@@ -1,0 +1,19 @@
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+{% block title_block %} Create Doctor New Account {% endblock %} 
+{% block body_block %} 
+{% if registered %}
+<div class="alert allert-success">
+  Account Created Successfully! <a href="#">Login Here</a>
+</div>
+{% else %}
+<h2>Create New Account:</h2>
+<form method="post">
+  {{ form }} 
+  {% csrf_token %}
+  <button type="submit" class="btn btn-success btn-sm">Create Account</button>
+</form>
+<br />
+<p>Already have an account ? <a href="#">Login Here</a></p>
+{% endif %} 
+{% endblock %}
