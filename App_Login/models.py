@@ -7,6 +7,7 @@ class User(AbstractUser):
     is_patient = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
     is_pathologist = models.BooleanField(default=False)
+    is_technician = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     user_type = models.CharField(max_length=50, null=True, blank=True)
 
@@ -27,6 +28,13 @@ class Doctor(models.Model):
     	return self.user.username
 
 class Pathologist(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+
+
+    def __str__(self):
+    	return self.user.username
+ 
+class Technician(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
 

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.db import transaction
-from App_Login.models import User, Patient, Doctor, Pathologist
+from App_Login.models import User, Patient, Doctor, Pathologist, Technician
 
 
 class UserSignUpForm(UserCreationForm):
@@ -62,6 +62,21 @@ class PathologistSignUpForm(UserCreationForm):
         user.is_pathologist = True
         user.save()
         pathologist = Pathologist.objects.create(user=user)
+        return user
+
+class TechnicianSignUpForm(UserCreationForm):
+    email=forms.EmailField(required=True)
+  
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.email=self.cleaned_data.get('email')
+        user.is_technician = True
+        user.save()
+        Technician = Technician.objects.create(user=user)
         return user
     
 class UserProfileChange(UserChangeForm):

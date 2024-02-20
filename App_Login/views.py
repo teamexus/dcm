@@ -63,6 +63,20 @@ class PathologistSignUpview(CreateView):
         login(self.request, user)
         return redirect('index')
 
+class TechnicianSignUpview(CreateView):
+    model = User
+    form_class = PathologistSignUpForm
+    template_name = 'App_Login/techniciansignup.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'pathologist'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('index')
+
 def login_page(request):
     form = AuthenticationForm()
     if request.method == 'POST':
