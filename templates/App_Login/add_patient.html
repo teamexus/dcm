@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title_block %}  {% endblock %} 
+{% block body_block %}
+<h2> Create Your Patient Here: </h2>
+<form method="post" enctype="multipart/form-data">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success btn-sm">add</button>
+</form>
+
+
+{% if error == "no" %}
+<script>
+  alert('Record  Save Successfully');
+  window.location = ('{% url 'Diagnostic_Center:view_patient' %}');
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+  alert("Something went wrong, Try again");
+</script>
+{% endif %}
+
+
+{% endblock %}

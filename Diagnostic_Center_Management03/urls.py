@@ -10,3 +10,5 @@ urlpatterns = [
     path('diagnostic_center/', include('Diagnostic_Center.urls')),
     path('', views.Index, name='index'),
 ]
+urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
