@@ -56,6 +56,13 @@ def View_Doctor(request):
     d = {'doc': doc}
     return render(request, 'App_Login/view_doctor.html', d)
 
+def delete_doctor(request, pid):
+    if not request.user.is_staff:
+        return redirect('index')
+    doctor = Doctor.objects.get(id=pid)
+    doctor.delete()
+    return redirect('view_doctor')
+
 class TechnicianSignUpview(CreateView):
     model = User
     form_class = TechnicianSignUpForm
@@ -76,6 +83,12 @@ def View_Technician(request):
     tec = Technician.objects.all()
     d = {'tec': tec}
     return render(request, 'App_Login/view_technician.html', d)
+def Delete_Technician(request, pid):
+    if not request.user.is_staff:
+        return redirect('login')
+    technician = Technician.objects.get(id=pid)
+    technician.delete()
+    return redirect('view_technician.html')
 
 def login_page(request):
     form = AuthenticationForm()
@@ -151,7 +164,7 @@ def change_pro_pic(request):
 
 @login_required
 def View_Patient(request):
-    pat = DcmPatient.objects.all()
+    pat = DcmPatient.objects.filter(pcreator=request.user)
     d = {'pat': pat}
     return render(request, 'App_Login/view_patient.html', d)
 
@@ -163,8 +176,10 @@ class CreatePatient(LoginRequiredMixin, CreateView):
     template_name = 'App_Login/add_patient.html'
     fields = ('pcreator','name','gender','mobile','age', 'address')
     
-    def form_valid(self, form):
         
+    
+    def form_valid(self, form):
+       
         dcmpatient_obj = form.save(commit=False)
         dcmpatient_obj.pcreator = self.request.user
         name = dcmpatient_obj.name
@@ -178,10 +193,8 @@ class CreatePatient(LoginRequiredMixin, CreateView):
     
        
     
-
-
 @login_required
 def Delete_Patient(request, pid):
     patient = DcmPatient.objects.get(id=pid)
     patient.delete()
-    return redirect('view_patient.html')
+    return redirect('/account/view_patient')

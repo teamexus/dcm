@@ -8,8 +8,8 @@
         <thead>
             <tr>
                 <th>Technician Name</th>
-                <th>Gender</th>
                 <th>Contact</th>
+                <th>Designation</th>
                 <th>Delete</th>
                 
             </tr>
@@ -18,8 +18,8 @@
             {% for i in tec %}
             <tr>
                 <td>{{i.name}}</td>
-                <td>{{i.gender}}</td>
-                <td>{{i.mobile}}</td>
+                <td>{{i.phone}}</td>
+                <td>{{i.job_position}}</td>
                 <td><a href="#" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
             </tr>
             {% endfor %}

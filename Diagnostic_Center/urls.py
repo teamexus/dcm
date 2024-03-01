@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.blog_list, name='blog_list'),
     path('view_appointment/', views.view_appointment, name='view_appointment'),
     path('create_appointment/', views.create_appointment, name='create_appointment'),
-    path('delete_appointment(?P<int:pid>)', views.delete_appointment, name='delete_appointment'),
+    path('delete_appointment(<int:pid>)', views.delete_appointment, name='delete_appointment'),
     path('view_test/', views.view_test, name='view_test'),
     path('view_package/', views.view_package, name='view_package'),
     

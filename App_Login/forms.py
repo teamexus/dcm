@@ -57,12 +57,13 @@ class TechnicianSignUpForm(UserCreationForm):
     email = forms.EmailField( label="Email Address", required=True)
     
     name=forms.CharField(required=True)
-    phone=forms.CharField(required=True)
+    phone=forms.IntegerField(required=True)
     job_position=forms.CharField(required=True)
     
   
     class Meta(UserCreationForm.Meta):
         model = User
+        
 
     @transaction.atomic
     def save(self):
@@ -75,7 +76,7 @@ class TechnicianSignUpForm(UserCreationForm):
         technician.phone=self.cleaned_data.get('phone')
         technician.job_position=self.cleaned_data.get('job_position')
         technician.save()
-        return user
+        return technician
     
 class UserProfileChange(UserChangeForm):
     class Meta:
