@@ -28,9 +28,12 @@ class DcmAdminSignUpForm(UserCreationForm):
         return user
     
 class DoctorSignUpForm(UserCreationForm):
+    
+    full_name=forms.CharField(required=True)
     email=forms.EmailField(required=True)
     phone=forms.CharField(required=True)
     desination=forms.CharField(required=True)
+    
   
     class Meta(UserCreationForm.Meta):
         model = User
@@ -39,18 +42,24 @@ class DoctorSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.email=self.cleaned_data.get('email')
-        user.is_ = True
+        user.is_doctor = True
         user.save()
         doctor = Doctor.objects.create(user=user)
+        doctor.doctor_full_name=self.cleaned_data.get('full_name')
         doctor.phone=self.cleaned_data.get('phone')
-        doctor.desination=self.cleaned_data.get('desination')
+        doctor.designation=self.cleaned_data.get('desination')
         doctor.save()
 
         return doctor
     
 
 class TechnicianSignUpForm(UserCreationForm):
-    email=forms.EmailField(required=True)
+    email = forms.EmailField( label="Email Address", required=True)
+    
+    name=forms.CharField(required=True)
+    phone=forms.CharField(required=True)
+    job_position=forms.CharField(required=True)
+    
   
     class Meta(UserCreationForm.Meta):
         model = User
@@ -61,7 +70,11 @@ class TechnicianSignUpForm(UserCreationForm):
         user.email=self.cleaned_data.get('email')
         user.is_technician = True
         user.save()
-        Technician = Technician.objects.create(user=user)
+        technician = Technician.objects.create(user=user)
+        technician.name=self.cleaned_data.get('name')
+        technician.phone=self.cleaned_data.get('phone')
+        technician.job_position=self.cleaned_data.get('job_position')
+        technician.save()
         return user
     
 class UserProfileChange(UserChangeForm):

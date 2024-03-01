@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout 
-from django.shortcuts import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic
-from App_Login.models import User, DcmPatient
+from App_Login.models import User, DcmPatient, Doctor, Technician
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -50,6 +49,13 @@ class DoctorSignUpview(CreateView):
         #login(self.request, user)
         return redirect('index')
 
+def View_Doctor(request):
+    if not request.user.is_staff:
+        return redirect('index')
+    doc = Doctor.objects.all()
+    d = {'doc': doc}
+    return render(request, 'App_Login/view_doctor.html', d)
+
 class TechnicianSignUpview(CreateView):
     model = User
     form_class = TechnicianSignUpForm
@@ -63,6 +69,13 @@ class TechnicianSignUpview(CreateView):
         user = form.save()
         login(self.request, user)
         return redirect('index')
+    
+def View_Technician(request):
+    if not request.user.is_staff:
+        return redirect('index')
+    tec = Technician.objects.all()
+    d = {'tec': tec}
+    return render(request, 'App_Login/view_technician.html', d)
 
 def login_page(request):
     form = AuthenticationForm()
@@ -143,38 +156,28 @@ def View_Patient(request):
     return render(request, 'App_Login/view_patient.html', d)
 
 
-@login_required
-def Add_Patient(request):
-    error=""
-    user1 = User.objects.all()
-    if request.method == 'POST':
-        n = request.POST['name']
-        g = request.POST['gender']
-        m = request.POST['mobile']
-        a = request.POST['age']
-        add = request.POST['address']
-        
-        user = User.objects.filter(name=d).first()
-        try:
-            DcmPatient.objects.create(user=user, name=n, gender=g, mobile=m, age=a, address=add)
-            error="no"
-        except:
-            error="yes"
-    d = {'user':user1, 'error': error}
-    return render(request, 'App_Login/add_patient.html', d)
+
 
 class CreatePatient(LoginRequiredMixin, CreateView):
     model = DcmPatient
     template_name = 'App_Login/add_patient.html'
     fields = ('pcreator','name','gender','mobile','age', 'address')
-
+    
     def form_valid(self, form):
+        
         dcmpatient_obj = form.save(commit=False)
         dcmpatient_obj.pcreator = self.request.user
-        #pname = dcmpatient_obj.name
+        name = dcmpatient_obj.name
+        gender = dcmpatient_obj.gender
+        mobile = dcmpatient_obj.mobile
+        age = dcmpatient_obj.age
+        address = dcmpatient_obj.address
         #blog_obj.slug = title.replace(" ", "-") + "-" + str(uuid.uuid4())
         dcmpatient_obj.save()
         return HttpResponseRedirect(reverse('index'))
+    
+       
+    
 
 
 @login_required

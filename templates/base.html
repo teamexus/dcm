@@ -11,6 +11,33 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+<!-- Data Table CDN Start  -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"> </script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js" > </script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js" > </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" > </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" > </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" > </script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"> </script>
+<!-- Data Table CDN Start  -->
+<script>
+  $(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ]
+    } );
+} );
+</script>
+
+
     <title>{% block title_block %} Diagnostic Center Management {% endblock %}</title>
   </head>
   <body>
@@ -25,8 +52,9 @@
               </a>
               <div class="dropdown-menu">
                <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
-                <a class="dropdown-item"  href="{% url 'App_Login:add_patient' %}">Add Patient</a>
-                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}">View Patient</a>
+                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
+    
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment' %}">Appointment</a>
                 <hr>
               </div>
             </div>
@@ -39,18 +67,23 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'App_Login:login' %}">Login</a>
         </li>
-        
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'Diagnostic_Center:view_test' %}">Tests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
+    </li>
           {% endif %}
           {% if request.user.is_staff %}
           <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Doctor</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{% url 'App_Login:doctorsignup' %}">DoctorSignUp</a>
-              <a class="dropdown-item"  href="#">View Doctor</a>
+              <a class="dropdown-item"  href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
             </div>
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Technician</a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="{% url 'App_Login:techniciansignup' %}">TechnicianSignUp</a>
-              <a class="dropdown-item"  href="#">View Technician</a>
+              <a class="dropdown-item"  href="{% url 'App_Login:view_technician' %}">View Technician</a>
             </div>
            </li>
           </li>

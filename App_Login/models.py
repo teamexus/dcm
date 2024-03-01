@@ -10,7 +10,7 @@ class User(AbstractUser):
     profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     
 class DcmAdmin(models.Model):
-    user = models.OneToOneField(User, related_name='patient_profile', on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(User, related_name='admin_profile', on_delete=models.CASCADE, primary_key=True)
 
 
     def __str__(self):
@@ -30,17 +30,25 @@ class DcmPatient(models.Model):
  
 class Doctor(models.Model):
     user = models.OneToOneField(User, related_name='doctor_profile', on_delete=models.CASCADE, primary_key=True)
+    doctor_full_name = models.CharField(max_length=50, null=True, blank=True)
     phone=models.CharField(max_length=200)
     designation=models.CharField(max_length=200)
 
 
     def __str__(self):
     	return self.user.username
+ 
+
+ 
+
 
  
 class Technician(models.Model):
     user = models.OneToOneField(User, related_name='technician_profile', on_delete=models.CASCADE, primary_key=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
+    phone = models.IntegerField(blank=True, null=True)
+    job_position = models.CharField(max_length=30, blank=True, null=True)
 
 
     def __str__(self):
-    	return self.user.username
+    	return self.name

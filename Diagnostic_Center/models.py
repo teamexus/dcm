@@ -5,19 +5,32 @@ from App_Login.models import  DcmPatient, Doctor, User
 
 class Department(models.Model):
     name = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.name
+
 class Test(models.Model):
     test_name =  models.CharField(max_length=50)
     test_name_department = models.ForeignKey(Department, on_delete=models.CASCADE)
     test_price = models.IntegerField(null=True)
     
+    def __str__(self):
+        return self.test_name
+    
 class Package(models.Model):
     package_name = models.CharField(max_length=50)
     total_price = models.IntegerField(null=True)
     package_price = models.IntegerField(null=True)
+    
+    def __str__(self):
+        return self.package_name
 
 class PackageTest(models.Model):
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.package.package_name + "--" + self.test.test_name
 
 class Report(models.Model):
     test = models.ForeignKey(Test, on_delete=models.CASCADE)
@@ -41,23 +54,16 @@ class Bill(models.Model):
 
 
 class Appointment(models.Model):
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name='user_appointment')
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(DcmPatient, on_delete=models.CASCADE)
-    
-    status_choice = (
-        ('Appointment For Doctor', 'Appointment For Doctor'),
-        ('Appointment For Test', 'Appointment For Test'),
-        ('Appointment For Package Test', 'Appointment For Package Test'),
-        
-    )
-    report_status = models.CharField(max_length=30, blank=True, null=True, choices=status_choice)
+    appointment= models.CharField(max_length=50 , null=True, blank=True)
     mobile = models.IntegerField(null=True)
     date1 = models.DateField()
     time1 = models.TimeField()
     
     def __str__(self):
-        return self.doctor.name + "--" + self.patient.name
+        return self.doctor.doctor_full_name + "--" + self.patient.name
     
     
     
