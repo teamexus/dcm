@@ -20,7 +20,7 @@
                 <td>{{i.name}}</td>
                 <td>{{i.phone}}</td>
                 <td>{{i.job_position}}</td>
-                <td><a href="#" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+                <td><a href="{% url 'App_Login:delete_technician' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
