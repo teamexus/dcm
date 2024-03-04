@@ -10,7 +10,10 @@
                 <th>Doctor Name</th>
                 <th>Contact</th>
                 <th>Specialization</th>
+                {% if request.user.is_staff %}
                 <th>Delete</th>
+                {% endif %}
+                
             </tr>
         </thead>
         <tbody>
@@ -19,8 +22,10 @@
                 <td>{{i.doctor_full_name}}</td>
                 <td>{{i.phone}}</td>
                 <td>{{i.designation}}</td>
-                
-                <td><a href="{% url 'App_Login:delete_doctor' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+                {% if request.user.is_staff %}
+               
+                <td><a href="{% url 'App_Login:delete_doctor' i.user_id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

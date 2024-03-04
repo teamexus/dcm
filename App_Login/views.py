@@ -47,11 +47,10 @@ class DoctorSignUpview(CreateView):
     def form_valid(self, form):
         user = form.save()
         #login(self.request, user)
-        return redirect('index')
+        return redirect('/account/view_doctor')
 
 def View_Doctor(request):
-    if not request.user.is_staff:
-        return redirect('index')
+    
     doc = Doctor.objects.all()
     d = {'doc': doc}
     return render(request, 'App_Login/view_doctor.html', d)
@@ -59,9 +58,9 @@ def View_Doctor(request):
 def delete_doctor(request, pid):
     if not request.user.is_staff:
         return redirect('index')
-    doctor = Doctor.objects.get(id=pid)
+    doctor = Doctor.objects.get(user_id=pid)
     doctor.delete()
-    return redirect('view_doctor')
+    return redirect('/account/view_doctor')
 
 class TechnicianSignUpview(CreateView):
     model = User
@@ -69,13 +68,13 @@ class TechnicianSignUpview(CreateView):
     template_name = 'App_Login/techniciansignup.html'
 
     def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'pathologist'
+        kwargs['user_type'] = 'technician'
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
-        return redirect('index')
+        #login(self.request, user)
+        return redirect('/account/view_technician')
     
 def View_Technician(request):
     if not request.user.is_staff:
@@ -86,9 +85,9 @@ def View_Technician(request):
 def Delete_Technician(request, pid):
     if not request.user.is_staff:
         return redirect('login')
-    technician = Technician.objects.get(id=pid)
+    technician = Technician.objects.get(user_id=pid)
     technician.delete()
-    return redirect('view_technician.html')
+    return redirect('/account/view_technician')
 
 def login_page(request):
     form = AuthenticationForm()
@@ -164,32 +163,34 @@ def change_pro_pic(request):
 
 @login_required
 def View_Patient(request):
-    pat = DcmPatient.objects.filter(pcreator=request.user)
+    pat = DcmPatient.objects.filter(user=request.user)
     d = {'pat': pat}
     return render(request, 'App_Login/view_patient.html', d)
 
 
 
 
-class CreatePatient(LoginRequiredMixin, CreateView):
-    model = DcmPatient
-    template_name = 'App_Login/add_patient.html'
-    fields = ('pcreator','name','gender','mobile','age', 'address')
+
     
+@login_required
+def CreatePatient(request):
+    error=""
+    user = request.user
+    if request.method == 'POST':
+        n = request.POST['name']
+        g = request.POST['gender']
+        m = request.POST['mobile']
+        a = request.POST['age']
+        add = request.POST['address']
         
-    
-    def form_valid(self, form):
-       
-        dcmpatient_obj = form.save(commit=False)
-        dcmpatient_obj.pcreator = self.request.user
-        name = dcmpatient_obj.name
-        gender = dcmpatient_obj.gender
-        mobile = dcmpatient_obj.mobile
-        age = dcmpatient_obj.age
-        address = dcmpatient_obj.address
-        #blog_obj.slug = title.replace(" ", "-") + "-" + str(uuid.uuid4())
-        dcmpatient_obj.save()
-        return HttpResponseRedirect(reverse('index'))
+  
+        try:
+            DcmPatient.objects.create(user=user, name=n, gender=g, mobile=m, age=a, address=add)
+            error="no"
+        except:
+            error="yes"
+    k = {'user':user, 'error': error}
+    return render(request, 'App_Login/add_patient.html', k)
     
        
     

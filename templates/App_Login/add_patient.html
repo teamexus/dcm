@@ -1,19 +1,39 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
+
 {% block title_block %} Create Patient {% endblock %} 
 {% block body_block %}
-<h2> Create Your Patient Here: </h2>
-<form method="post" enctype="multipart/form-data">
-    {{ form.as_p }}
+
+<div class="container">
+  <h2 class="text-center">Create Your Patient Here</h2>
+  <form method="post" >
     {% csrf_token %}
-    <button type="submit" class="btn btn-success btn-sm">add</button>
-</form>
+    <label>User Name</label>
+    <select name="user" class="form-control">
+
+    <option value="{{user.username}}">{{user.username}}</option>
+   
+    </select>
+    <label>Patient Name</label>
+    <input type="text" class="form-control" name="name" required />
+    <label>Gender</label>
+    <input type="text" class="form-control" name="gender" required />
+    <br>
+    <label>Contact</label>
+    <input type="text" class="form-control" name="mobile" required />
+    <label>Age</label>
+    <input type="text" class="form-control" name="age" required />
+    <label>Address</label>
+    <textarea class="form-control" name="address" required></textarea>
+    <br />
+    <input type="submit" value="Submit" class="form-control btn btn-primary" />
+  </form>
+</div>
 
 
 {% if error == "no" %}
 <script>
   alert('Record  Save Successfully');
-  window.location = ('{% url 'Diagnostic_Center:view_patient' %}');
+  window.location = ('{% url 'App_Login:view_patient' %}');
 </script>
 {% endif %}
 

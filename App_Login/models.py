@@ -17,9 +17,10 @@ class DcmAdmin(models.Model):
     	return self.user.username
  
 class DcmPatient(models.Model):
-    pcreator = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dcmpatient_profile')
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dcmpatient_profile')
     name = models.CharField(max_length=50)
-    gender = models.CharField(max_length=10)
+    gender = models.CharField(max_length=50, null=True, blank=True)
     mobile = models.IntegerField(null=True)
     age = models.IntegerField()
     address = models.CharField(max_length=150)
@@ -51,4 +52,4 @@ class Technician(models.Model):
 
 
     def __str__(self):
-    	return str(self.user.username)
+    	return self.user.username

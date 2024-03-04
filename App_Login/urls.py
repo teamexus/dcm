@@ -20,7 +20,7 @@ urlpatterns = [
     path('add-picture/', views.add_pro_pic, name='add_pro_pic'),
     path('change-picture/', views.change_pro_pic, name='change_pro_pic'),
     path('view_patient/', views.View_Patient, name='view_patient'),
-    path('add_patient/', CreatePatient.as_view(), name='add_patient'),
+    path('add_patient/', views.CreatePatient, name='add_patient'),
     path('delete_patient(<int:pid>)', views.Delete_Patient, name='delete_patient'),
 ]
 
