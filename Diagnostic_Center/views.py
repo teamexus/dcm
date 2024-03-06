@@ -18,9 +18,14 @@ def view_appointment(request):
     a = {'app': app}
     return render(request, 'Diagnostic_Center/view_appointment.html', a)
 
+@login_required
+def view_appointment_test(request):
+    app = Appointment.objects.filter(user=request.user)
+    a = {'app': app}
+    return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+
 
 @login_required
-
 def create_appointment(request):
     error=""
     user = request.user
@@ -46,6 +51,31 @@ def create_appointment(request):
             error="yes"
     k = {'user': user,'doctor': doctor1, 'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment.html', k)
+
+@login_required
+def create_appointment_test(request):
+    error=""
+    user = request.user
+    patient1 = DcmPatient.objects.all()
+    
+    if request.method == 'POST':
+    
+        x = request.POST['doctor']
+        y = request.POST['patient']
+        p = request.POST['appointment']
+        m = request.POST['mobile']
+        d1 = request.POST['date1']
+        t1 = request.POST['time1']
+        
+        
+        patient = DcmPatient.objects.filter(name=y).first()
+        try:
+            Appointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, time1=t1)
+            error="no"
+        except:
+            error="yes"
+    k = {'user': user, 'patient':patient1, 'error':error}
+    return render(request, 'Diagnostic_Center/create_appointment_test.html', k)
 
 def delete_appointment(request, pid):
     appointment = Appointment.objects.get(id=pid)

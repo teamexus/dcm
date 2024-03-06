@@ -12,12 +12,6 @@
     <option value="{{user.username}}">{{user.username}}</option>
     </select>
    
-    <label>Doctor Name</label>
-    <select name="doctor" class="form-control">
-      {% for i in doctor %}
-      <option value="{{i.doctor_full_name}}">{{i.doctor_full_name}}</option>
-      {% endfor %}
-    </select>
     <label>Patient Name</label>
     <select name="patient" class="form-control">
       {% for i in patient %}
@@ -26,9 +20,7 @@
     </select>
     <label>Appointment Type</label>
     <select name="appointment" class="form-control">
-      <option value="Appointment For Doctor">Appointment For Doctor</option>
       <option value="Appointment For Test">Appointment For Test</option>
-      <option value="Appointment For Package Test">Appointment For Package Test</option>
     </select>
     <label>Contact</label>
     <input type="text" class="form-control" name="mobile" required />
@@ -44,7 +36,7 @@
 {% if error == "no" %}
 <script>
   alert('Record  Save Successfully');
-  window.location = ('{% url 'Diagnostic_Center:view_appointment' %}');
+  window.location = ('{% url 'Diagnostic_Center:view_appointment_test' %}');
 </script>
 {% endif %} 
 {% if error == "yes" %}

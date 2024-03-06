@@ -82,6 +82,7 @@ def View_Technician(request):
     tec = Technician.objects.all()
     d = {'tec': tec}
     return render(request, 'App_Login/view_technician.html', d)
+
 def Delete_Technician(request, pid):
     if not request.user.is_staff:
         return redirect('login')
@@ -167,11 +168,6 @@ def View_Patient(request):
     d = {'pat': pat}
     return render(request, 'App_Login/view_patient.html', d)
 
-
-
-
-
-    
 @login_required
 def CreatePatient(request):
     error=""

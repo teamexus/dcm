@@ -9,12 +9,27 @@
 </div>
 {% else %}
 
-<h2>Create New Account:</h2>
-<form method="post">
-  {{ form.as_p }} 
-  {% csrf_token %}
-  <button type="submit" class="btn btn-success btn-sm">Create Account</button>
-</form>
+<div class="container">
+  <h2 class="text-center">Create New Account Here</h2>
+  <form method="post" >
+    {% csrf_token %}
+    <label>User Name</label>
+    <input type="text" class="form-control" name="username" required />
+    <label>User First Name</label>
+    <input type="text" class="form-control" name="first_name" required />
+    <label>User Last Name</label>
+    <input type="text" class="form-control" name="last_name" required />
+    <label>Email</label>
+    <input type="text" class="form-control" name="email" required />
+    <label>Password</label>
+    <input type="password" class="form-control" name="password1" required />
+    <label>Confirm Password</label>
+    <input type="password" class="form-control" name="password2" required />
+    <br />
+    <input type="submit" value="Submit" class="form-control btn btn-primary" />
+  </form>
+</div>
+
 <br />
 
 <p>Already have an account ? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
