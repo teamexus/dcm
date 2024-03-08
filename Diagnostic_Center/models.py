@@ -53,7 +53,7 @@ class Bill(models.Model):
     report_status = models.CharField(max_length=30, blank=True, null=True, choices=status_choice)
 
 
-class Appointment(models.Model):
+class DoctorAppointment(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(DcmPatient, on_delete=models.CASCADE)
@@ -64,6 +64,30 @@ class Appointment(models.Model):
     
     def __str__(self):
         return self.doctor.doctor_full_name + "--" + self.patient.name
+
+class TestAppointment(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    patient = models.ForeignKey(DcmPatient, on_delete=models.CASCADE)
+    appointment= models.CharField(max_length=50 , null=True, blank=True)
+    mobile = models.IntegerField(null=True)
+    date1 = models.DateField()
+    time1 = models.TimeField()
+    
+    def __str__(self):
+        return self.user.username + "--" + self.patient.name
+
+class PackageTestAppointment(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    patient = models.ForeignKey(DcmPatient, on_delete=models.CASCADE)
+    appointment= models.CharField(max_length=50 , null=True, blank=True)
+    mobile = models.IntegerField(null=True)
+    date1 = models.DateField()
+    time1 = models.TimeField()
+    
+    def __str__(self):
+        return self.user.username + "--" + self.patient.name
+
+
     
     
     

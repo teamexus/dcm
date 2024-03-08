@@ -8,8 +8,8 @@
     <table class="table table-hover" id="example">
         <thead>
             <tr>
-                <th>Technician Name</th>
-                <th>Contact</th>
+                <th>Technician Full Name</th>
+                <th>Phone Number</th>
                 <th>Designation</th>
                 <th>Delete</th>
                 
@@ -18,9 +18,9 @@
         <tbody>
             {% for i in tec %}
             <tr>
-                <td>{{i.name}}</td>
+                <td>{{i.technician_full_name}}</td>
                 <td>{{i.phone}}</td>
-                <td>{{i.job_position}}</td>
+                <td>{{i.designation}}</td>
                 <td><a href="{% url 'App_Login:delete_technician' i.user_id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
             </tr>
             {% endfor %}

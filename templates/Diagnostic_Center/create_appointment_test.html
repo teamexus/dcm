@@ -3,25 +3,20 @@
 {% block body_block %}
 
 <div class="container">
-  <h2 class="text-center">Create Appointment</h2>
-  <form method="post">
+  <h2 class="text-center">Create Appointment For Test</h2>
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
-    <label>User Name</label>
-    <select name="user" class="form-control">
-    <option value="{{user.username}}">{{user.username}}</option>
-    </select>
-   
+
     <label>Patient Name</label>
     <select name="patient" class="form-control">
       {% for i in patient %}
       <option value="{{i.name}}">{{i.name}}</option>
       {% endfor %}
     </select>
-    <label>Appointment Type</label>
-    <select name="appointment" class="form-control">
-      <option value="Appointment For Test">Appointment For Test</option>
-    </select>
+    <label for="appointment">Appointment Type</label>
+    <br>
+    <input type="text" class="form-control" name="appointment" value="Appointment For Test" >
     <label>Contact</label>
     <input type="text" class="form-control" name="mobile" required />
     <label>Date</label>

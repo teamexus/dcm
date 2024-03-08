@@ -31,25 +31,27 @@ class DcmPatient(models.Model):
  
 class Doctor(models.Model):
     user = models.OneToOneField(User, related_name='doctor_profile', on_delete=models.CASCADE, primary_key=True)
-    doctor_full_name = models.CharField(max_length=50, null=True, blank=True)
-    phone=models.CharField(max_length=200)
-    designation=models.CharField(max_length=200)
+    doctor_full_name = models.CharField(max_length=200, null=True, blank=True)
+    phone = models.IntegerField(blank=True, null=True)
+    spe = models.CharField(max_length=200, null=True, blank=True)
+    designation =models.CharField(max_length=200, null=True, blank=True)
+    degree = models.CharField(max_length=200, null=True, blank=True)
+    current_working_place=models.CharField(max_length=200, null=True, blank=True)
+    mbbs_institution = models.CharField(max_length=200, null=True, blank=True)
+    post_graduation_institution = models.CharField(max_length=200, null=True, blank=True)
+    
 
 
     def __str__(self):
-    	return self.user.username
+    	return self.doctor_full_name
  
 
- 
-
-
- 
 class Technician(models.Model):
     user = models.OneToOneField(User, related_name='technician_profile', on_delete=models.CASCADE, primary_key=True)
-    name = models.CharField(max_length=30, blank=True, null=True)
+    technician_full_name = models.CharField(max_length=100, null=True, blank=True)
     phone = models.IntegerField(blank=True, null=True)
-    job_position = models.CharField(max_length=30, blank=True, null=True)
+    designation = models.CharField(max_length=30, blank=True, null=True)
 
 
     def __str__(self):
-    	return self.user.username
+    	return self.technician_full_name

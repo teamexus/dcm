@@ -11,9 +11,9 @@
     <table class="table table-hover" id="example">
         <thead>
             <tr>
-                <th>Doctor Name</th>
-                <th>Contact</th>
+                <th>Doctor Full Name</th>
                 <th>Specialization</th>
+                <th>Designation</th>
                 {% if request.user.is_staff %}
                 <th>Delete</th>
                 {% endif %}
@@ -24,8 +24,9 @@
             {% for i in doc %}
             <tr>
                 <td>{{i.doctor_full_name}}</td>
-                <td>{{i.phone}}</td>
+                <td>{{i.spe}}</td>
                 <td>{{i.designation}}</td>
+
                 {% if request.user.is_staff %}
                
                 <td><a href="{% url 'App_Login:delete_doctor' i.user_id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>

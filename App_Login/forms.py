@@ -10,13 +10,14 @@ class UserSignUpForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ('username',  'email', 'password1', 'password2')
+        fields = ('username',  'first_name', 'last_name', 'email', 'password1', 'password2')
 
 class DcmAdminSignUpForm(UserCreationForm):
     email=forms.EmailField(required=True)
   
     class Meta(UserCreationForm.Meta):
         model = User
+        fields = ('username',  'first_name', 'last_name', 'email', 'password1', 'password2')
 
     @transaction.atomic
     def save(self):
@@ -29,36 +30,16 @@ class DcmAdminSignUpForm(UserCreationForm):
     
 class DoctorSignUpForm(UserCreationForm):
     
-    full_name=forms.CharField(required=True)
+    
     email=forms.EmailField(required=True)
-    phone=forms.CharField(required=True)
-    desination=forms.CharField(required=True)
-    
-  
-    class Meta(UserCreationForm.Meta):
-        model = User
-
-    @transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.email=self.cleaned_data.get('email')
-        user.is_doctor = True
-        user.save()
-        doctor = Doctor.objects.create(user=user)
-        doctor.doctor_full_name=self.cleaned_data.get('full_name')
-        doctor.phone=self.cleaned_data.get('phone')
-        doctor.designation=self.cleaned_data.get('desination')
-        doctor.save()
-
-        return doctor
-    
-
-class TechnicianSignUpForm(UserCreationForm):
-    email = forms.EmailField( label="Email Address", required=True)
-    
-    name=forms.CharField(required=True)
+    doctor_full_name = forms.CharField(required=True)
     phone=forms.IntegerField(required=True)
-    job_position=forms.CharField(required=True)
+    spe = forms.CharField(required=True)
+    designation=forms.CharField(required=True)
+    degree = forms.CharField(required=True)
+    current_working_place = forms.CharField(required=True)
+    mbbs_institution = forms.CharField(required=True)
+    post_graduation_institution = forms.CharField(required=True)
     
   
     class Meta(UserCreationForm.Meta):
@@ -69,12 +50,44 @@ class TechnicianSignUpForm(UserCreationForm):
     def save(self):
         user = super().save(commit=False)
         user.email=self.cleaned_data.get('email')
+        user.is_doctor = True
+        user.save()
+        doctor = Doctor.objects.create(user=user)
+        doctor.doctor_full_name = self.cleaned_data.get('doctor_full_name')
+        doctor.phone=self.cleaned_data.get('phone')
+        doctor.spe=self.cleaned_data.get('spe')
+        doctor.designation=self.cleaned_data.get('designation')
+        doctor.degree=self.cleaned_data.get('degree')
+        doctor.current_working_place=self.cleaned_data.get('current_working_place')
+        doctor.mbbs_institution=self.cleaned_data.get('mbbs_institution')
+        doctor.post_graduation_institution=self.cleaned_data.get('post_graduation_institution')
+        doctor.save()
+
+        return doctor
+    
+
+class TechnicianSignUpForm(UserCreationForm):
+    email = forms.EmailField( label="Email Address", required=True)
+    technician_full_name = forms.CharField(required=True)
+    phone=forms.IntegerField(required=True)
+    designation=forms.CharField(required=True)
+    
+  
+    class Meta(UserCreationForm.Meta):
+        model = User
+        
+        
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.email=self.cleaned_data.get('email')
         user.is_technician = True
         user.save()
         technician = Technician.objects.create(user=user)
-        technician.name=self.cleaned_data.get('name')
+        technician.technician_full_name = self.cleaned_data.get('technician_full_name')
         technician.phone=self.cleaned_data.get('phone')
-        technician.job_position=self.cleaned_data.get('job_position')
+        technician.designation=self.cleaned_data.get('designation')
         technician.save()
         return technician
     

@@ -3,25 +3,28 @@
 {% block body_block %}
 
 <div class="container">
-  <h2 class="text-center">Create Appointment For Package Test</h2>
-  <form method="post">
+  <h2 class="text-center">Create Appointmen For Doctor</h2>
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
-    <label>User Name</label>
-    <select name="user" class="form-control">
-    <option value="{{user.username}}">{{user.username}}</option>
+
+    <label for="username">User Name</label><br>
+    <input type="text" class="form-control" id="username" name="username" value="{{user.username}}" required />
+    <label>Doctor Name</label>
+    <select name="doctor" class="form-control">
+      {% for i in doctor %}
+      <option value="{{i.doctor_full_name}}">{{i.doctor_full_name}}</option>
+      {% endfor %}
     </select>
-   
     <label>Patient Name</label>
     <select name="patient" class="form-control">
       {% for i in patient %}
       <option value="{{i.name}}">{{i.name}}</option>
       {% endfor %}
     </select>
-    <label>Appointment Type</label>
-    <select name="appointment" class="form-control">
-      <option value="Appointment For Test">Appointment For Package Test</option>
-    </select>
+    <label for="appointment">Appointment Type</label>
+    <br>
+    <input type="text" class="form-control" name="appointment" value="Appointment For Doctor" >
     <label>Contact</label>
     <input type="text" class="form-control" name="mobile" required />
     <label>Date</label>
@@ -36,7 +39,7 @@
 {% if error == "no" %}
 <script>
   alert('Record  Save Successfully');
-  window.location = ('{% url 'Diagnostic_Center:view_appointment_package_test' %}');
+  window.location = ('{% url 'Diagnostic_Center:view_appointment_doctor' %}');
 </script>
 {% endif %} 
 {% if error == "yes" %}
