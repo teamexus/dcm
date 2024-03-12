@@ -45,15 +45,15 @@
         <ul class="navbar-nav">
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'index' %}"> Home</a></li>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and user.is_doctor  %}
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 @{{user.username}}
               </a>
               <div class="dropdown-menu">
-               <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
+               <a class="dropdown-item" href="{% url 'App_Login:doctor_profile' %}">Your Profile</a>
                 <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
-                
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
                 <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
                 <hr>
               </div>
@@ -67,6 +67,51 @@
               </div>
             
             </li>
+            {% elif user.is_authenticated and user.is_technician  %}
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                @{{user.username}}
+              </a>
+              <div class="dropdown-menu">
+               <a class="dropdown-item" href="{% url 'App_Login:technician_profile' %}">Your Profile</a>
+                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
+                <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
+                <hr>
+              </div>
+              
+            </div>
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Appointment</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_doctor' %}">Appointment For Doctor</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_test' %}">Appointment For Test</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_package_test' %}">Appointment For Package Test</a>
+              </div>
+            
+            </li>
+            {% elif user.is_authenticated %}
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                @{{user.username}}
+              </a>
+              <div class="dropdown-menu">
+               <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
+                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
+                <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
+                <hr>
+              </div>
+              
+            </div>
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Appointment</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_doctor' %}">Appointment For Doctor</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_test' %}">Appointment For Test</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_package_test' %}">Appointment For Package Test</a>
+              </div>
+            
+            </li>
+    
             {% else %}
          <li class="nav-item">
                 <a class="nav-link" href="{% url 'App_Login:signup' %}">SignUp</a>

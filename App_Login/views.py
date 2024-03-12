@@ -115,6 +115,19 @@ def profile(request):
     return render(request, 'App_Login/profile.html', context={})
 
 @login_required
+def doctor_profile(request):
+    doc = Doctor.objects.filter(user=request.user)
+    d = {'doc': doc}
+    return render(request, 'App_Login/doctor_profile.html', d)
+
+@login_required
+def technician_profile(request):
+    tec = Technician.objects.filter(user=request.user)
+    t = {'tec': tec}
+    return render(request, 'App_Login/technician_profile.html', t)
+
+
+@login_required
 def user_change(request):
     current_user = request.user
     form = UserProfileChange(instance=current_user)

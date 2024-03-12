@@ -103,6 +103,40 @@ def create_appointment_package_test(request):
     k = {'user':user,  'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_package_test.html', k)
 
+@login_required
+def create_prescription(request):
+    error=""
+    user1 = User.objects.all()
+    doctor1 = Doctor.objects.filter(user=request.user)
+    patient1 = DcmPatient.objects.all()
+    test1 = Test.objects.all()
+    
+    if request.method == 'POST':
+    
+        x = request.POST.get('doctor')
+        u = request.POST.get('user')
+        y = request.POST.get('patient')
+        t = request.POST.get('test')
+        p1 = request.POST.get('text1')
+        p2 = request.POST.get('text2')
+        p3 = request.POST.get('text3')
+        d1 = request.POST.get('date1')
+       
+        
+        
+        doctor = Doctor.objects.filter(doctor_full_name=x).first()
+        user = User.objects.filter(first_name=u).first()
+        patient = DcmPatient.objects.filter(name=y).first()
+        test = Test.objects.filter(test_name=t).first()
+        try:
+            Prescription.objects.create(user=user, doctor=doctor,  patient=patient, test=test, text1=p1, text2=p2, text3=p3, date1=d1)
+            error="no"
+        except:
+            error="yes"
+    k = {'user': user1,'doctor': doctor1, 'patient':patient1, 'test':test1, 'error':error}
+    return render(request, 'Diagnostic_Center/create_prescription.html', k)
+
+
 def delete_appointment_doctor(request, pid):
     appointment = DoctorAppointment.objects.get(id=pid)
     appointment.delete()
@@ -127,6 +161,12 @@ def view_package(request):
     pac = Package.objects.all()
     d = {'pac': pac}
     return render(request, 'Diagnostic_Center/view_package.html', d)
+
+@login_required
+def view_prescription(request):
+    pres = Prescription.objects.filter(user=request.user)
+    a = {'pres': pres}
+    return render(request, 'Diagnostic_Center/view_prescription.html', a)
     
 
 

@@ -6,7 +6,6 @@
   <h2 class="text-center">Create Appointment For Test</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    
 
     <label>Patient Name</label>
     <select name="patient" class="form-control">
@@ -14,9 +13,7 @@
       <option value="{{i.name}}">{{i.name}}</option>
       {% endfor %}
     </select>
-    <label for="appointment">Appointment Type</label>
-    <br>
-    <input type="text" class="form-control" name="appointment" value="Appointment For Test" >
+    
     <label>Contact</label>
     <input type="text" class="form-control" name="mobile" required />
     <label>Date</label>

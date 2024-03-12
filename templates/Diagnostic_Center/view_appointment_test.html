@@ -13,7 +13,6 @@
             
             <th>Patient Name</th>
             <th>Contact Number</th>
-            <th>Appointment Type</th>
             <th>Date</th>
             <th>Time</th>
             <th>Delete</th>
@@ -25,7 +24,6 @@
             
             <td>{{i.patient}}</td>
             <td>{{i.mobile}}</td>
-            <td>{{i.appointment}}</td>
             <td>{{i.date1}}</td>
             <td>{{i.time1}}</td>
             <td><a href="{% url 'Diagnostic_Center:delete_appointment_test' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>

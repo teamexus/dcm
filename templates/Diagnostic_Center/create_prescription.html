@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title_block %} Profile {% endblock %} 
+{% block title_block %} Prescription {% endblock %} 
 {% block body_block %}
 
 <div class="container">
-  <h2 class="text-center">Create Appointmen For Doctor</h2>
+  <h2 class="text-center">Create Prescription</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
@@ -13,18 +13,26 @@
       <option value="{{i.doctor_full_name}}">{{i.doctor_full_name}}</option>
       {% endfor %}
     </select>
+    <label>User Name</label>
+    <select name="user" class="form-control">
+      {% for i in user %}
+      <option value="{{i.first_name}}">{{i.first_name}}</option>
+      {% endfor %}
+    </select>
     <label>Patient Name</label>
     <select name="patient" class="form-control">
       {% for i in patient %}
       <option value="{{i.name}}">{{i.name}}</option>
       {% endfor %}
     </select>
-    <label>Contact</label>
-    <input type="text" class="form-control" name="mobile" required />
+    <label>Previous Medicine</label>
+    <input type="text" class="form-control" name="text1" required />
+    <label>Today's Medicine</label>
+    <input type="text" class="form-control" name="text2" required />
+    <label>Guideline or Refered </label>
+    <input type="text" class="form-control" name="text3" required />
     <label>Date</label>
     <input type="date" class="form-control" name="date1" required />
-    <label>Time</label>
-    <input type="time" class="form-control" name="time1" required />
     <br />
     <input type="submit" value="Submit" class="form-control btn btn-primary" />
   </form>
@@ -33,7 +41,7 @@
 {% if error == "no" %}
 <script>
   alert('Record  Save Successfully');
-  window.location = ('{% url 'Diagnostic_Center:view_appointment_doctor' %}');
+  window.location = ('{% url 'Diagnostic_Center:view_prescription' %}');
 </script>
 {% endif %} 
 {% if error == "yes" %}

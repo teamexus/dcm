@@ -86,6 +86,20 @@ class PackageTestAppointment(models.Model):
     
     def __str__(self):
         return self.user.username + "--" + self.patient.name
+    
+    
+class Prescription(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    patient = models.ForeignKey(DcmPatient, on_delete=models.CASCADE)
+    test= models.ForeignKey(Test, on_delete=models.CASCADE)
+    text1 = models.CharField(max_length=300 , null=True, blank=True)
+    text2 = models.CharField(max_length=300 , null=True, blank=True)
+    text3 = models.CharField(max_length=100 , null=True, blank=True)
+    date1 = models.DateField()
+    
+    def __str__(self):
+        return self.doctor.doctor_full_name + "--" + self.patient.name
 
 
     

@@ -55,3 +55,15 @@ class Technician(models.Model):
 
     def __str__(self):
     	return self.technician_full_name
+ 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, related_name = 'user_profile', on_delete=models.CASCADE, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True)
+
+class DoctorProfile(models.Model):
+    doctor = models.OneToOneField(Doctor, related_name = 'doctor_profile', on_delete=models.CASCADE, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
+
+class TechnicianProfile(models.Model):
+    technician = models.OneToOneField(Technician, related_name = 'technician_profile', on_delete=models.CASCADE, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)

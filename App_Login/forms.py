@@ -95,6 +95,17 @@ class UserProfileChange(UserChangeForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
+        
+class DoctorProfileChange(UserChangeForm):
+    class Meta:
+        model = Doctor
+        fields = "__all__" 
+        
+
+class TechnicianProfileChange(UserChangeForm):
+    class Meta:
+        model = Technician
+        fields = "__all__" 
 
 class ProfilePic(forms.ModelForm):
     class Meta:
