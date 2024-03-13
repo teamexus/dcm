@@ -7,12 +7,7 @@
   <h2 class="text-center">Create Your Patient Here</h2>
   <form method="post" >
     {% csrf_token %}
-    <label>User Name</label>
-    <select name="user" class="form-control">
-
-    <option value="{{user.username}}">{{user.username}}</option>
    
-    </select>
     <label>Patient Name</label>
     <input type="text" class="form-control" name="name" required />
     <label>Gender</label>

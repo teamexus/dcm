@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.urls import reverse
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
-from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic
+from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange
 from App_Login.models import User, DcmPatient, Doctor, Technician
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -137,6 +137,28 @@ def user_change(request):
             form.save()
             form = UserProfileChange(instance=current_user)
     return render(request, 'App_Login/change_profile.html', context={'form':form})
+
+@login_required
+def doctor_change(request):
+    current_user = request.user
+    form = DoctorProfileChange(instance=current_user)
+    if request.method == 'POST':
+        form = DoctorProfileChange(request.POST, instance=current_user)
+        if form.is_valid():
+            form.save()
+            form = DoctorProfileChange(instance=current_user)
+    return render(request, 'App_Login/change_doctor_profile.html', context={'form':form})
+
+@login_required
+def technician_change(request):
+    current_user = request.user
+    form = TechnicianProfileChange(instance=current_user)
+    if request.method == 'POST':
+        form = TechnicianProfileChange(request.POST, instance=current_user)
+        if form.is_valid():
+            form.save()
+            form = TechnicianProfileChange(instance=current_user)
+    return render(request, 'App_Login/change_technician_profile.html', context={'form':form})
 
 @login_required
 def pass_change(request):

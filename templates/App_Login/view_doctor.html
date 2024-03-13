@@ -15,6 +15,7 @@
                 <th>Designation</th>
                 {% if request.user.is_staff %}
                 <th>Delete</th>
+                
                 {% endif %}
                 
             </tr>
@@ -28,6 +29,7 @@
 
                 {% if request.user.is_staff %}
                 <td><a href="{% url 'App_Login:delete_doctor' i.user_id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+                
                 {% endif %}
             </tr>
             {% endfor %}
