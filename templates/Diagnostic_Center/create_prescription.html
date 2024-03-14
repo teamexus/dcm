@@ -7,6 +7,18 @@
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
+    <label>Doctor Name</label>
+    <select name="doctor" class="form-control">
+      {% for i in doctor %}
+      <option value="{{i.doctor_full_name}}">{{i.doctor_full_name}}</option>
+      {% endfor %}
+
+    <label>Patient  Name</label>
+    <select name="patient" class="form-control">
+      {% for i in patient %}
+      <option value="{{i.name}}">{{i.name}}</option>
+      {% endfor %}
+    </select>
     <label for="text1">Medicine & Test </label>
     <textarea id="text1" class="form-control" name="text1" required >
     </textarea>

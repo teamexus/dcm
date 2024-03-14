@@ -7,6 +7,7 @@ class User(AbstractUser):
     is_dcmadmin = models.BooleanField(default=False)
     is_doctor = models.BooleanField(default=False)
     is_technician = models.BooleanField(default=False)
+    is_attendent = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
 
 
@@ -17,9 +18,17 @@ class DcmAdmin(models.Model):
     def __str__(self):
     	return self.user.username
  
+class Attendent(models.Model):
+    user = models.OneToOneField(User, related_name='attendent_profile', on_delete=models.CASCADE, primary_key=True)
+
+
+    def __str__(self):
+    	return self.user.username
+ 
 class DcmPatient(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dcmpatient_profile')
+    attendent = models.ForeignKey(Attendent, on_delete=models.CASCADE, related_name='attendent_profile', null=True, blank=True)
     name = models.CharField(max_length=50)
     gender = models.CharField(max_length=50, null=True, blank=True)
     mobile = models.IntegerField(null=True)
@@ -59,6 +68,10 @@ class Technician(models.Model):
  
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name = 'user_profile', on_delete=models.CASCADE, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True)
+
+class AttendentProfile(models.Model):
+    user = models.OneToOneField(Attendent, related_name = 'user_profile', on_delete=models.CASCADE, null=True, blank=True)
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True)
 
 class DoctorProfile(models.Model):

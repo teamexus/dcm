@@ -52,7 +52,6 @@
               </a>
               <div class="dropdown-menu">
                <a class="dropdown-item" href="{% url 'App_Login:doctor_profile' %}">Your Profile</a>
-                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
                 <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
                 <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
                 <hr>
@@ -74,15 +73,20 @@
               </a>
               <div class="dropdown-menu">
                <a class="dropdown-item" href="{% url 'App_Login:technician_profile' %}">Your Profile</a>
-                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
                 <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
                 <hr>
               </div>
               
             </div>
-            
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Appointment</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_test' %}">Appointment For Test</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_package_test' %}">Appointment For Package Test</a>
+              </div>
             
             </li>
+            
+            
             {% elif user.is_authenticated %}
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">

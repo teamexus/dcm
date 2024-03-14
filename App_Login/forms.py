@@ -12,6 +12,22 @@ class UserSignUpForm(UserCreationForm):
         model = User
         fields = ('username',  'first_name', 'last_name', 'email', 'password1', 'password2')
 
+class AttendentSignUpForm(UserCreationForm):
+    email=forms.EmailField(required=True)
+  
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('username',  'first_name', 'last_name', 'email', 'password1', 'password2')
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.email=self.cleaned_data.get('email')
+        user.is_dcmadmin = True
+        user.save()
+        patient = DcmAdmin.objects.create(user=user)
+        return user
+
 class DcmAdminSignUpForm(UserCreationForm):
     email=forms.EmailField(required=True)
   
@@ -92,6 +108,11 @@ class TechnicianSignUpForm(UserCreationForm):
         return technician
     
 class UserProfileChange(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'password')
+
+class AttendentProfileChange(UserChangeForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
