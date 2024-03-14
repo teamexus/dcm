@@ -4,8 +4,11 @@
 
 
 <div class="container" style="margin-top:50px">
+ 
 <h2 class="text-center">View Appointment For Doctor</h2>
+{% if  not user.is_doctor %}
 <td><a href="{% url 'Diagnostic_Center:create_appointment_doctor' %}" class="btn btn-danger">Create Appointment</a></td>
+{% endif %}
 <br><br>
 <table class="table table-hover" id="example">
     <thead>
@@ -16,7 +19,10 @@
             <th>Contact Number</th>
             <th>Date</th>
             <th>Time</th>
+            {% if user.is_doctor %}
             <th>Delete</th>
+            <th>Create Prescription</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -28,7 +34,10 @@
             <td>{{i.mobile}}</td>
             <td>{{i.date1}}</td>
             <td>{{i.time1}}</td>
+            {% if user.is_doctor %}
             <td><a href="{% url 'Diagnostic_Center:delete_appointment_doctor' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+            <td><a href="{% url 'Diagnostic_Center:create_prescription' %}" onClick="return confirm('Are you sure?')" class="btn btn-danger"> Prescription</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

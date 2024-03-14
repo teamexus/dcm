@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User 
 from .models import *
 from django.contrib.auth import authenticate, logout, login
-from App_Login.models import User, DcmPatient
+from App_Login.models import User, DcmPatient, Doctor
 from django.contrib.auth.decorators import login_required
 
 
@@ -14,9 +14,14 @@ def blog_list(request):
 
 @login_required
 def view_appointment_doctor(request):
-    app = DoctorAppointment.objects.all()
-    a = {'app': app}
-    return render(request, 'Diagnostic_Center/view_appointment_doctor.html', a)
+    if request.user.is_doctor:
+        app = DoctorAppointment.objects.all()
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_doctor.html', a)
+    else:
+        app = DoctorAppointment.objects.filter(user=request.user)
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_doctor.html', a)
 
 
 @login_required
@@ -46,19 +51,21 @@ def create_appointment_doctor(request):
     k = {'user': user,'doctor': doctor1, 'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_doctor.html', k)
 
+def delete_appointment_doctor(request, pid):
+    appointment = DoctorAppointment.objects.get(id=pid)
+    appointment.delete()
+    return redirect('/diagnostic_center/view_appointment_doctor')
+
 @login_required
 def view_appointment_test(request):
-    app = TestAppointment.objects.filter(user=request.user)
-    a = {'app': app}
-    return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
-
-@login_required
-def view_appointment_package_test(request):
-    app = PackageTestAppointment.objects.filter(user=request.user)
-    a = {'app': app}
-    return render(request, 'Diagnostic_Center/view_appointment_package_test.html', a)
-
-
+    if request.user.is_technician:
+        app = TestAppointment.objects.all()
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+    else:
+        app = TestAppointment.objects.filter(user=request.user)
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
 
 
 @login_required
@@ -82,6 +89,22 @@ def create_appointment_test(request):
             error="yes"
     k = {'user':user,  'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_test.html', k)
+
+def delete_appointment_test(request, pid):
+    appointment = TestAppointment.objects.get(id=pid)
+    appointment.delete()
+    return redirect('/diagnostic_center/view_appointment_test')
+
+@login_required
+def view_appointment_package_test(request):
+    if request.user.is_technician:
+        app = PackageTestAppointment.objects.all()
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_package_test.html', a)
+    else:
+        app = PackageTestAppointment.objects.filter(user=request.user)
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_package_test.html', a)
 
 @login_required
 def create_appointment_package_test(request):
@@ -107,17 +130,6 @@ def create_appointment_package_test(request):
     return render(request, 'Diagnostic_Center/create_appointment_package_test.html', k)
 
 
-
-def delete_appointment_doctor(request, pid):
-    appointment = DoctorAppointment.objects.get(id=pid)
-    appointment.delete()
-    return redirect('/diagnostic_center/view_appointment_doctor')
-
-def delete_appointment_test(request, pid):
-    appointment = TestAppointment.objects.get(id=pid)
-    appointment.delete()
-    return redirect('/diagnostic_center/view_appointment_test')
-
 def delete_appointment_package_test(request, pid):
     appointment = PackageTestAppointment.objects.get(id=pid)
     appointment.delete()
@@ -136,9 +148,15 @@ def view_package(request):
 
 @login_required
 def view_prescription(request):
-    pres = Prescription.objects.all()
-    a = {'pres': pres}
-    return render(request, 'Diagnostic_Center/view_prescription.html', a)
+     if request.user.is_doctor:
+         pres = Prescription.objects.all()
+         a = {'pres': pres}
+         return render(request, 'Diagnostic_Center/view_prescription.html', a)
+     else:
+         pres = Prescription.objects.filter(user=request.user)
+         a = {'pres': pres}
+         return render(request, 'Diagnostic_Center/view_prescription.html', a)
+         
 
 
 @login_required
