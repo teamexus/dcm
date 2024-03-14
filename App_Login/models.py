@@ -8,7 +8,8 @@ class User(AbstractUser):
     is_doctor = models.BooleanField(default=False)
     is_technician = models.BooleanField(default=False)
     profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
-    
+
+
 class DcmAdmin(models.Model):
     user = models.OneToOneField(User, related_name='admin_profile', on_delete=models.CASCADE, primary_key=True)
 

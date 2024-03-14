@@ -14,21 +14,9 @@ def blog_list(request):
 
 @login_required
 def view_appointment_doctor(request):
-    app = DoctorAppointment.objects.filter(user=request.user)
+    app = DoctorAppointment.objects.all()
     a = {'app': app}
     return render(request, 'Diagnostic_Center/view_appointment_doctor.html', a)
-
-@login_required
-def view_appointment_test(request):
-    app = TestAppointment.objects.filter(user=request.user)
-    a = {'app': app}
-    return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
-
-@login_required
-def view_appointment_package_test(request):
-    app = PackageTestAppointment.objects.filter(user=request.user)
-    a = {'app': app}
-    return render(request, 'Diagnostic_Center/view_appointment_package_test.html', a)
 
 
 @login_required
@@ -57,6 +45,21 @@ def create_appointment_doctor(request):
             error="yes"
     k = {'user': user,'doctor': doctor1, 'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_doctor.html', k)
+
+@login_required
+def view_appointment_test(request):
+    app = TestAppointment.objects.filter(user=request.user)
+    a = {'app': app}
+    return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+
+@login_required
+def view_appointment_package_test(request):
+    app = PackageTestAppointment.objects.filter(user=request.user)
+    a = {'app': app}
+    return render(request, 'Diagnostic_Center/view_appointment_package_test.html', a)
+
+
+
 
 @login_required
 def create_appointment_test(request):
@@ -133,44 +136,27 @@ def view_package(request):
 
 @login_required
 def view_prescription(request):
-    if request.user == request.user.is_doctor:
-        pres = Prescription.objects.all() 
-        a = {'pres': pres}
-        return render(request, 'Diagnostic_Center/view_prescription.html', a)
-    else:
-         pres = Prescription.objects.filter(user=request.user) 
-         a = {'pres': pres}
-         return render(request, 'Diagnostic_Center/view_prescription.html', a)
+    pres = Prescription.objects.all()
+    a = {'pres': pres}
+    return render(request, 'Diagnostic_Center/view_prescription.html', a)
 
 
+@login_required
 def create_prescription(request):
     error=""
-    user1 = User.objects.all()
-    doctor1 = Doctor.objects.filter(user=request.user)
-    patient1 = DcmPatient.objects.all()
-    test1 = Test.objects.all()
-    
+    appointment1 = DoctorAppointment.objects.all()
     if request.method == 'POST':
-    
-        x = request.POST.get('doctor')
-        u = request.POST.get('user')
-        y = request.POST.get('patient')
-        t = request.POST.get('test')
+        x = request.POST.get('appointment')
         p1 = request.POST.get('text1')
-        p2 = request.POST.get('text2')
-        p3 = request.POST.get('text3')
         d1 = request.POST.get('date1')
-       
-        doctor = Doctor.objects.filter(doctor_full_name=x).first()
-        user = User.objects.filter(first_name=u).first()
-        patient = DcmPatient.objects.filter(name=y).first()
-        test = Test.objects.filter(test_name=t).first()
+        
+        appointment = DoctorAppointment.objects.filter(id=x).first()
         try:
-            Prescription.objects.create(user=user, doctor=doctor,  patient=patient, test=test, text1=p1, text2=p2, text3=p3, date1=d1)
+            Prescription.objects.create(appointment=appointment, text1=p1, date1=d1)
             error="no"
         except:
             error="yes"
-    k = {'user':user1, 'doctor': doctor1, 'patient':patient1, 'test':test1,  'error':error}
+    k = {'appointment':appointment1,   'error':error}
     return render(request, 'Diagnostic_Center/create_prescription.html', k)
 
 def delete_prescription(request, pid):
