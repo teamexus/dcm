@@ -11,31 +11,130 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+<!-- Data Table CDN Start  -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"> </script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js" > </script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js" > </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" > </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" > </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" > </script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"> </script>
+<!-- Data Table CDN Start  -->
+<script>
+  $(document).ready(function() {
+    $('#example').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copyHtml5',
+            'excelHtml5',
+            'csvHtml5',
+            'pdfHtml5'
+        ]
+    } );
+} );
+</script>
+
+
     <title>{% block title_block %} Diagnostic Center Management {% endblock %}</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="{% url 'index' %}"> <img src="/media/dcmlogo.png" width="50px">Home</a></li>
-            {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
-                <hr>
+            <a class="nav-link" href="{% url 'index' %}"> Home</a></li>
+            {% if user.is_authenticated and user.is_doctor  %}
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                @{{user.username}}
+              </a>
+              <div class="dropdown-menu">
+               <a class="dropdown-item" href="{% url 'App_Login:doctor_profile' %}">Your Profile</a>
+                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
                 <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
-                </li>
+                <hr>
+              </div>
+            </div>
+              <br>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Appointment</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_doctor' %}">Appointment For Doctor</a>
+                  
+                </div>
+              
+              </li>
+            
+            {% elif user.is_authenticated and user.is_technician  %}
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                @{{user.username}}
+              </a>
+              <div class="dropdown-menu">
+               <a class="dropdown-item" href="{% url 'App_Login:technician_profile' %}">Your Profile</a>
+                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
+                <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
+                <hr>
+              </div>
+              
+            </div>
+            
+            
+            </li>
+            {% elif user.is_authenticated %}
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                @{{user.username}}
+              </a>
+              <div class="dropdown-menu">
+               <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
+                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
+                <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
+                <hr>
+              </div>
+              
+            </div>
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Appointment</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_doctor' %}">Appointment For Doctor</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_test' %}">Appointment For Test</a>
+                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_package_test' %}">Appointment For Package Test</a>
+              </div>
+            
+            </li>
+    
             {% else %}
          <li class="nav-item">
                 <a class="nav-link" href="{% url 'App_Login:signup' %}">SignUp</a>
          </li>
-         <li class="nav-item">
-            <a class="nav-link" href="{% url 'App_Login:patientsignup' %}">PatientSignUp</a>
-         </li>
-         <li class="nav-item">
-            <a class="nav-link" href="{% url 'App_Login:doctorsignup' %}">DoctorSignUp</a>
-         </li>
-         <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link" href="{% url 'App_Login:login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
+      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'Diagnostic_Center:view_test' %}">Tests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
+    </li>
+          {% endif %}
+          {% if request.user.is_staff %}
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Doctor</a>
+            <div class="dropdown-menu">
+              
+              <a class="dropdown-item"  href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
+            </div>
+            <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Technician</a>
+            <div class="dropdown-menu">
+              
+              <a class="dropdown-item"  href="{% url 'App_Login:view_technician' %}">Technicians</a>
+            </div>
+           </li>
           </li>
           {% endif %}
         </ul>

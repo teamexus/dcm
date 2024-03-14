@@ -1,0 +1,32 @@
+{% extends 'base.html' %} 
+{% block title_block %}Doctor Profile {% endblock %} 
+{% block body_block %}
+<h2>Your Profile</h2>
+{% if user.is_doctor %}
+<img src='/media/{{user.user_profile.profile_pic}}' class="rounded-circle" width="100px">
+<br>
+<br>
+<a href="{% url 'App_Login:change_pro_pic' %}" class="btn btn-info btn-sm">Change Profile Picture</a>
+{% else %}
+<img src='/media/profile_pics/avatar-male.jpg' class="rounded-circle" width="100px"/>
+<br>
+<br>
+<a href="{% url 'App_Login:add_pro_pic' %}" class="btn btn-info btn-sm">Change Profile Picture</a>
+{% endif %}
+<br>
+<br>
+{% for i in doc %}
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+<p>Doctor Full Name: {{ i.doctor_full_name }} </p>
+<p>Doctor Phone Number: {{ i.phone }} </p>
+<p>Doctor Specialization : {{ i.spe }} </p>
+<p>Doctor Designation : {{ i.designation }} </p>
+<p>Doctor Degrees : {{ i.degree }} </p>
+<p>Doctor Current Working Place : {{ i.current_working_place }} </p>
+<p>Doctor Mbbs Institution: {{ i.mbbs_institution }} </p>
+<p>Doctor Post Graduation Institution: {{ i.post_graduation_institution }} </p>
+<br>
+{% endfor %}
+<a href="{% url 'App_Login:doctor_change'  %}" class="btn btn-warning btn-sm">Change Profile Info</a>
+{% endblock %}

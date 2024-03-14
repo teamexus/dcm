@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title_block %} Create Patient {% endblock %} 
+{% block body_block %}
+
+<div class="container">
+  <h2 class="text-center">Create Your Patient Here</h2>
+  <form method="post" >
+    {% csrf_token %}
+   
+    <label>Patient Name</label>
+    <input type="text" class="form-control" name="name" required />
+    <label>Gender</label>
+    <input type="radio"  name="gender" value="Male">Male
+    <input type="radio"  name="gender" value="Male">Female
+    <br>
+    <label>Contact</label>
+    <input type="text" class="form-control" name="mobile" required />
+    <label>Age</label>
+    <input type="text" class="form-control" name="age" required />
+    <label>Address</label>
+    <textarea class="form-control" name="address" required></textarea>
+    <br />
+    <input type="submit" value="Submit" class="form-control btn btn-primary" />
+  </form>
+</div>
+
+
+{% if error == "no" %}
+<script>
+  alert('Record  Save Successfully');
+  window.location = ('{% url 'App_Login:view_patient' %}');
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+  alert("Something went wrong, Try again");
+</script>
+{% endif %}
+
+
+{% endblock %}
