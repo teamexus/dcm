@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange
 from App_Login.models import User, DcmPatient, Doctor, Technician
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 # Create your views here.
 
@@ -100,10 +101,17 @@ def login_page(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                messages.success(request, "You are logged in AS User Successfully")
                 return HttpResponseRedirect(reverse('index'))
             
     dict = {'form': form}
     return render(request, 'App_Login/login.html', context=dict)
+
+def custom_login(request,*args, **kwargs):
+    response = login(request, *args, **kwargs)
+    if request.user.is_authenticated():
+         messages.info(request, "Welcome User AS Customer")
+    return response
 
 @login_required
 def logout_user(request):
@@ -230,3 +238,5 @@ def Delete_Patient(request, pid):
     patient = DcmPatient.objects.get(id=pid)
     patient.delete()
     return redirect('/account/view_patient')
+
+
