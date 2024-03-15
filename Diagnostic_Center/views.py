@@ -4,6 +4,7 @@ from .models import *
 from django.contrib.auth import authenticate, logout, login
 from App_Login.models import User, DcmPatient, Doctor
 from django.contrib.auth.decorators import login_required
+import datetime
 
 
 
@@ -169,11 +170,13 @@ def view_prescription(request):
 def create_prescription(request):
     error=""
     appointment1 = DoctorAppointment.objects.all()
+    
     if request.method == 'POST':
         x = request.POST.get('appointment')
         p1 = request.POST.get('text1')
         d1 = request.POST.get('date1')
         
+        d1 = datetime.date.today()
         appointment = DoctorAppointment.objects.filter(id=x).first()
         try:
             Prescription.objects.create(appointment=appointment, text1=p1, date1=d1)
