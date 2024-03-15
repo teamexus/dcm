@@ -21,7 +21,7 @@
     <tbody>
         {% for i in pres %}
         <tr>
-            <td>{{i.name}}</td>
+            <td>{{i.appointment.patient.name}}</td>
             <td>{{i.text1}}</td>
             <td>{{i.date1}}</td>
             <td><a href="{% url 'Diagnostic_Center:delete_prescription' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>

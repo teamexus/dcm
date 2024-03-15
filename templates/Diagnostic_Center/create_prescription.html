@@ -7,11 +7,7 @@
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
-    <label>Doctor Name</label>
-    <select name="doctor" class="form-control">
-      {% for i in doctor %}
-      <option value="{{i.doctor_full_name}}">{{i.doctor_full_name}}</option>
-      {% endfor %}
+ 
 
     <label>Patient  Name</label>
     <select name="patient" class="form-control">

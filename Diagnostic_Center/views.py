@@ -15,7 +15,8 @@ def blog_list(request):
 @login_required
 def view_appointment_doctor(request):
     if request.user.is_doctor:
-        app = DoctorAppointment.objects.all()
+        doctor = Doctor.objects.filter(user=request.user).first()
+        app = DoctorAppointment.objects.filter(doctor=doctor)
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_doctor.html', a)
     else:
@@ -149,11 +150,16 @@ def view_package(request):
 @login_required
 def view_prescription(request):
      if request.user.is_doctor:
+         #doctor = Doctor.objects.filter(user=request.user).first()
+         #filter(doctor=doctor)
          pres = Prescription.objects.all()
          a = {'pres': pres}
          return render(request, 'Diagnostic_Center/view_prescription.html', a)
      else:
-         pres = Prescription.objects.filter(user=request.user)
+         #print(request)
+         patients = DcmPatient.objects.filter(user=request.user)
+         doctorappointment = DoctorAppointment.objects.filter(patient__in = patients)
+         pres = Prescription.objects.filter(appointment__in = doctorappointment)
          a = {'pres': pres}
          return render(request, 'Diagnostic_Center/view_prescription.html', a)
          
