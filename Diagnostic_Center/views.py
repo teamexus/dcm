@@ -172,11 +172,13 @@ def create_prescription(request):
     appointment1 = DoctorAppointment.objects.all()
     pres_user1 = User.objects.all()
     pres_doctor1 = Doctor.objects.filter(user=request.user)
+    pres_patient1 = DcmPatient.objects.all()
     
     if request.method == 'POST':
         x = request.POST.get('appointment')
         u= request.POST.get('pres_user')
         d= request.POST.get('pres_doctor')
+        p= request.POST.get('pres_patient')
         p1 = request.POST.get('text1')
         d1 = request.POST.get('date1')
         
@@ -184,12 +186,13 @@ def create_prescription(request):
         appointment = DoctorAppointment.objects.filter(id=x).first()
         pres_user = User.objects.filter(first_name=u).first()
         pres_doctor = Doctor.objects.filter(doctor_full_name=d).first()
+        pres_patient = DcmPatient.objects.filter(name=p).first()
         try:
-            Prescription.objects.create(appointment=appointment, pres_user=pres_user, pres_doctor=pres_doctor, text1=p1, date1=d1)
+            Prescription.objects.create(appointment=appointment, pres_user=pres_user, pres_doctor=pres_doctor,pres_patient=pres_patient, text1=p1, date1=d1)
             error="no"
         except:
             error="yes"
-    k = {'appointment':appointment1, 'pres_user':pres_user1, 'pres_doctor':pres_doctor1, 'error':error}
+    k = {'appointment':appointment1, 'pres_user':pres_user1, 'pres_doctor':pres_doctor1, 'pres_patient':pres_patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_prescription.html', k)
 
 def delete_prescription(request, pid):

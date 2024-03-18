@@ -127,6 +127,14 @@ def technician_profile(request):
     t = {'tec': tec}
     return render(request, 'App_Login/technician_profile.html', t)
 
+@login_required
+def patient_profile(request):
+    pat = DcmPatient.objects.filter(user=request.user)
+    d = {'pat': pat}
+    return render(request, 'App_Login/patient_profile.html', d)
+
+
+
 
 @login_required
 def user_change(request):
@@ -203,6 +211,8 @@ def View_Patient(request):
     pat = DcmPatient.objects.filter(user=request.user)
     d = {'pat': pat}
     return render(request, 'App_Login/view_patient.html', d)
+
+
 
 @login_required
 def CreatePatient(request):

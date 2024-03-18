@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.db import transaction
-from App_Login.models import User, DcmAdmin, Doctor, Technician
+from App_Login.models import User, DcmAdmin, Doctor, Technician, UserProfile
 
 
 class UserSignUpForm(UserCreationForm):
@@ -130,6 +130,6 @@ class TechnicianProfileChange(UserChangeForm):
 
 class ProfilePic(forms.ModelForm):
     class Meta:
-        model = User
+        model = UserProfile
         fields = ['profile_pic']
     

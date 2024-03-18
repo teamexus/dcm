@@ -17,6 +17,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('doctor_profile/', views.doctor_profile, name='doctor_profile'),
     path('technician_profile/', views.technician_profile, name='technician_profile'),
+     path('patient_profile/', views.patient_profile, name='patient_profile'),
     path('change-profile/', views.user_change, name='user_change'),
     path('change-doctor-profile/', views.doctor_change, name='doctor_change'),
     path('change-technician-profile/', views.technician_change, name='technician_change'),

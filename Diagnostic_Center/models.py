@@ -92,6 +92,7 @@ class PackageTestAppointment(models.Model):
 class Prescription(models.Model):
     appointment = models.ForeignKey(DoctorAppointment, blank=True, null=True, on_delete=models.CASCADE)
     pres_user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    pres_patient = models.ForeignKey(DcmPatient, blank=True, null=True, on_delete=models.CASCADE)
     pres_doctor = models.ForeignKey(Doctor, blank=True, null=True, on_delete=models.CASCADE)
     text1 = models.CharField(max_length=800 , null=True, blank=True)
     date1 = models.DateField(null=True, blank=True)

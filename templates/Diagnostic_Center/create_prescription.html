@@ -20,6 +20,14 @@
       <option value="{{i.first_name}}">{{i.first_name}}</option>
       {% endfor %}
     </select>
+    <label>Patient Name</label>
+    <select name="pres_patient" class="form-control">
+      
+      {% for i in pres_patient %}
+      <option value="{{i.name}}">{{i.name}}</option>
+      {% endfor %}
+     
+    </select>
     <label for="text1">Medicine & Test </label>
     <textarea id="text1" class="form-control" name="text1" required >
     </textarea>

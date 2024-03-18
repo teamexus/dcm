@@ -1,0 +1,17 @@
+{% extends 'base.html' %} 
+{% block title_block %}Patient Profile {% endblock %} 
+{% block body_block %}
+<h2>Patient Profile</h2>
+
+<br>
+<br>
+{% for i in pat %}
+<p>Patient Name: {{ i.name }} </p>
+<p>Gender: {{ i.gender }} </p>
+<p>Mobile : {{ i.mobile }} </p>
+<p>Age: {{ i.age }} </p>
+<p>Address : {{ i.address }} </p>
+<br>
+{% endfor %}
+
+{% endblock %}

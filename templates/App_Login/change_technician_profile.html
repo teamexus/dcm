@@ -2,10 +2,33 @@
 {% load crispy_forms_tags %}
 {% block title_block %} Change Profile {% endblock %} 
 {% block body_block %}
-<form method="POST">
-    {{ form.as_p }}
-    {% csrf_token %}
-    <button type="submit" class="btn btn-warning btn-sm">Change</button>
-</form>
+
+<div class="container">
+    <h2 class="text-center">Change Technician Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+    <label>User Name</label>
+    <input type="text" class="form-control" name="username" value={{user.username}} required />
+    <label>Email</label>
+    <input type="text" class="form-control" name="email" value={{user.email}} required />
+    <label>Technician Full Name</label>
+    <input type="text" class="form-control" name="technician_full_name" required />
+    <label>Phone</label>
+    <input type="text" class="form-control" name="phone" required />
+    <label>Designation</label>
+    <input type="text" class="form-control" name="designation" required />
+    <label>Password</label>
+    <input type="password" class="form-control" name="password1" required />
+    <label>Confirm Password</label>
+    <input type="password" class="form-control" name="password2" required />
+      <br />
+      <input type="submit" value="Change" class="form-control btn btn-primary" />
+    </form>
+  </div>
+
+
+    
+
 
 {% endblock %}

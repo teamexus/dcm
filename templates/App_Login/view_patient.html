@@ -26,7 +26,7 @@
                 <td>{{i.gender}}</td>
                 <td>{{i.mobile}}</td>
                 <td><a href="{% url 'App_Login:delete_patient' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
-                <td><a href="#" onClick="return confirm('Patient Profile')" class="btn btn-danger">Details</a></td>
+                <td><a href="{% url 'App_Login:patient_profile'   %}" onClick="return confirm('Patient Profile')" class="btn btn-danger">Details</a></td>
             </tr>
             {% endfor %}
         </tbody>
