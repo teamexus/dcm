@@ -4,7 +4,7 @@ from .models import *
 from django.contrib.auth import authenticate, logout, login
 from App_Login.models import User, DcmPatient, Doctor
 from django.contrib.auth.decorators import login_required
-import datetime
+
 
 
 
@@ -151,16 +151,16 @@ def view_package(request):
 @login_required
 def view_prescription(request):
      if request.user.is_doctor:
-         #doctor = Doctor.objects.filter(user=request.user).first()
+         doctor = Doctor.objects.filter(user=request.user).first()
          #filter(doctor=doctor)
-         pres = Prescription.objects.all()
+         pres = Prescription.objects.filter(pres_doctor=doctor)
          a = {'pres': pres}
          return render(request, 'Diagnostic_Center/view_prescription.html', a)
      else:
          #print(request)
-         patients = DcmPatient.objects.filter(user=request.user)
-         doctorappointment = DoctorAppointment.objects.filter(patient__in = patients)
-         pres = Prescription.objects.filter(appointment__in = doctorappointment)
+         #patients = DcmPatient.objects.filter(user=request.user)
+         #doctorappointment = DoctorAppointment.objects.filter(patient__in = patients)
+         pres = Prescription.objects.filter(pres_user=request.user)
          a = {'pres': pres}
          return render(request, 'Diagnostic_Center/view_prescription.html', a)
          
@@ -170,20 +170,26 @@ def view_prescription(request):
 def create_prescription(request):
     error=""
     appointment1 = DoctorAppointment.objects.all()
+    pres_user1 = User.objects.all()
+    pres_doctor1 = Doctor.objects.filter(user=request.user)
     
     if request.method == 'POST':
         x = request.POST.get('appointment')
+        u= request.POST.get('pres_user')
+        d= request.POST.get('pres_doctor')
         p1 = request.POST.get('text1')
         d1 = request.POST.get('date1')
         
-        d1 = datetime.date.today()
+        #d1 = datetime.date.today()
         appointment = DoctorAppointment.objects.filter(id=x).first()
+        pres_user = User.objects.filter(first_name=u).first()
+        pres_doctor = Doctor.objects.filter(doctor_full_name=d).first()
         try:
-            Prescription.objects.create(appointment=appointment, text1=p1, date1=d1)
+            Prescription.objects.create(appointment=appointment, pres_user=pres_user, pres_doctor=pres_doctor, text1=p1, date1=d1)
             error="no"
         except:
             error="yes"
-    k = {'appointment':appointment1,   'error':error}
+    k = {'appointment':appointment1, 'pres_user':pres_user1, 'pres_doctor':pres_doctor1, 'error':error}
     return render(request, 'Diagnostic_Center/create_prescription.html', k)
 
 def delete_prescription(request, pid):

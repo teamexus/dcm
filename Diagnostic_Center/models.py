@@ -1,5 +1,6 @@
 from django.db import models
 from App_Login.models import  DcmPatient, Doctor, User
+import datetime
 
 # Create your models here.
 
@@ -90,8 +91,10 @@ class PackageTestAppointment(models.Model):
     
 class Prescription(models.Model):
     appointment = models.ForeignKey(DoctorAppointment, blank=True, null=True, on_delete=models.CASCADE)
+    pres_user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    pres_doctor = models.ForeignKey(Doctor, blank=True, null=True, on_delete=models.CASCADE)
     text1 = models.CharField(max_length=800 , null=True, blank=True)
-    date1 = models.DateField()
+    date1 = models.DateField(null=True, blank=True)
     
     def __str__(self):
         return str(self.date1)
