@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
 # Create your models here.
 
@@ -28,8 +29,8 @@ class Attendent(models.Model):
 class DcmPatient(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dcmpatient_profile')
-    attendent = models.ForeignKey(Attendent, on_delete=models.CASCADE, related_name='attendent_profile', null=True, blank=True)
     name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=264, unique=True, null=True, blank=True)
     gender = models.CharField(max_length=50, null=True, blank=True)
     mobile = models.IntegerField(null=True)
     age = models.IntegerField()
@@ -37,6 +38,9 @@ class DcmPatient(models.Model):
     
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse('first_app:patient_details', kwargs={'pk':self.pk})
  
  
 class Doctor(models.Model):

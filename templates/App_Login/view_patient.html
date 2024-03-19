@@ -10,23 +10,25 @@
     <table class="table table-hover" id="example">
         <thead>
             <tr>
-                
+                <th>Patient Name</th>
                 <th>Patient Name</th>
                 <th>Gender</th>
                 <th>Contact</th>
                 <th>Delete</th>
                 <th>Details</th>
+                <th>Edit</th>
             </tr>
         </thead>
         <tbody>
             {% for i in pat %}
             <tr>
-                
-                <td>{{i.name}}</td>
+                <td><a href="{% url 'App_Login:patient_details' pk=patient.pk %}" onClick="return confirm('Are you sure?')">{{i.name}}</a></td>
+                <td >{{i.name}}</td>
                 <td>{{i.gender}}</td>
                 <td>{{i.mobile}}</td>
                 <td><a href="{% url 'App_Login:delete_patient' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
                 <td><a href="{% url 'App_Login:patient_profile'   %}" onClick="return confirm('Patient Profile')" class="btn btn-danger">Details</a></td>
+                <td><a href="{% url 'App_Login:edit_patient' i.id  %}" onClick="return confirm('Patient Profile')" class="btn btn-danger">Edit</a></td>
             </tr>
             {% endfor %}
         </tbody>

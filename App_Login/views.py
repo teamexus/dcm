@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout 
-from django.urls import reverse
-from django.views.generic import CreateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DetailView
 from django.contrib.auth.decorators import login_required
 from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange
 from App_Login.models import User, DcmPatient, Doctor, Technician
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
+from App_Login import models
 
 # Create your views here.
 
@@ -132,6 +134,12 @@ def patient_profile(request):
     pat = DcmPatient.objects.filter(user=request.user)
     d = {'pat': pat}
     return render(request, 'App_Login/patient_profile.html', d)
+class DcmPatientDetail(DetailView):
+    context_object_name = 'patient'
+    model = models.DcmPatient
+    template_name = 'App_Login/patient_details.html'
+    
+    
 
 
 
@@ -168,6 +176,10 @@ def technician_change(request):
             form.save()
             form = TechnicianProfileChange(instance=current_user)
     return render(request, 'App_Login/change_technician_profile.html', context={'form':form})
+
+
+
+  
 
 @login_required
 def pass_change(request):
@@ -241,5 +253,13 @@ def Delete_Patient(request, pid):
     patient = DcmPatient.objects.get(id=pid)
     patient.delete()
     return redirect('/account/view_patient')
+
+class UpdateDcmPatient(LoginRequiredMixin, UpdateView):
+    model = DcmPatient
+    fields = ('user', 'name', 'gender', 'mobile', 'age', 'address')
+    template_name = 'App_Login/edit_patient.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('App_Login:view_patient', kwargs={'slug':self.object.slug})
 
 
