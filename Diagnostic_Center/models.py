@@ -94,6 +94,7 @@ class Prescription(models.Model):
     pres_user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     pres_patient = models.ForeignKey(DcmPatient, blank=True, null=True, on_delete=models.CASCADE)
     pres_doctor = models.ForeignKey(Doctor, blank=True, null=True, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=264, unique=True, null=True, blank=True)
     text1 = models.CharField(max_length=800 , null=True, blank=True)
     date1 = models.DateField(null=True, blank=True)
     

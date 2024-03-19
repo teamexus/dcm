@@ -16,6 +16,7 @@
             <th>Medicine</th>
             <th>Date</th>
             <th>Delete</th>
+            <th>Edit</th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
             <td>{{i.text1}}</td>
             <td>{{i.date1}}</td>
             <td><a href="{% url 'Diagnostic_Center:delete_prescription' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+            <td><a href="{% url 'Diagnostic_Center:edit_prescription' i.id  %}" onClick="return confirm('Patient Profile')" class="btn btn-danger">Edit</a></td>
         </tr>
         {% endfor %}
     </tbody>

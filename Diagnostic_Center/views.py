@@ -4,6 +4,9 @@ from .models import *
 from django.contrib.auth import authenticate, logout, login
 from App_Login.models import User, DcmPatient, Doctor
 from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse, reverse_lazy
 
 
 
@@ -199,6 +202,14 @@ def delete_prescription(request, pid):
     prescription = Prescription.objects.get(id=pid)
     prescription.delete()
     return redirect('/diagnostic_center/view_prescription')
+
+class UpdatePrescription(LoginRequiredMixin, UpdateView):
+    model = Prescription
+    fields = ('pres_user', 'pres_patient', 'pres_doctor', 'text1', 'date1')
+    template_name = 'Diagnostic_Center/edit_prescription.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_prescription', kwargs={'slug':self.object.slug})
 
     
 
