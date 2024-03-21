@@ -120,7 +120,8 @@ class AttendentProfileChange(UserChangeForm):
 class DoctorProfileChange(UserChangeForm):
     class Meta:
         model = Doctor
-        fields = "__all__" 
+        #fields = "__all__" 
+        fields = ('doctor_full_name', 'phone', 'spe', 'designation', 'degree', 'current_working_place', 'mbbs_institution')
         
 
 class TechnicianProfileChange(UserChangeForm):
@@ -138,4 +139,9 @@ class ProfilePic(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['profile_pic']
+
+class PatientProfilePic(forms.ModelForm):
+    class Meta:
+        model = DcmPatient
+        fields = ['patient_image']
     

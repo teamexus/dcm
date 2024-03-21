@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView
 from django.contrib.auth.decorators import login_required
-from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange
+from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange, PatientProfilePic
 from App_Login.models import User, DcmPatient, Doctor, Technician
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
@@ -130,20 +130,13 @@ def technician_profile(request):
     return render(request, 'App_Login/technician_profile.html', t)
 
 @login_required
-def patient_profile(request):
-    pat = DcmPatient.objects.filter(user=request.user)
+def patient_profile(request, pid):
+    pat = DcmPatient.objects.filter(id=pid)
     d = {'pat': pat}
     return render(request, 'App_Login/patient_profile.html', d)
-class DcmPatientDetail(DetailView):
-    context_object_name = 'patient'
-    model = models.DcmPatient
-    template_name = 'App_Login/patient_details.html'
+
+
     
-    
-
-
-
-
 @login_required
 def user_change(request):
     current_user = request.user
@@ -216,6 +209,30 @@ def change_pro_pic(request):
                 return HttpResponseRedirect(reverse('App_Login:profile'))
                 
     return render(request, 'App_Login/change_pro_pic.html', context={'form':form})
+
+@login_required
+def add_patient_pic(request):
+    form = PatientProfilePic()
+    if request.method == 'POST':
+        form = PatientProfilePic(request.POST, request.FILES)
+        if form.is_valid():
+            user_obj = form.save(commit=False)
+            user_obj.user = request.user
+            user_obj.save()
+            return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
+    return render(request, 'App_Login/add_patient_pic.html', context={'form':form})
+
+@login_required
+def change_patient_pic(request):
+    form = PatientProfilePic(instance=request.user)
+    if request.method == 'POST':
+        form = PatientProfilePic(request.POST, request.FILES, instance=request.user)
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(reverse('App_Login:patient_profile'))
+                
+    return render(request, 'App_Login/change_patient_pic.html', context={'form':form})
 
 
 @login_required

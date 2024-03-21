@@ -29,6 +29,7 @@ class Attendent(models.Model):
 class DcmPatient(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dcmpatient_profile')
+    patient_image = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=264, unique=True, null=True, blank=True)
     gender = models.CharField(max_length=50, null=True, blank=True)

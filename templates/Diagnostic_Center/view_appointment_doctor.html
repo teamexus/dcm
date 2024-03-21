@@ -36,7 +36,7 @@
             <td>{{i.time1}}</td>
             {% if user.is_doctor %}
             <td><a href="{% url 'Diagnostic_Center:delete_appointment_doctor' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
-            <td><a href="{% url 'Diagnostic_Center:create_prescription' %}" onClick="return confirm('Are you sure?')" class="btn btn-danger"> Prescription</a></td>
+            <td><a href="{% url 'Diagnostic_Center:create_prescription' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger"> Prescription</a></td>
             {% endif %}
         </tr>
         {% endfor %}

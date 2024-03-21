@@ -170,12 +170,15 @@ def view_prescription(request):
 
 
 @login_required
-def create_prescription(request):
+def create_prescription(request, aid):
     error=""
-    appointment1 = DoctorAppointment.objects.all()
-    pres_user1 = User.objects.all()
+    
+    appointment1 = DoctorAppointment.objects.filter(id=aid)
+    user = appointment1.values('user').first()
+    pres_user1 = User.objects.filter(id=user['user'])
     pres_doctor1 = Doctor.objects.filter(user=request.user)
-    pres_patient1 = DcmPatient.objects.all()
+    patient = appointment1.values('patient').first()
+    pres_patient1 = DcmPatient.objects.filter(id= patient['patient'])
     
     if request.method == 'POST':
         x = request.POST.get('appointment')
