@@ -33,9 +33,21 @@ class DcmPatient(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=264, unique=True, null=True, blank=True)
     gender = models.CharField(max_length=50, null=True, blank=True)
-    mobile = models.IntegerField(null=True)
-    age = models.IntegerField()
-    address = models.CharField(max_length=150)
+    blood_group = (
+        ("A+", "A+"),
+        ("A-", "A-"),
+        ("B+", "B+"),
+        ("B-", "B-"),
+        ("O+", "O+"),
+        ("O-", "O-"),
+        ("AB+", "AB+"),
+        ("AB-", "AB-"),
+    
+    )
+    patient_blood_group = models.CharField(max_length=20,choices= blood_group, null=True, blank=True)
+    mobile = models.IntegerField(null=True, blank=True)
+    age = models.IntegerField(null=True, blank=True)
+    address = models.CharField(max_length=150, null=True, blank=True)
     
     def __str__(self):
         return self.name

@@ -177,7 +177,7 @@ def create_prescription(request, aid):
     user = appointment1.values('user').first()
     pres_user1 = User.objects.filter(id=user['user'])
     pres_doctor1 = Doctor.objects.filter(user=request.user)
-    patient = appointment1.values('patient').first()
+    patient = appointment1.values('patient').first()  
     pres_patient1 = DcmPatient.objects.filter(id= patient['patient'])
     
     if request.method == 'POST':
@@ -212,7 +212,7 @@ class UpdatePrescription(LoginRequiredMixin, UpdateView):
     template_name = 'Diagnostic_Center/edit_prescription.html'
     
     def get_success_url(self, **kwargs):
-        return reverse_lazy('Diagnostic_Center:view_prescription', kwargs={'slug':self.object.slug})
+        return reverse_lazy('Diagnostic_Center:view_prescription')
 
     
 

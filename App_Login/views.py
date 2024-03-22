@@ -211,7 +211,7 @@ def change_pro_pic(request):
     return render(request, 'App_Login/change_pro_pic.html', context={'form':form})
 
 @login_required
-def add_patient_pic(request):
+def add_patient_pic(request, pid):
     form = PatientProfilePic()
     if request.method == 'POST':
         form = PatientProfilePic(request.POST, request.FILES)
@@ -223,7 +223,7 @@ def add_patient_pic(request):
     return render(request, 'App_Login/add_patient_pic.html', context={'form':form})
 
 @login_required
-def change_patient_pic(request):
+def change_patient_pic(request, pid):
     form = PatientProfilePic(instance=request.user)
     if request.method == 'POST':
         form = PatientProfilePic(request.POST, request.FILES, instance=request.user)
@@ -248,15 +248,16 @@ def CreatePatient(request):
     error=""
     user = request.user
     if request.method == 'POST':
-        n = request.POST['name']
-        g = request.POST['gender']
-        m = request.POST['mobile']
-        a = request.POST['age']
-        add = request.POST['address']
+        n = request.POST.get('name')
+        g = request.POST.get('gender')
+        b = request.POST.get('patient_blood_group')
+        m = request.POST.get('mobile')
+        a = request.POST.get('age')
+        add = request.POST.get('address')
         
   
         try:
-            DcmPatient.objects.create(user=user, name=n, gender=g, mobile=m, age=a, address=add)
+            DcmPatient.objects.create(user=user, name=n, gender=g, patient_blood_group =b, mobile=m, age=a, address=add)
             error="no"
         except:
             error="yes"
@@ -277,6 +278,6 @@ class UpdateDcmPatient(LoginRequiredMixin, UpdateView):
     template_name = 'App_Login/edit_patient.html'
     
     def get_success_url(self, **kwargs):
-        return reverse_lazy('App_Login:view_patient', kwargs={'slug':self.object.slug})
+        return reverse_lazy('App_Login:view_patient')
 
 

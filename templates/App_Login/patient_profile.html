@@ -3,9 +3,7 @@
 {% block body_block %}
 <h2>Patient Profile</h2>
 <br>
-<br>
-{% for i in pat %}
- {% if  user.is_authenticated %}
+{% if  patient %}
 <img src='/media/{{ i.patient_image }}' class="rounded-circle" width="100px">
 <br>
 <br>
@@ -16,10 +14,12 @@
 <br>
 <a href="{% url 'App_Login:add_patient_pic' %}" class="btn btn-info btn-sm">Change Patient Picture</a>
 {% endif %}
+{% for i in pat %}
 <br>
 <br>
 <p>Patient Name: {{ i.name }} </p>
 <p>Gender: {{ i.gender }} </p>
+<p>Blood Group: {{ i.patient_blood_group }} </p>
 <p>Mobile : {{ i.mobile }} </p>
 <p>Age: {{ i.age }} </p>
 <p>Address : {{ i.address }} </p>
