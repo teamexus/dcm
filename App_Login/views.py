@@ -151,24 +151,26 @@ def user_change(request):
 @login_required
 def doctor_change(request):
     current_user = request.user
-    form = DoctorProfileChange(instance=current_user)
+    doc = Doctor.objects.filter(user=request.user).first()
+    form = DoctorProfileChange(instance=doc)
     if request.method == 'POST':
-        form = DoctorProfileChange(request.POST, instance=current_user)
+        form = DoctorProfileChange(request.POST, instance=doc)
         if form.is_valid():
             form.save()
-            form = DoctorProfileChange(instance=current_user)
+            form = DoctorProfileChange(instance=doc)
     return render(request, 'App_Login/change_doctor_profile.html', context={'form':form})
 
 @login_required
 def technician_change(request):
     current_user = request.user
-    form = TechnicianProfileChange(instance=current_user)
+    tec = Technician.objects.filter(user=request.user).first()
+    form = TechnicianProfileChange(instance=tec)
     if request.method == 'POST':
-        form = TechnicianProfileChange(request.POST, instance=current_user)
+        form = TechnicianProfileChange(request.POST, instance=tec)
         if form.is_valid():
             form.save()
-            form = TechnicianProfileChange(instance=current_user)
-    return render(request, 'App_Login/change_technician_profile.html', context={'form':form})
+            form = TechnicianProfileChange(instance=tec)
+    return render(request, 'App_Login/change_technician_profile.html', context={'form':form, "tec":tec})
 
 
 
@@ -219,11 +221,12 @@ def add_patient_pic(request, pid):
             user_obj = form.save(commit=False)
             user_obj.user = request.user
             user_obj.save()
-            return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
+            #return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
+            return  HttpResponseRedirect(reverse('App_Login:patient_profile', kwargs={'pid':pid}))
     return render(request, 'App_Login/add_patient_pic.html', context={'form':form})
 
 @login_required
-def change_patient_pic(request, pid):
+def change_patient_pic(request):
     form = PatientProfilePic(instance=request.user)
     if request.method == 'POST':
         form = PatientProfilePic(request.POST, request.FILES, instance=request.user)
