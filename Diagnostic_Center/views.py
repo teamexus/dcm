@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User 
 from .models import *
 from django.contrib.auth import authenticate, logout, login
-from App_Login.models import User, DcmPatient, Doctor
+from App_Login.models import User, DcmPatient, Doctor, DcmAdmin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,6 +21,12 @@ def view_appointment_doctor(request):
     if request.user.is_doctor:
         doctor = Doctor.objects.filter(user=request.user).first()
         app = DoctorAppointment.objects.filter(doctor=doctor)
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_doctor.html', a)
+    
+    elif request.user.is_dcmadmin:
+        dcmadmin = DcmAdmin.objects.filter(user=request.user).first()
+        app = DoctorAppointment.objects.all()
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_doctor.html', a)
     else:
@@ -67,6 +73,11 @@ def view_appointment_test(request):
         app = TestAppointment.objects.all()
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+    
+    elif request.user.is_dcmadmin:
+        app = TestAppointment.objects.all()
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
     else:
         app = TestAppointment.objects.filter(user=request.user)
         a = {'app': app}
@@ -106,6 +117,12 @@ def view_appointment_package_test(request):
         app = PackageTestAppointment.objects.all()
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_package_test.html', a)
+    
+    elif request.user.is_dcmadmin:
+        app = PackageTestAppointment.objects.all()
+        a = {'app': app}
+        return render(request, 'Diagnostic_Center/view_appointment_package_test.html', a)
+    
     else:
         app = PackageTestAppointment.objects.filter(user=request.user)
         a = {'app': app}

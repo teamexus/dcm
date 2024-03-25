@@ -5,7 +5,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView
 from django.contrib.auth.decorators import login_required
 from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange, PatientProfilePic
-from App_Login.models import User, DcmPatient, Doctor, Technician
+from App_Login.models import User, DcmPatient, Doctor, Technician, DcmAdmin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
@@ -24,19 +24,6 @@ def sign_up(request):
     dict = {'form': form, 'registered': registered}
     return render(request, 'App_Login/signup.html', context=dict)
 
-class DcmAdminSignUpview(CreateView):
-    model = User
-    form_class = DcmAdminSignUpForm
-    template_name = 'App_Login/dcmadminsignup.html'
-
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'patient'
-        return super().get_context_data(**kwargs)
-
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('index')
 
 class DoctorSignUpview(CreateView):
     model = User
@@ -80,8 +67,6 @@ class TechnicianSignUpview(CreateView):
         return redirect('/account/view_technician')
     
 def View_Technician(request):
-    if not request.user.is_staff:
-        return redirect('index')
     tec = Technician.objects.all()
     d = {'tec': tec}
     return render(request, 'App_Login/view_technician.html', d)
@@ -92,6 +77,37 @@ def Delete_Technician(request, pid):
     technician = Technician.objects.get(user_id=pid)
     technician.delete()
     return redirect('/account/view_technician')
+
+
+class DcmAdminSignUpview(CreateView):
+    model = User
+    form_class = DcmAdminSignUpForm
+    template_name = 'App_Login/dcmadminsignup.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'dcmadmin'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        #login(self.request, user)
+        return redirect('/account/view_dcmadmin')
+    
+def View_DcmAdmin(request):
+    if not request.user.is_staff:
+        return redirect('index')
+    adm = DcmAdmin.objects.all()
+    a = {'adm': adm}
+    return render(request, 'App_Login/view_dcmadmin.html', a)
+
+def Delete_DcmAdmin(request, pid):
+    if not request.user.is_staff:
+        return redirect('login')
+    dcmadmin = DcmAdmin.objects.get(user_id=pid)
+    dcmadmin.delete()
+    return redirect('/account/view_dcmadmin')
+
+
 
 def login_page(request):
     form = AuthenticationForm()
@@ -277,7 +293,7 @@ def Delete_Patient(request, pid):
 
 class UpdateDcmPatient(LoginRequiredMixin, UpdateView):
     model = DcmPatient
-    fields = ('user', 'name', 'gender', 'mobile', 'age', 'address')
+    fields = ('user', 'name', 'gender', 'patient_blood_group', 'mobile', 'age', 'address')
     template_name = 'App_Login/edit_patient.html'
     
     def get_success_url(self, **kwargs):

@@ -10,6 +10,10 @@
 <div class="alert allert-success">
   Logged in As Technician! <a>Welcome To Our Diagnostic Center !</a>
 </div>
+{% elif user.is_authenticated and user.is_dcmadmin  %}
+<div class="alert allert-success">
+  Logged in As Admin! <a>Welcome To Our Diagnostic Center !</a>
+</div>
 {% elif user.is_authenticated %}
 <div class="alert allert-success">
   Logged in As User! <a >Welcome To Our Diagnostic Center !</a>

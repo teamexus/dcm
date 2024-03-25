@@ -1,18 +1,34 @@
 {% extends 'base.html' %} 
 {% load crispy_forms_tags %}
-{% block title_block %} Create Patient New Account {% endblock %} 
+{% block title_block %} Create DcmAdmin New Account {% endblock %} 
 {% block body_block %} 
 {% if registered %}
 <div class="alert allert-success">
   Account Created Successfully! <a href="{% url 'App_Login:login' %}">Login Here</a>
 </div>
 {% else %}
-<h2>Create New Account:</h2>
-<form method="post">
-  {{ form }} 
-  {% csrf_token %}
-  <button type="submit" class="btn btn-success btn-sm">Create Account</button>
-</form>
+<div class="container">
+  <h2 class="text-center">Create An Admin </h2>
+  <form method="post" >
+    {% csrf_token %}
+    <label>User Name</label>
+    <input type="text" class="form-control" name="username" required />
+    <label> Admin Full Name</label>
+    <input type="text" class="form-control" name="dcmadmin_full_name" required />
+    <label>Email</label>
+    <input type="text" class="form-control" name="email" required />
+    <label>Phone Number</label>
+    <input type="text" class="form-control" name="dcmadmin_phone" required />
+    <label>Department</label>
+    <input type="text" class="form-control" name="dcmadmin_department" required />
+    <label>Password</label>
+    <input type="password" class="form-control" name="password1" required />
+    <label>Confirm Password</label>
+    <input type="password" class="form-control" name="password2" required />
+    <br />
+    <input type="submit" value="Submit" class="form-control btn btn-primary" />
+  </form>
+</div>
 <br />
 <p>Already have an account ? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
 {% endif %} 

@@ -96,7 +96,7 @@ class Prescription(models.Model):
     pres_doctor = models.ForeignKey(Doctor, blank=True, null=True, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=264, unique=True, null=True, blank=True)
     text1 = models.CharField(max_length=800 , null=True, blank=True)
-    date1 = models.DateField(null=True, blank=True)
+    date1 = models.DateField(auto_now= True, null=True, blank=True)
     
     def __str__(self):
         return str(self.date1)

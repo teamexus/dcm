@@ -14,6 +14,7 @@
                 <th>Patient Name</th>
                 <th>Gender</th>
                 <th>Blood Group</th>
+                <th>Age</th>
                 <th>Contact</th>
                 <th>Delete</th>
                 <th>Profile</th>
@@ -27,6 +28,7 @@
                 <td >{{i.name}}</td>
                 <td>{{i.gender}}</td>
                 <td>{{i.patient_blood_group}}</td>
+                <td>{{i.age}}</td>
                 <td>{{i.mobile}}</td>
                 <td><a href="{% url 'App_Login:delete_patient' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
                 <td><a href="{% url 'App_Login:patient_profile' i.id  %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Profile</a></td>

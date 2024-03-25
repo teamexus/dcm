@@ -14,6 +14,9 @@ class User(AbstractUser):
 
 class DcmAdmin(models.Model):
     user = models.OneToOneField(User, related_name='admin_profile', on_delete=models.CASCADE, primary_key=True)
+    dcmadmin_full_name = models.CharField(max_length=60, null=True, blank=True)
+    dcmadmin_phone = models.IntegerField(blank=True, null=True)
+    dcmadmin_department =models.CharField(max_length=60, null=True, blank=True)
 
 
     def __str__(self):

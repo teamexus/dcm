@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title_block %} View DcmAdmin {% endblock %} 
+{% block body_block %}
+<div class="container" style="margin-top:50px">
+    <h2 class="text-center">Admins</h2>
+    <td><a href="{% url 'App_Login:dcmadminsignup' %}" class="btn btn-danger">Create Admin</a></td>
+    <br><br>
+    <table class="table table-hover" id="example">
+        <thead>
+            <tr>
+                <th>Admin Name</th>
+                <th>Phone Number</th>
+                <th>Department</th>
+                <th>Delete</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in adm %}
+            <tr>
+                <td>{{i.dcmadmin_full_name}}</td>
+                <td>{{i.dcmadmin_phone}}</td>
+                <td>{{i.dcmadmin_department}}</td>
+                <td><a href="{% url 'App_Login:delete_dcmadmin' i.user_id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+{% endblock %}

@@ -2,8 +2,8 @@
 {% block title_block %} View Doctor {% endblock %} 
 {% block body_block %}
 <div class="container" style="margin-top:50px">
-    <h2 class="text-center">View Doctor</h2>
-    {% if request.user.is_staff %}
+    <h2 class="text-center">Our Doctors</h2>
+    {% if request.user.is_staff or user.is_dcmadmin %}
              <td><a href="{% url 'App_Login:doctorsignup' %}" class="btn btn-danger">Create Doctor</a></td>
     {% endif %}
     <br><br>
@@ -14,7 +14,7 @@
                 <th>Specialization</th>
                 <th>Designation</th>
                 <th>Degrees</th>
-                {% if request.user.is_staff %}
+                {% if request.user.is_staff or user.is_dcmadmin %}
                 <th>Delete</th>
                 
                 {% endif %}
@@ -29,7 +29,7 @@
                 <td>{{i.designation}}</td>
                 <td>{{i.degree}}</td>
 
-                {% if request.user.is_staff %}
+                {% if request.user.is_staff or user.is_dcmadmin %}
                 <td><a href="{% url 'App_Login:delete_doctor' i.user_id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
                 
                 {% endif %}

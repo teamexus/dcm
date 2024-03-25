@@ -30,6 +30,9 @@ class AttendentSignUpForm(UserCreationForm):
 
 class DcmAdminSignUpForm(UserCreationForm):
     email=forms.EmailField(required=True)
+    dcmadmin_full_name = forms.CharField(required=True)
+    dcmadmin_phone=forms.IntegerField(required=True)
+    dcmadmin_department=forms.CharField(required=True)
   
     class Meta(UserCreationForm.Meta):
         model = User
@@ -41,8 +44,12 @@ class DcmAdminSignUpForm(UserCreationForm):
         user.email=self.cleaned_data.get('email')
         user.is_dcmadmin = True
         user.save()
-        patient = DcmAdmin.objects.create(user=user)
-        return user
+        dcmadmin = DcmAdmin.objects.create(user=user)
+        dcmadmin.dcmadmin_full_name = self.cleaned_data.get('dcmadmin_full_name')
+        dcmadmin.dcmadmin_phone=self.cleaned_data.get('dcmadmin_phone')
+        dcmadmin.dcmadmin_department=self.cleaned_data.get('dcmadmin_department')
+        dcmadmin.save()
+        return dcmadmin
     
 class DoctorSignUpForm(UserCreationForm):
     

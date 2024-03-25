@@ -87,15 +87,13 @@
             </li>
             
             
-            {% elif user.is_authenticated %}
+            {% elif user.is_authenticated and user.is_dcmadmin %}
             <div class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 @{{user.username}}
               </a>
               <div class="dropdown-menu">
                <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
-                <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
-                <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
                 <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
                 <hr>
               </div>
@@ -111,12 +109,47 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'App_Login:view_technician' %}"> Technicians </a>
+        </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'Diagnostic_Center:view_test' %}">Tests</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
         </li>
+
+     
+        {% elif user.is_authenticated %}
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            @{{user.username}}
+          </a>
+          <div class="dropdown-menu">
+           <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
+            <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
+            <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
+            <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
+            <hr>
+          </div>
+          
+        </div>
+        <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Appointment</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_doctor' %}">Appointment For Doctor</a>
+            <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_test' %}">Appointment For Test</a>
+            <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_package_test' %}">Appointment For Package Test</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
+      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'Diagnostic_Center:view_test' %}">Tests</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
+    </li>
     {% else %}
  
        <li class="nav-item" >
@@ -137,15 +170,17 @@
      </li>
       {% endif %}
           {% if request.user.is_staff %}
-          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Doctor</a>
-            <div class="dropdown-menu">
-              
-              <a class="dropdown-item"  href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
-            </div>
+       
             <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Technician</a>
             <div class="dropdown-menu">
               
               <a class="dropdown-item"  href="{% url 'App_Login:view_technician' %}">Technicians</a>
+            </div>
+           </li>
+           <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Admins</a>
+            <div class="dropdown-menu">
+              
+              <a class="dropdown-item"  href="{% url 'App_Login:view_dcmadmin' %}">Admins</a>
             </div>
            </li>
           </li>
