@@ -3,16 +3,16 @@
 {% block body_block %}
 <h2>Patient Profile</h2>
 <br>
-{% if  patient %}
+{% if  pat %}
 <img src='/media/{{ i.patient_image }}' class="rounded-circle" width="100px">
 <br>
 <br>
-<a href="{% url 'App_Login:change_patient_pic'  %}" class="btn btn-info btn-sm">Change Patient Picture</a>
+<a href="{% url 'App_Login:change_patient_pic' i.id  %}" class="btn btn-info btn-sm">Change Patient Picture</a>
 {% else %}
 <img src='/media/profile_pics/avatar-male.jpg' class="rounded-circle" width="100px"/>
 <br>
 <br>
-<a href= "#" class="btn btn-info btn-sm">Change Patient Picture</a>
+<a href= "{% url 'App_Login:add_patient_pic' i.id  %}" class="btn btn-info btn-sm">Change Patient Picture</a>
 {% endif %}
 {% for i in pat %}
 <br>

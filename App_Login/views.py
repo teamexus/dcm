@@ -238,18 +238,18 @@ def add_patient_pic(request, pid):
             user_obj.user = request.user
             user_obj.save()
             #return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
-            return  HttpResponseRedirect(reverse('App_Login:patient_profile', kwargs={'pid':pid}))
+            return  HttpResponseRedirect(reverse('App_Login:patient_profile', kwargs={'pid':request.user.id}))
     return render(request, 'App_Login/add_patient_pic.html', context={'form':form})
 
 @login_required
-def change_patient_pic(request):
+def change_patient_pic(request, pid):
     form = PatientProfilePic(instance=request.user)
     if request.method == 'POST':
         form = PatientProfilePic(request.POST, request.FILES, instance=request.user)
         if request.method == 'POST':
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect(reverse('App_Login:patient_profile'))
+                return HttpResponseRedirect(reverse('App_Login:patient_profile',  kwargs={'pid':request.user.id}))
                 
     return render(request, 'App_Login/change_patient_pic.html', context={'form':form})
 
