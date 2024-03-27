@@ -2,37 +2,15 @@
 {% block title_block %} Profile {% endblock %} 
 {% block body_block %}
 
-<div class="container">
-  <h2 class="text-center">Create Appointment For Package Test</h2>
-  <form method="post">
-    {% csrf_token %}
-    
-    <label>User Name</label>
-    <select name="user" class="form-control">
-    <option value="{{user.username}}">{{user.username}}</option>
-    </select>
-   
-    <label>Patient Name</label>
-    <select name="patient" class="form-control">
-      {% for i in patient %}
-      <option value="{{i.name}}">{{i.name}}</option>
-      {% endfor %}
-    </select>
-    <label>Appointment Type</label>
-    <select name="appointment" class="form-control">
-      <option value="Appointment For Test">Appointment For Package Test</option>
-    </select>
-    <label>Contact</label>
-    <input type="text" class="form-control" name="mobile" required />
-    <label>Date</label>
-    <input type="date" class="form-control" name="date1" required />
-    <label>Time</label>
-    <input type="time" class="form-control" name="time1" required />
-    <br />
-    <input type="submit" value="Submit" class="form-control btn btn-primary" />
-  </form>
-</div>
+<h1 class="text-center">Package</h1>
 
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+</form>
+ 
 {% if error == "no" %}
 <script>
   alert('Record  Save Successfully');

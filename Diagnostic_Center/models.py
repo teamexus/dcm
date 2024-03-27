@@ -22,6 +22,7 @@ class Package(models.Model):
     package_name = models.CharField(max_length=50)
     total_price = models.IntegerField(null=True)
     package_price = models.IntegerField(null=True)
+    package_test = models.ManyToManyField(Test, blank=True, null = True)
     
     def __str__(self):
         return self.package_name

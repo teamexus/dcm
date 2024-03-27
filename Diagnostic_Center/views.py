@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User 
 from .models import *
 from django.contrib.auth import authenticate, logout, login
@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
-
+from .forms import PackageForm
 
 
 
@@ -157,15 +157,6 @@ def delete_appointment_package_test(request, pid):
     appointment.delete()
     return redirect('/diagnostic_center/view_appointment_package_test')
 
-def view_test(request):
-    te = Test.objects.all()
-    d = {'te': te}
-    return render(request, 'Diagnostic_Center/view_test.html', d)
-
-def view_package(request):
-    pac = Package.objects.all()
-    d = {'pac': pac}
-    return render(request, 'Diagnostic_Center/view_package.html', d)
 
 
 @login_required
@@ -230,7 +221,73 @@ class UpdatePrescription(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self, **kwargs):
         return reverse_lazy('Diagnostic_Center:view_prescription')
-
     
+
+def view_test(request):
+    te = Test.objects.all()
+    d = {'te': te}
+    return render(request, 'Diagnostic_Center/view_test.html', d)
+
+
+@login_required
+def create_test(request):
+    error = ""
+    user = request.user
+    #dcmadmin1 = DcmAdmin.objects.filter(user=request.user)
+    department1 = Department.objects.all()
+    
+    
+    if request.method == 'POST':
+        tn = request.POST.get('test_name')
+        tnd = request.POST.get('test_name_department')
+        tp = request.POST.get('test_price')
+        
+        test_name_department = Department.objects.filter(name=tnd).first()
+        
+        try:
+            Test.objects.create(user=user, test_name=tn, test_name_department=tnd, test_price=tp)
+            error="no"
+        except:
+            error="yes"
+    k = {'user':user, 'test_name_department':department1, 'error': error}
+    return render(request, 'Diagnostic_Center/create_test.html', k)
+
+
+def view_package(request):
+    pac = Package.objects.all()
+    d = {'pac': pac}
+    return render(request, 'Diagnostic_Center/view_package.html', d)
+
+
+@login_required
+def create_package(request):
+    
+    if request.method == 'POST':
+        form = PackageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            #return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
+            return  HttpResponse("The data is saved successfully")
+    else:
+        form = PackageForm()
+    return render(request, 'Diagnostic_Center/create_package.html', context={'form':form})
+
+
+class UpdatePackage(LoginRequiredMixin, UpdateView):
+    model = Package
+    fields = ('package_name', 'total_price', 'package_price', 'package_test')
+    template_name = 'Diagnostic_Center/package_update.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_package')
+    
+@login_required
+def package_detail(request, pid):
+    pac = Package.objects.filter(id=pid)
+    d = {'pac': pac}
+    return render(request, 'Diagnostic_Center/package_detail.html', d)
+       
+       
+  
 
 

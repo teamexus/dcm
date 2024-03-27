@@ -229,7 +229,7 @@ def change_pro_pic(request):
     return render(request, 'App_Login/change_pro_pic.html', context={'form':form})
 
 @login_required
-def add_patient_pic(request, pid):
+def add_patient_pic(request):
     form = PatientProfilePic()
     if request.method == 'POST':
         form = PatientProfilePic(request.POST, request.FILES)
@@ -242,7 +242,7 @@ def add_patient_pic(request, pid):
     return render(request, 'App_Login/add_patient_pic.html', context={'form':form})
 
 @login_required
-def change_patient_pic(request, pid):
+def change_patient_pic(request):
     form = PatientProfilePic(instance=request.user)
     if request.method == 'POST':
         form = PatientProfilePic(request.POST, request.FILES, instance=request.user)
