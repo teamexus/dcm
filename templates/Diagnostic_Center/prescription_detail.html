@@ -1,0 +1,16 @@
+{% extends 'base.html' %} 
+{% block title_block %} Prescription Details {% endblock %} 
+{% block body_block %}
+<h2>Prescription Details</h2>
+
+<br>
+{% for i in pres %}
+
+<p>User Name: {{ i.pres_user }} </p>
+<p>Patient Name: {{ i.pres_patient }} </p>
+<p>Doctor Name: {{ i.pres_doctor }} </p>
+<p>Medicine & Test: {{ i.text1 }} </p>
+<p>Date: {{ i.date1 }} </p>
+
+{% endfor %}
+{% endblock %}

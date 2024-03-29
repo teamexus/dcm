@@ -14,6 +14,9 @@
                 <th>Test Name</th>
                 <th>Department </th>
                 <th>Price</th>
+                {% if  user.is_dcmadmin   %}
+                <th>Delete</th>
+                {% endif %}
                 
             </tr>
         </thead>
@@ -25,8 +28,17 @@
                 <td>{{i.test_name_department}}</td>
                 <td>{{i.test_price}}</td>
                 
+            {% if  user.is_dcmadmin   %}
+            <td><a href="{% url 'Diagnostic_Center:delete_test' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+            {% endif %}
+                
             </tr>
+
+            
             {% endfor %}
+
+
+            
         </tbody>
     </table>
     </div>

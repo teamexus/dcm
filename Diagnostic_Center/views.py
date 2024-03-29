@@ -209,6 +209,14 @@ def create_prescription(request, aid):
     k = {'appointment':appointment1, 'pres_user':pres_user1, 'pres_doctor':pres_doctor1, 'pres_patient':pres_patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_prescription.html', k)
 
+
+
+@login_required
+def prescription_detail(request,pid):
+    pres = Prescription.objects.filter(id=pid)
+    d = {'pres': pres}
+    return render(request, 'Diagnostic_Center/prescription_detail.html', d)
+
 def delete_prescription(request, pid):
     prescription = Prescription.objects.get(id=pid)
     prescription.delete()
@@ -216,7 +224,7 @@ def delete_prescription(request, pid):
 
 class UpdatePrescription(LoginRequiredMixin, UpdateView):
     model = Prescription
-    fields = ('pres_user', 'pres_patient', 'pres_doctor', 'text1', 'date1')
+    fields = ('pres_user', 'pres_patient', 'pres_doctor', 'text1')
     template_name = 'Diagnostic_Center/edit_prescription.html'
     
     def get_success_url(self, **kwargs):
@@ -244,13 +252,19 @@ def create_test(request):
         
         test_name_department = Department.objects.filter(name=tnd).first()
         
-        try:
-            Test.objects.create(user=user, test_name=tn, test_name_department=tnd, test_price=tp)
-            error="no"
-        except:
-            error="yes"
+        #try:
+        Test.objects.create( test_name=tn, test_name_department=test_name_department, test_price=tp)
+        error="no"
+       # except:
+           # error="yes"
     k = {'user':user, 'test_name_department':department1, 'error': error}
     return render(request, 'Diagnostic_Center/create_test.html', k)
+
+
+def delete_test(request, pid):
+    test = Test.objects.get(id=pid)
+    test.delete()
+    return redirect('/diagnostic_center/view_test')
 
 
 def view_package(request):
@@ -267,7 +281,7 @@ def create_package(request):
         if form.is_valid():
             form.save()
             #return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
-            return  HttpResponse("The data is saved successfully")
+            return redirect('/diagnostic_center/view_package')
     else:
         form = PackageForm()
     return render(request, 'Diagnostic_Center/create_package.html', context={'form':form})
@@ -283,9 +297,22 @@ class UpdatePackage(LoginRequiredMixin, UpdateView):
     
 @login_required
 def package_detail(request, pid):
+    '''
     pac = Package.objects.filter(id=pid)
-    d = {'pac': pac}
+    packagetest = PackageTest.objects.filter(package_id=pid).values('test_id')
+    print(packagetest)
+    test=Test.objects.filter(id__in= packagetest)
+    d = {'pac': pac, 'test': test}
     return render(request, 'Diagnostic_Center/package_detail.html', d)
+    '''
+    filtered_packages = Package.objects.filter(package_test__test_name='YourTestName')
+    return render(request, 'Diagnostic_Center/package_detail.html', {'packages': filtered_packages})
+    
+
+def delete_package(request, pid):
+    package = Package.objects.get(id=pid)
+    package.delete()
+    return redirect('/diagnostic_center/view_package')
        
        
   

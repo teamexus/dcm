@@ -24,6 +24,10 @@ def sign_up(request):
     dict = {'form': form, 'registered': registered}
     return render(request, 'App_Login/signup.html', context=dict)
 
+@login_required
+def profile(request):
+    return render(request, 'App_Login/profile.html', context={})
+
 
 class DoctorSignUpview(CreateView):
     model = User
@@ -38,9 +42,17 @@ class DoctorSignUpview(CreateView):
         user = form.save()
         #login(self.request, user)
         return redirect('/account/view_doctor')
+    
+
+@login_required
+def doctor_profile(request):
+    doc = Doctor.objects.filter(user=request.user)
+    d = {'doc': doc}
+    return render(request, 'App_Login/doctor_profile.html', d)
+
+
 
 def View_Doctor(request):
-    
     doc = Doctor.objects.all()
     d = {'doc': doc}
     return render(request, 'App_Login/view_doctor.html', d)
@@ -65,6 +77,12 @@ class TechnicianSignUpview(CreateView):
         user = form.save()
         #login(self.request, user)
         return redirect('/account/view_technician')
+    
+@login_required
+def technician_profile(request):
+    tec = Technician.objects.filter(user=request.user)
+    t = {'tec': tec}
+    return render(request, 'App_Login/technician_profile.html', t)
     
 def View_Technician(request):
     tec = Technician.objects.all()
@@ -128,28 +146,6 @@ def login_page(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
-
-@login_required
-def profile(request):
-    return render(request, 'App_Login/profile.html', context={})
-
-@login_required
-def doctor_profile(request):
-    doc = Doctor.objects.filter(user=request.user)
-    d = {'doc': doc}
-    return render(request, 'App_Login/doctor_profile.html', d)
-
-@login_required
-def technician_profile(request):
-    tec = Technician.objects.filter(user=request.user)
-    t = {'tec': tec}
-    return render(request, 'App_Login/technician_profile.html', t)
-
-@login_required
-def patient_profile(request, pid):
-    pat = DcmPatient.objects.filter(id=pid)
-    d = {'pat': pat}
-    return render(request, 'App_Login/patient_profile.html', d)
 
 
     
@@ -282,6 +278,12 @@ def CreatePatient(request):
             error="yes"
     k = {'user':user, 'error': error}
     return render(request, 'App_Login/add_patient.html', k)
+
+@login_required
+def patient_profile(request, pid):
+    pat = DcmPatient.objects.filter(id=pid)
+    d = {'pat': pat}
+    return render(request, 'App_Login/patient_profile.html', d)
     
        
     

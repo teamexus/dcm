@@ -18,6 +18,9 @@
             {% if user.is_doctor %}
             <th>Delete</th>
             <th>Edit</th>
+            <th>Details</th>
+            {% else %}
+            <th>Details</th>
             {% endif %} 
         </tr>
     </thead>
@@ -29,7 +32,10 @@
             <td>{{i.date1}}</td>
             {% if user.is_doctor %}
             <td><a href="{% url 'Diagnostic_Center:delete_prescription' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
-            <td><a href="{% url 'Diagnostic_Center:edit_prescription' i.id  %}" onClick="return confirm('Patient Profile')" class="btn btn-danger">Edit</a></td>
+            <td><a href="{% url 'Diagnostic_Center:edit_prescription' i.id  %}"  class="btn btn-danger">Edit</a></td>
+            <td><a href="{% url 'Diagnostic_Center:prescription_detail' i.id  %}"  class="btn btn-danger">Details</a></td>
+            {% else %}
+            <td><a href="{% url 'Diagnostic_Center:prescription_detail' i.id  %}"  class="btn btn-danger">Details</a></td>
             {% endif %}   
         </tr>
         {% endfor %}

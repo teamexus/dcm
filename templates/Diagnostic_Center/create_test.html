@@ -23,7 +23,7 @@
   </form>
 </div>
 
-{% if error == "no" %}
+{% comment %} {% if error == "no" %}
 <script>
   alert('Record  Save Successfully');
   window.location = ('{% url 'Diagnostic_Center:view_test' %}');
@@ -33,5 +33,6 @@
 <script>
   alert("Something went wrong, Try again");
 </script>
-{% endif %} 
+{% endif %}  {% endcomment %}
+
 {% endblock %}

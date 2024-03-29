@@ -57,10 +57,18 @@
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Appointment</a>
                 <div class="dropdown-menu">
                   <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_appointment_doctor' %}">Appointment For Doctor</a>
-                  
                 </div>
               
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Diagnostic_Center:view_test' %}">Tests</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
+          </li>
             
             {% elif user.is_authenticated and user.is_technician  %}
             <div class="nav-item dropdown">
@@ -81,6 +89,15 @@
               </div>
             
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'Diagnostic_Center:view_test' %}">Tests</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
+        </li>
             
             
             {% elif user.is_authenticated and user.is_dcmadmin %}

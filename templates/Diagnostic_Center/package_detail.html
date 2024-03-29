@@ -1,17 +1,21 @@
 {% extends 'base.html' %} 
-{% block title_block %}Package Details {% endblock %} 
+{% block title_block %} Package Details {% endblock %} 
 {% block body_block %}
-<h2>Package Details</h2>
-<br>
-<br>
-{% for i in pac %}
-<p>Package Name: {{ i.package_name }}</p>
-<p>Package Tests: {{ i.package_test }}</p>
-<p>Total Price: {{ i.total_price }} </p>
-<p>Package Price: {{ i.package_price }} </p>
-
-
-<br>
-{% endfor %}
+<h1>Packages</h1>
+<ul>
+    {% for package in packages %}
+    <li>
+        <strong>Package Name:</strong> {{ package.package_name }}<br>
+        <strong>Total Price:</strong> {{ package.total_price }}<br>
+        <strong>Package Price:</strong> {{ package.package_price }}<br>
+        <strong>Tests:</strong><br>
+        <ul>
+            {% for test in package.package_test.all %}
+            <li>{{ test.test_name }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
 
 {% endblock %}
