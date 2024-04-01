@@ -8,6 +8,7 @@ from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from .forms import PackageForm
+from django.shortcuts import get_object_or_404
 
 
 
@@ -49,18 +50,28 @@ def create_appointment_doctor(request):
         p = request.POST.get('appointment')
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
-        t1 = request.POST.get('time1')
+        t1 = request.POST.get('serial')
+        aps = request.POST.get('appointment_status')
         
         
         doctor = Doctor.objects.filter(doctor_full_name=x).first()
         patient = DcmPatient.objects.filter(name=y).first()
         try:
-            DoctorAppointment.objects.create(user=user, doctor=doctor,  patient=patient, appointment=p, mobile=m, date1=d1, time1=t1)
+            DoctorAppointment.objects.create(user=user, doctor=doctor,  patient=patient, appointment=p, mobile=m, date1=d1, serial=t1, appointment_status=aps)
             error="no"
         except:
             error="yes"
     k = {'user': user,'doctor': doctor1, 'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_doctor.html', k)
+
+
+class UpdateDoctorAppointment(LoginRequiredMixin, UpdateView):
+    model = DoctorAppointment
+    fields = ('serial', 'appointment_status')
+    template_name = 'Diagnostic_Center/update_doctor_appointment.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_appointment_doctor')
 
 def delete_appointment_doctor(request, pid):
     appointment = DoctorAppointment.objects.get(id=pid)
@@ -95,16 +106,25 @@ def create_appointment_test(request):
         p = request.POST.get('appointment')
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
-        t1 = request.POST.get('time1')
+        t1 = request.POST.get('serial')
+        aps = request.POST.get('appointment_status')
         
         patient = DcmPatient.objects.filter(name=y).first()
         try:
-            TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, time1=t1)
+            TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=t1, appointment_status= aps )
             error="no"
         except:
             error="yes"
     k = {'user':user,  'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_test.html', k)
+
+class UpdateTestAppointment(LoginRequiredMixin, UpdateView):
+    model = TestAppointment
+    fields = ('serial', 'appointment_status')
+    template_name = 'Diagnostic_Center/update_test_appointment.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_appointment_test')
 
 def delete_appointment_test(request, pid):
     appointment = TestAppointment.objects.get(id=pid)
@@ -139,17 +159,26 @@ def create_appointment_package_test(request):
         p = request.POST.get('appointment')
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
-        t1 = request.POST.get('time1')
-        
+        t1 = request.POST.get('serial')
+        aps = request.POST.get('appointment_status')
         
         patient = DcmPatient.objects.filter(name=y).first()
         try:
-            PackageTestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, time1=t1)
+            PackageTestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=t1, appointment_status= aps)
             error="no"
         except:
             error="yes"
     k = {'user':user,  'patient':patient1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_package_test.html', k)
+
+
+class UpdatePackageTestAppointment(LoginRequiredMixin, UpdateView):
+    model = PackageTestAppointment
+    fields = ('serial', 'appointment_status')
+    template_name = 'Diagnostic_Center/update_package_test_appointment.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_appointment_package_test')
 
 
 def delete_appointment_package_test(request, pid):
@@ -179,14 +208,14 @@ def view_prescription(request):
 
 @login_required
 def create_prescription(request, aid):
-    error=""
-    
+    error = ""
     appointment1 = DoctorAppointment.objects.filter(id=aid)
     user = appointment1.values('user').first()
     pres_user1 = User.objects.filter(id=user['user'])
     pres_doctor1 = Doctor.objects.filter(user=request.user)
     patient = appointment1.values('patient').first()  
     pres_patient1 = DcmPatient.objects.filter(id= patient['patient'])
+
     
     if request.method == 'POST':
         x = request.POST.get('appointment')
@@ -195,18 +224,46 @@ def create_prescription(request, aid):
         p= request.POST.get('pres_patient')
         p1 = request.POST.get('text1')
         d1 = request.POST.get('date1')
+        test_ids = request.POST.getlist('test')
+        tests = Test.objects.filter(id__in=test_ids)
+        medicine_ids = request.POST.getlist('medicine')
+        medicines = Medicine.objects.filter(id__in=medicine_ids)
         
-        #d1 = datetime.date.today()
         appointment = DoctorAppointment.objects.filter(id=x).first()
         pres_user = User.objects.filter(first_name=u).first()
         pres_doctor = Doctor.objects.filter(doctor_full_name=d).first()
         pres_patient = DcmPatient.objects.filter(name=p).first()
+
+        
         try:
-            Prescription.objects.create(appointment=appointment, pres_user=pres_user, pres_doctor=pres_doctor,pres_patient=pres_patient, text1=p1, date1=d1)
-            error="no"
-        except:
-            error="yes"
-    k = {'appointment':appointment1, 'pres_user':pres_user1, 'pres_doctor':pres_doctor1, 'pres_patient':pres_patient1, 'error':error}
+            prescription = Prescription.objects.create(
+                appointment=appointment,
+                pres_user=pres_user,
+                pres_doctor=pres_doctor,
+                pres_patient=pres_patient,
+                text1=p1,
+                date1=d1,
+            )
+            prescription.test.set(tests)
+            prescription.medicine.set(medicines)
+            error = "no"
+        except Exception as e:
+            error = "yes"
+    
+    
+    tests = Test.objects.all()  # Assuming you want to display all tests
+    medicines = Medicine.objects.all()  # Assuming you want to display all medicines
+    
+    k = {
+        'appointment':appointment1,
+        'pres_user':pres_user1,
+        'pres_doctor':pres_doctor1,
+        'pres_patient':pres_patient1,
+        'tests': tests,
+        'medicines': medicines,
+        'error': error
+    }
+    
     return render(request, 'Diagnostic_Center/create_prescription.html', k)
 
 
@@ -224,7 +281,7 @@ def delete_prescription(request, pid):
 
 class UpdatePrescription(LoginRequiredMixin, UpdateView):
     model = Prescription
-    fields = ('pres_user', 'pres_patient', 'pres_doctor', 'text1')
+    fields = ('pres_user', 'pres_patient', 'pres_doctor', 'medicine', 'test', 'text1')
     template_name = 'Diagnostic_Center/edit_prescription.html'
     
     def get_success_url(self, **kwargs):
@@ -280,6 +337,7 @@ def create_package(request):
         form = PackageForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            form.save_m2m()
             #return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
             return redirect('/diagnostic_center/view_package')
     else:
@@ -304,9 +362,14 @@ def package_detail(request, pid):
     test=Test.objects.filter(id__in= packagetest)
     d = {'pac': pac, 'test': test}
     return render(request, 'Diagnostic_Center/package_detail.html', d)
-    '''
+    
     filtered_packages = Package.objects.filter(package_test__test_name='YourTestName')
     return render(request, 'Diagnostic_Center/package_detail.html', {'packages': filtered_packages})
+    '''
+    
+    pac = Package.objects.filter(id=pid)
+    d = {'pac': pac,}
+    return render(request, 'Diagnostic_Center/package_detail.html', d)
     
 
 def delete_package(request, pid):

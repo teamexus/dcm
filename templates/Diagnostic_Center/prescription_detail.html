@@ -1,16 +1,29 @@
 {% extends 'base.html' %} 
 {% block title_block %} Prescription Details {% endblock %} 
 {% block body_block %}
-<h2>Prescription Details</h2>
 
-<br>
-{% for i in pres %}
+<div class="text-center">
+    <br>
+    <br>
+    <h2>Prescription Details</h2>
 
-<p>User Name: {{ i.pres_user }} </p>
-<p>Patient Name: {{ i.pres_patient }} </p>
-<p>Doctor Name: {{ i.pres_doctor }} </p>
-<p>Medicine & Test: {{ i.text1 }} </p>
-<p>Date: {{ i.date1 }} </p>
+    <br>
+    {% for i in pres %}
+        <p>User Name: {{ i.pres_user }} </p>
+        <p>Patient Name: {{ i.pres_patient }} </p>
+        <p>Doctor Name: {{ i.pres_doctor }} </p>
+        {% for j in i.medicine.all %}
+            <li>Medicine :{{ j.medicine_name }}</li>
+        {% endfor %}
+        <br>
+        {% for j in i.test.all %}
+            <li>Test :{{ j.test_name }}</li>
+        {% endfor %}
+        <br>
+        <br>
+        <p>Suggestions: {{ i.text1 }} </p>
+        <p>Date: {{ i.date1 }} </p>
+    {% endfor %}
+</div>
 
-{% endfor %}
 {% endblock %}

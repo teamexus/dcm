@@ -3,11 +3,76 @@
 {% block title_block %} Change Profile {% endblock %} 
 {% block body_block %}
 
-<form method="POST">
-  {{ form.as_p }}
-  {% csrf_token %}
-  <button type="submit" class="btn btn-warning btn-sm">Updated</button>
-</form>
+<div class="container mt-5">
+  <form method="POST" class="offset-sm-3 col-sm-9"> <!-- Offset the form by 3 columns -->
+    {% csrf_token %}
+    
+    <div class="form-group row">
+      <label for="id_doctor_full_name" class="col-sm-3 col-form-label">Doctor Full Name:</label>
+      <div class="col-sm-9">
+        {{ form.doctor_full_name }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="id_phone" class="col-sm-3 col-form-label">Phone:</label>
+      <div class="col-sm-9">
+        {{ form.phone }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="id_spe" class="col-sm-3 col-form-label">Specialization:</label>
+      <div class="col-sm-9">
+        {{ form.spe }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="id_designation" class="col-sm-3 col-form-label">Designation:</label>
+      <div class="col-sm-9">
+        {{ form.designation }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="id_degree" class="col-sm-3 col-form-label">Degrees:</label>
+      <div class="col-sm-9">
+        {{ form.degree }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="id_current_working_place" class="col-sm-3 col-form-label">Current Working Place:</label>
+      <div class="col-sm-9">
+        {{ form.current_working_place }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="id_mbbs_institution" class="col-sm-3 col-form-label">MBBS Institution:</label>
+      <div class="col-sm-9">
+        {{ form.mbbs_institution }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="id_post_graduation_institution" class="col-sm-3 col-form-label">Post Graduation Institution:</label>
+      <div class="col-sm-9">
+        {{ form.post_graduation_institution }}
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-sm-12 text-center">
+        <button type="submit" class="btn btn-warning btn-sm mt-3">Update</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+
 
 
 {% endblock %}

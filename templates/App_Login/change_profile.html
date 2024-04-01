@@ -2,10 +2,50 @@
 {% load crispy_forms_tags %}
 {% block title_block %} Change Profile {% endblock %} 
 {% block body_block %}
-<form method="POST">
-    {{ form.as_p }}
-    {% csrf_token %}
-    <button type="submit" class="btn btn-warning btn-sm">Updated</button>
-</form>
+
+<div class="container">
+    <br>
+    <br>
+    <h2 class="text-center">Update Profile</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6">
+          <label>User Name</label>
+          <input type="text" class="form-control" name="username" value="{{ user.username }}" required />
+        </div>
+        <div class="col-md-6">
+          <label>Email</label>
+          <input type="email" class="form-control" name="email" value="{{ user.email }}" required />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>First Name</label>
+          <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}" required />
+        </div>
+        <div class="col-md-6">
+          <label>Last Name</label>
+          <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}" required />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Password</label>
+          <input type="password" class="form-control" name="password" required />
+        </div>
+        <div class="col-md-6">
+          <label>Confirm Password</label>
+          <input type="password" class="form-control" name="confirm_password" required />
+        </div>
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <input type="submit" value="Update Profile" class="btn btn-primary btn-block" />
+        </div>
+      </div>
+    </form>
+  </div>
 
 {% endblock %}

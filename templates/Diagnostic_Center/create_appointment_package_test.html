@@ -3,7 +3,7 @@
 {% block body_block %}
 
 <div class="container">
-  <h2 class="text-center">Create Appointment For Package Test</h2>
+  <h2 class="text-center">Appointment A Package Test</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
@@ -18,8 +18,15 @@
     <input type="text" class="form-control" name="mobile" required />
     <label>Date</label>
     <input type="date" class="form-control" name="date1" required />
-    <label>Time</label>
-    <input type="time" class="form-control" name="time1" required />
+    <label>Serial Number </label>
+    <input type="text" class="form-control" name="serial"  required disabled/>
+    <label for="appointment_status">Appointment Status </label>
+    <select name="appointment_status" id="appointment_status" class="form-control" disabled>
+      <option value="Pending">Pending</option>
+      <option value="Confirmed">Confirmed</option>
+      <option value="Cancelled">Cancelled</option>
+      <option value="Completed">Completed</option>
+    </select>
     <br />
     <input type="submit" value="Submit" class="form-control btn btn-primary" />
   </form>

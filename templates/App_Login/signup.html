@@ -10,23 +10,47 @@
 {% else %}
 
 <div class="container">
+  <br>
+  <br>
   <h2 class="text-center">Create An Account </h2>
   <form method="post" >
     {% csrf_token %}
-    <label>User Name</label>
-    <input type="text" class="form-control" name="username" required />
-    <label>User First Name</label>
-    <input type="text" class="form-control" name="first_name" required />
-    <label>User Last Name</label>
-    <input type="text" class="form-control" name="last_name" required />
-    <label>Email</label>
-    <input type="text" class="form-control" name="email" required />
-    <label>Password</label>
-    <input type="password" class="form-control" name="password1" required />
-    <label>Confirm Password</label>
-    <input type="password" class="form-control" name="password2" required />
+    <div class="row">
+      <div class="col-md-6">
+        <label>User Name</label>
+        <input type="text" class="form-control" name="username" required />
+      </div>
+      <div class="col-md-6">
+        <label>User First Name</label>
+        <input type="text" class="form-control" name="first_name" required />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label>User Last Name</label>
+        <input type="text" class="form-control" name="last_name" required />
+      </div>
+      <div class="col-md-6">
+        <label>Email</label>
+        <input type="text" class="form-control" name="email" required />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password1" required />
+      </div>
+      <div class="col-md-6">
+        <label>Confirm Password</label>
+        <input type="password" class="form-control" name="password2" required />
+      </div>
+    </div>
     <br />
-    <input type="submit" value="Submit" class="form-control btn btn-primary" />
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <input type="submit" value="Submit" class="form-control btn btn-primary" />
+      </div>
+    </div>
   </form>
 </div>
 

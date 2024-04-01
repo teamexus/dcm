@@ -62,7 +62,15 @@ class DoctorAppointment(models.Model):
     appointment= models.CharField(max_length=50 , null=True, blank=True)
     mobile = models.IntegerField(null=True)
     date1 = models.DateField()
-    time1 = models.TimeField()
+    serial = models.IntegerField(blank=True, null=True)
+    status = (
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Cancelled', 'Cancelled'),
+        ('Completed', 'Completed'),
+    
+    )
+    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True)
     
     def __str__(self):
         return self.doctor.doctor_full_name + "--" + self.patient.name
@@ -73,7 +81,16 @@ class TestAppointment(models.Model):
     appointment= models.CharField(max_length=50 , null=True, blank=True)
     mobile = models.IntegerField(null=True)
     date1 = models.DateField()
-    time1 = models.TimeField()
+    serial = models.IntegerField(blank=True, null=True)
+    status = (
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Cancelled', 'Cancelled'),
+        ('Completed', 'Completed'),
+    
+    )
+    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True)
+    
     
     def __str__(self):
         return self.user.username + "--" + self.patient.name
@@ -84,10 +101,29 @@ class PackageTestAppointment(models.Model):
     appointment= models.CharField(max_length=50 , null=True, blank=True)
     mobile = models.IntegerField(null=True)
     date1 = models.DateField()
-    time1 = models.TimeField()
+    serial = models.IntegerField(blank=True, null=True)
+    status = (
+        ('Pending', 'Pending'),
+        ('Confirmed', 'Confirmed'),
+        ('Cancelled', 'Cancelled'),
+        ('Completed', 'Completed'),
+    
+    )
+    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True)
+    
     
     def __str__(self):
         return self.user.username + "--" + self.patient.name
+    
+
+class Medicine(models.Model):
+    medicine_name =  models.CharField(max_length=50)
+    medicine_department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    medicine_price = models.IntegerField(null=True)
+    
+    def __str__(self):
+        return self.medicine_name
+
     
     
 class Prescription(models.Model):
@@ -98,9 +134,13 @@ class Prescription(models.Model):
     slug = models.SlugField(max_length=264, unique=True, null=True, blank=True)
     text1 = models.CharField(max_length=800 , null=True, blank=True)
     date1 = models.DateField(auto_now= True, null=True, blank=True)
+    test = models.ManyToManyField(Test, blank=True, null=True)
+    medicine = models.ManyToManyField(Medicine, blank=True, null=True)
     
     def __str__(self):
         return str(self.date1)
+    
+
 
 
     

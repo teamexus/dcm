@@ -1,27 +1,38 @@
-{% extends 'base.html' %} {% block title_block %}Patient Profile {% endblock %}
+{% extends 'base.html' %}
+{% block title_block %}Patient Profile{% endblock %}
 {% block body_block %}
-<h2>Patient Profile</h2>
-<br />
-{% if pat %}
-<img src="/media/{{ i.patient_image }}" class="rounded-circle" width="100px" />
-<br />
-<br />
-<a href="{% url 'App_Login:change_patient_pic'   %}" class="btn btn-info btn-sm">Change Patient Picture</a>
-{% else %}
-<img
-  src="/media/profile_pics/avatar-male.jpg" class="rounded-circle" width="100px"/>
-<br />
-<br />
-<a href="{% url 'App_Login:add_patient_pic'   %}" class="btn btn-info btn-sm">Change Patient Picture</a>
-{% endif %}
-{% for i in pat %}
-<br>
-<br>
-<p>Patient Name: {{ i.name }}</p>
-<p>Gender: {{ i.gender }}</p>
-<p>Blood Group: {{ i.patient_blood_group }}</p>
-<p>Mobile : {{ i.mobile }}</p>
-<p>Age: {{ i.age }}</p>
-<p>Address : {{ i.address }}</p>
-<br />
-{% endfor %} {% endblock %}
+<div class="container">
+  <h2 class="text-center">Patient Profile</h2>
+  {% for patient in pat %}
+  <div class="row mt-4">
+    <div class="col-md-4">
+      {% if patient.patient_image %}
+      <img src="{{ patient.patient_image.url }}" class="rounded-circle" width="200px" />
+      {% else %}
+      <img src="/media/profile_pics/avatar-male.jpg" class="rounded-circle" width="200px" />
+      {% endif %}
+      <div class="mt-3">
+        {% if pat %}
+        <a href="{% url 'App_Login:change_patient_pic' %}" class="btn btn-info btn-sm">Change Patient Picture</a>
+        {% else %}
+        <a href="{% url 'App_Login:add_patient_pic' %}" class="btn btn-info btn-sm">Add Patient Picture</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">Patient Name: {{ patient.name }}</p>
+          <p class="card-text">Gender: {{ patient.gender }}</p>
+          <p class="card-text">Blood Group: {{ patient.patient_blood_group }}</p>
+          <p class="card-text">Mobile: {{ patient.mobile }}</p>
+          <p class="card-text">Age: {{ patient.age }}</p>
+          <p class="card-text">Address: {{ patient.address }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

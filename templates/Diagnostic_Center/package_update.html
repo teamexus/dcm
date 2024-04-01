@@ -1,14 +1,35 @@
+
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title_block %} Package Update {% endblock %}
+{% block title_block %} Update Doctor Appointment {% endblock %}
+
 {% block body_block %}
-{% if user.is_authenticated %}
-<form method="POST">
-{{form.as_p}}
-{% csrf_token %}
-<button type="submit" name="button">Update</button>
-{% else %}
-<p>Your are not allowed to view this page. 404</p>
-</form>
-{% endif %}
+<div class="container">
+    <h2 class="text-center">Update Package</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_package_name">Package Name:</label>
+        <input type="text" class="form-control" name="package_name" id="id_package_name" value="{{ object.package_name }}" required>
+        <br>
+        <label for="id_total_price">Total Price:</label>
+        <input type="number" class="form-control" name="total_price" id="id_total_price" value="{{ object.total_price }}" required>
+        <br>
+        <label for="id_package_price">Package Price:</label>
+        <input type="number" class="form-control" name="package_price" id="id_package_price" value="{{ object.package_price }}" required>
+        <br>
+        <label for="id_package_test">Package Test:</label>
+        <select name="package_test" class="form-control" id="id_package_test" multiple required>
+            {% for test in object.package_test.all %}
+            <option value="{{ test.pk }}" selected>{{ test.test_name }}</option>
+            {% endfor %}
+            {% for test in all_tests %}
+            <option value="{{ test.pk }}">{{ test.test_name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <button type="submit" class="btn btn-primary" >Update Package</button>
+    </form>
+</div>
 {% endblock %}
+
+

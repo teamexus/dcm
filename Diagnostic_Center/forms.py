@@ -1,5 +1,5 @@
 from django import  forms 
-from .models import Package, Test
+from .models import Package, Test, DoctorAppointment
 from django.forms import ModelForm
 
 class PackageForm(forms.ModelForm):
@@ -60,4 +60,5 @@ class PackageForm(ModelForm):
                 'package_price',
                 'package_test'
             ]
+        
         

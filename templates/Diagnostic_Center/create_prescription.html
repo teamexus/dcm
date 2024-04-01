@@ -7,33 +7,48 @@
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
- 
     <label>Doctor Name</label>
-    <select name="pres_doctor" class="form-control">
-      {% for i in pres_doctor %}
-      <option value="{{i.doctor_full_name}}">{{i.doctor_full_name}}</option>
+    <select name="pres_doctor" class="form-control" readonly>
+      {% for doctor in pres_doctor %}
+      <option value="{{ doctor.doctor_full_name }}">{{ doctor.doctor_full_name }}</option>
       {% endfor %}
     </select>
+    
+    <label>Patient Name</label>
+    <select name="pres_patient" class="form-control" readonly>
+      {% for patient in pres_patient %}
+      <option value="{{ patient.name }}">{{ patient.name }}</option>
+      {% endfor %}
+    </select>
+    
+
     <label>User Name</label>
-    <select name="pres_user" class="form-control">
+    <select name="pres_user" class="form-control" readonly >
       {% for i in pres_user %}
       <option value="{{i.first_name}}">{{i.first_name}}</option>
       {% endfor %}
     </select>
-    <label>Patient Name</label>
-    <select name="pres_patient" class="form-control">
-      
-      {% for i in pres_patient %}
-      <option value="{{i.name}}">{{i.name}}</option>
+    
+    <label>Medicine</label>
+    <select name="medicine" class="form-control" multiple>
+      {% for medicine in medicines %}
+      <option value="{{ medicine.id }}">{{ medicine.name }}</option>
       {% endfor %}
-     
     </select>
-    <label for="text1">Medicine & Test </label>
-    <textarea id="text1" class="form-control" name="text1" required >
-    </textarea>
-    <br>
+    
+    <label>Test</label>
+    <select name="test" class="form-control" multiple>
+      {% for test in tests %}
+      <option value="{{ test.id }}">{{ test.name }}</option>
+      {% endfor %}
+    </select>
+    
+    <label for="text1">Suggestions</label>
+    <textarea id="text1" class="form-control" name="text1" required></textarea>
+    
     <label>Date</label>
-    <input type="date" class="form-control" name="date1"  required />
+    <input type="date" class="form-control" name="date1" required />
+    
     <br />
     <input type="submit" value="Submit" class="form-control btn btn-primary" />
   </form>
@@ -41,13 +56,14 @@
 
 {% if error == "no" %}
 <script>
-  alert('Record  Save Successfully');
-  window.location = ('{% url 'Diagnostic_Center:view_prescription' %}');
+  alert('Record saved successfully');
+  window.location.href = "{% url 'Diagnostic_Center:view_prescription' %}";
 </script>
 {% endif %} 
 {% if error == "yes" %}
 <script>
-  alert("Something went wrong, Try again");
+  alert("Something went wrong. Please try again.");
 </script>
 {% endif %} 
+
 {% endblock %}
