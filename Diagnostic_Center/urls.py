@@ -27,10 +27,15 @@ urlpatterns = [
     path('view_test/', views.view_test, name='view_test'),
     path('create_test/', views.create_test, name='create_test'),
     path('delete_test(<int:pid>)', views.delete_test, name='delete_test'),
+    path('update_test/<pk>/', views.UpdateTest.as_view(), name='update_test'),
     path('view_package/', views.view_package, name='view_package'),
     path('create_package/', views.create_package, name='create_package'),
     path('package_detail(<int:pid>)', views.package_detail, name='package_detail'),
     path('package_update/<pk>/', views.UpdatePackage.as_view(), name='package_update'),
     path('delete_package(<int:pid>)', views.delete_package, name='delete_package'),
+    path('view_medicine/', views.view_medicine, name='view_medicine'),
+    path('create_medicine/', views.create_medicine, name='create_medicine'),
+    path('update_medicine/<pk>/', views.UpdateMedicine.as_view(), name='update_medicine'),
+    path('delete_medicine(<int:pid>)', views.delete_medicine, name='delete_medicine'),
     
 ]

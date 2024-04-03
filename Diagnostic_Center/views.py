@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from .forms import PackageForm
 from django.shortcuts import get_object_or_404
+from django.db.models import Max
 
 
 
@@ -50,14 +51,21 @@ def create_appointment_doctor(request):
         p = request.POST.get('appointment')
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
-        t1 = request.POST.get('serial')
+        serial_number = request.POST.get('serial')
         aps = request.POST.get('appointment_status')
         
         
         doctor = Doctor.objects.filter(doctor_full_name=x).first()
+        #doctor2 = Doctor.objects.filter(doctor_id=x).first()
         patient = DcmPatient.objects.filter(name=y).first()
+        max_serial = DoctorAppointment.objects.filter(doctor=doctor, date1=d1).aggregate(Max('serial'))['serial__max']
+        # Increment the serial number
+        if max_serial is None:
+            serial_number = 1  # No appointments for the day yet, so start with 1
+        else:
+            serial_number = max_serial + 1
         try:
-            DoctorAppointment.objects.create(user=user, doctor=doctor,  patient=patient, appointment=p, mobile=m, date1=d1, serial=t1, appointment_status=aps)
+            DoctorAppointment.objects.create(user=user, doctor=doctor,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status=aps)
             error="no"
         except:
             error="yes"
@@ -106,12 +114,20 @@ def create_appointment_test(request):
         p = request.POST.get('appointment')
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
-        t1 = request.POST.get('serial')
+        serial_number = request.POST.get('serial')
         aps = request.POST.get('appointment_status')
         
         patient = DcmPatient.objects.filter(name=y).first()
+        
+        max_serial = TestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
+        # Increment the serial number
+        if max_serial is None:
+            serial_number = 1  # No appointments for the day yet, so start with 1
+        else:
+            serial_number = max_serial + 1
+        
         try:
-            TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=t1, appointment_status= aps )
+            TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status= aps )
             error="no"
         except:
             error="yes"
@@ -120,7 +136,7 @@ def create_appointment_test(request):
 
 class UpdateTestAppointment(LoginRequiredMixin, UpdateView):
     model = TestAppointment
-    fields = ('serial', 'appointment_status')
+    fields = ('serial', 'appointment_status',)
     template_name = 'Diagnostic_Center/update_test_appointment.html'
     
     def get_success_url(self, **kwargs):
@@ -159,12 +175,18 @@ def create_appointment_package_test(request):
         p = request.POST.get('appointment')
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
-        t1 = request.POST.get('serial')
+        serial_number  = request.POST.get('serial')
         aps = request.POST.get('appointment_status')
         
         patient = DcmPatient.objects.filter(name=y).first()
+        max_serial = PackageTestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
+        # Increment the serial number
+        if max_serial is None:
+            serial_number = 1  # No appointments for the day yet, so start with 1
+        else:
+            serial_number = max_serial + 1
         try:
-            PackageTestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=t1, appointment_status= aps)
+            PackageTestAppointment.objects.create(user=user, patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number , appointment_status= aps)
             error="no"
         except:
             error="yes"
@@ -174,7 +196,7 @@ def create_appointment_package_test(request):
 
 class UpdatePackageTestAppointment(LoginRequiredMixin, UpdateView):
     model = PackageTestAppointment
-    fields = ('serial', 'appointment_status')
+    fields = ('serial','appointment_status')
     template_name = 'Diagnostic_Center/update_package_test_appointment.html'
     
     def get_success_url(self, **kwargs):
@@ -309,13 +331,23 @@ def create_test(request):
         
         test_name_department = Department.objects.filter(name=tnd).first()
         
-        #try:
-        Test.objects.create( test_name=tn, test_name_department=test_name_department, test_price=tp)
-        error="no"
-       # except:
-           # error="yes"
+        try:
+           Test.objects.create( test_name=tn, test_name_department=test_name_department, test_price=tp)
+           error="no"
+        except:
+            error="yes"
     k = {'user':user, 'test_name_department':department1, 'error': error}
     return render(request, 'Diagnostic_Center/create_test.html', k)
+
+
+class UpdateTest(LoginRequiredMixin, UpdateView):
+    model = Test
+    fields = ('test_name','test_name_department','test_price' )
+    template_name = 'Diagnostic_Center/update_test.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_test')
+
 
 
 def delete_test(request, pid):
@@ -338,7 +370,7 @@ def create_package(request):
         if form.is_valid():
             form.save()
             form.save_m2m()
-            #return  HttpResponseRedirect(reverse('App_Login:patient_profile'))
+            
             return redirect('/diagnostic_center/view_package')
     else:
         form = PackageForm()
@@ -355,17 +387,6 @@ class UpdatePackage(LoginRequiredMixin, UpdateView):
     
 @login_required
 def package_detail(request, pid):
-    '''
-    pac = Package.objects.filter(id=pid)
-    packagetest = PackageTest.objects.filter(package_id=pid).values('test_id')
-    print(packagetest)
-    test=Test.objects.filter(id__in= packagetest)
-    d = {'pac': pac, 'test': test}
-    return render(request, 'Diagnostic_Center/package_detail.html', d)
-    
-    filtered_packages = Package.objects.filter(package_test__test_name='YourTestName')
-    return render(request, 'Diagnostic_Center/package_detail.html', {'packages': filtered_packages})
-    '''
     
     pac = Package.objects.filter(id=pid)
     d = {'pac': pac,}
@@ -376,6 +397,52 @@ def delete_package(request, pid):
     package = Package.objects.get(id=pid)
     package.delete()
     return redirect('/diagnostic_center/view_package')
+
+
+def view_medicine(request):
+    me = Medicine.objects.all()
+    m = {'me': me}
+    return render(request, 'Diagnostic_Center/view_medicine.html', m)
+
+
+@login_required
+def create_medicine(request):
+    error = ""
+    user = request.user
+    #dcmadmin1 = DcmAdmin.objects.filter(user=request.user)
+    department1 = Department.objects.all()
+    
+    
+    if request.method == 'POST':
+        tn = request.POST.get('medicine_name')
+        tnd = request.POST.get('medicine_department')
+        tp = request.POST.get('medicine_price')
+        
+        medicine_department = Department.objects.filter(name=tnd).first()
+        
+        try:
+            Medicine.objects.create( medicine_name=tn, medicine_department=medicine_department, medicine_price=tp)
+            error="no"
+        except:
+            error="yes"
+            
+    k = {'user':user, 'medicine_department':department1, 'error': error}
+    return render(request, 'Diagnostic_Center/create_medicine.html', k)
+
+
+class UpdateMedicine(LoginRequiredMixin, UpdateView):
+    model = Medicine
+    fields = ('medicine_name','medicine_department','medicine_price' )
+    template_name = 'Diagnostic_Center/update_medicine.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_medicine')
+    
+    
+def delete_medicine(request, pid):
+    medicine = Medicine.objects.get(id=pid)
+    medicine.delete()
+    return redirect('/diagnostic_center/view_medicine')
        
        
   

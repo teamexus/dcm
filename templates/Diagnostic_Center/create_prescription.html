@@ -3,6 +3,8 @@
 {% block body_block %}
 
 <div class="container">
+  <br>
+  <br>
   <h2 class="text-center">Create Prescription</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -32,14 +34,14 @@
     <label>Medicine</label>
     <select name="medicine" class="form-control" multiple>
       {% for medicine in medicines %}
-      <option value="{{ medicine.id }}">{{ medicine.name }}</option>
+      <option value="{{ medicine.id }}">{{ medicine.medicine_name }}</option>
       {% endfor %}
     </select>
     
     <label>Test</label>
     <select name="test" class="form-control" multiple>
       {% for test in tests %}
-      <option value="{{ test.id }}">{{ test.name }}</option>
+      <option value="{{ test.id }}">{{ test.test_name }}</option>
       {% endfor %}
     </select>
     

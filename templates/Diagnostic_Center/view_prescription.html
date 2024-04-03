@@ -10,7 +10,7 @@
     <thead>
         <tr>
             <th>Patient Name</th>
-           
+            <th>Doctor Name</th>
             <th>Suggestions</th>
             <th>Date</th>
             {% if user.is_doctor %}
@@ -26,7 +26,7 @@
         {% for i in pres %}
         <tr>
             <th>{{i.pres_patient}}</th>
-            
+            <th>{{i.pres_doctor}}</th>
             <td>{{i.text1}}</td>
             <td>{{i.date1}}</td>
             {% if user.is_doctor %}

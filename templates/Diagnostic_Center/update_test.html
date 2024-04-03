@@ -1,7 +1,7 @@
 <!-- update_doctor_appointment.html -->
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block title_block %} Update Doctor Appointment {% endblock %}
+{% block title_block %} Update Test {% endblock %}
 {% block body_block %}
 {% if user.is_authenticated %}
 <div class="container">
@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <br>
                 <br>
-                <h2 class="text-center">Update Doctor Appointment</h2>
+                <h2 class="text-center">Update Test </h2>
                 {{ form.as_p }}
                 <button type="submit" class="btn btn-primary btn-block">Update</button>
             </form>
@@ -22,4 +22,3 @@
 <p>You are not allowed to view this page. 404</p>
 {% endif %}
 {% endblock %}
-

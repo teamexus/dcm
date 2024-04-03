@@ -1,19 +1,28 @@
 {% extends 'base.html' %} 
 {% block title_block %} Package Details {% endblock %} 
 {% block body_block %}
-<h2>Package Details</h2>
-<br>
-<br>
-{% for i in pac %}
-<p>Package Name: {{ i.package_name }}</p>
+<style>
+    .center {
+        text-align: center;
+    }
+</style>
 
-<p>Total Price: {{ i.total_price }} </p>
-<p>Package Price: {{ i.package_price }} </p>
-{% for test in i.package_test.all %}
- <li>Package Test:{{ test.test_name }}</li>
-{% endfor %}
-
-{% endfor %}
-
+<div class="center">
+    <br>
+    <br>
+    <h2>Package Details</h2>
+    <br>
+    <br>
+    {% for i in pac %}
+    <p>Package Name: {{ i.package_name }}</p>
+    <p>Total Price: {{ i.total_price }} </p>
+    <p>Package Price: {{ i.package_price }} </p>
+    
+        {% for test in i.package_test.all %}
+        <li>Package Test: {{ test.test_name }}</li>
+        {% endfor %}
+    
+    {% endfor %}
+</div>
 
 {% endblock %}

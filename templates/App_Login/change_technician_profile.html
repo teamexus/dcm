@@ -3,11 +3,56 @@
 {% block title_block %} Change Profile {% endblock %} 
 {% block body_block %}
 
-<form method="POST">
-  {{ form.as_p }}
-  {% csrf_token %}
-  <button type="submit" class="btn btn-warning btn-sm">Updated</button>
-</form>
-
+<div class="container">
+    <br>
+    <br>
+    <br>
+    <h2 class="text-center">Update Technician Profile</h2>
+    <br>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6">
+            <label>Phone</label>
+            <input type="text" class="form-control" name="phone" value="{{tec.phone }}" required />
+        </div>
+        <div class="col-md-6">
+          <label>Email</label>
+          <input type="email" class="form-control" name="email" value="{{ user.email }}" required />
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-md-6">
+          <label>Technician Full Name</label>
+          <input type="text" class="form-control" name="technician_full_name" value="{{ tec.technician_full_name }}" required />
+        </div>
+        <div class="col-md-6">
+          <label>Designation</label>
+          <input type="text" class="form-control" name="designation" value="{{ tec.designation }}" required />
+        </div>
+        
+      </div>
+      <div class="row">
+       <div class="col-md-6">
+          <label>Password</label>
+          <input type="password" class="form-control" name="password" required />
+        </div>
+        <div class="col-md-6">
+          <label>Confirm Password</label>
+          <input type="password" class="form-control" name="confirm_password" required />
+        </div>
+      </div>
+      <div class="row">
+        
+      </div>
+      <br />
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <input type="submit" value="Update Profile" class="btn btn-primary btn-block" />
+        </div>
+      </div>
+    </form>
+  </div>
 
 {% endblock %}

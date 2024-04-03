@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
-{% block title_block %} Create Test {% endblock %} 
+{% block title_block %} Create Medicine {% endblock %} 
 {% block body_block %}
 
 <div class="container">
-  <h2 class="text-center">Create Test</h2>
+  <br>
+  <br>
+  <h2 class="text-center">Create Medicine</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
 
-    <label>Test Name</label>
-    <input type="text" class="form-control" name="test_name" required />
-    <label>Test Name Department</label>
-    <select name="test_name_department" class="form-control">
-      {% for i in test_name_department %}
+    <label>Medicine Name</label>
+    <input type="text" class="form-control" name="medicine_name" required />
+    <label>Medicine Department</label>
+    <select name="medicine_department" class="form-control">
+      {% for i in medicine_department %}
       <option value="{{i.name}}">{{i.name}}</option>
       {% endfor %}
     </select>
-    <label>Test Price</label>
-    <input type="text" class="form-control" name="test_price" required />
+    <label>Medicine Price</label>
+    <input type="text" class="form-control" name="medicine_price" required />
     <br />
     <input type="submit" value="Submit" class="form-control btn btn-primary" />
   </form>
@@ -26,7 +28,7 @@
  {% if error == "no" %}
 <script>
   alert('Record  Save Successfully');
-  window.location = ('{% url 'Diagnostic_Center:view_test' %}');
+  window.location = ('{% url 'Diagnostic_Center:view_medicine' %}');
 </script>
 {% endif %} 
 {% if error == "yes" %}

@@ -50,12 +50,22 @@ def doctor_profile(request):
     d = {'doc': doc}
     return render(request, 'App_Login/doctor_profile.html', d)
 
-
-
 def View_Doctor(request):
     doc = Doctor.objects.all()
     d = {'doc': doc}
     return render(request, 'App_Login/view_doctor.html', d)
+
+@login_required
+def doctor_change(request):
+    current_user = request.user
+    doc = Doctor.objects.filter(user=request.user).first()
+    form = DoctorProfileChange(instance=doc)
+    if request.method == 'POST':
+        form = DoctorProfileChange(request.POST, instance=doc)
+        if form.is_valid():
+            form.save()
+            form = DoctorProfileChange(instance=doc)
+    return render(request, 'App_Login/change_doctor_profile.html', context={'form':form})
 
 def delete_doctor(request, pid):
     if not request.user.is_staff:
@@ -88,6 +98,18 @@ def View_Technician(request):
     tec = Technician.objects.all()
     d = {'tec': tec}
     return render(request, 'App_Login/view_technician.html', d)
+
+@login_required
+def technician_change(request):
+    current_user = request.user
+    tec = Technician.objects.filter(user=request.user).first()
+    form = TechnicianProfileChange(instance=tec)
+    if request.method == 'POST':
+        form = TechnicianProfileChange(request.POST, instance=tec)
+        if form.is_valid():
+            form.save()
+            form = TechnicianProfileChange(instance=tec)
+    return render(request, 'App_Login/change_technician_profile.html', context={'form':form, "tec":tec})
 
 def Delete_Technician(request, pid):
     if not request.user.is_staff:
@@ -160,29 +182,9 @@ def user_change(request):
             form = UserProfileChange(instance=current_user)
     return render(request, 'App_Login/change_profile.html', context={'form':form})
 
-@login_required
-def doctor_change(request):
-    current_user = request.user
-    doc = Doctor.objects.filter(user=request.user).first()
-    form = DoctorProfileChange(instance=doc)
-    if request.method == 'POST':
-        form = DoctorProfileChange(request.POST, instance=doc)
-        if form.is_valid():
-            form.save()
-            form = DoctorProfileChange(instance=doc)
-    return render(request, 'App_Login/change_doctor_profile.html', context={'form':form})
 
-@login_required
-def technician_change(request):
-    current_user = request.user
-    tec = Technician.objects.filter(user=request.user).first()
-    form = TechnicianProfileChange(instance=tec)
-    if request.method == 'POST':
-        form = TechnicianProfileChange(request.POST, instance=tec)
-        if form.is_valid():
-            form.save()
-            form = TechnicianProfileChange(instance=tec)
-    return render(request, 'App_Login/change_technician_profile.html', context={'form':form, "tec":tec})
+
+
 
 
 

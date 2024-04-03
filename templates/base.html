@@ -132,6 +132,9 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'Diagnostic_Center:view_medicine' %}">Medicines</a>
+        </li>
 
      
         {% elif user.is_authenticated %}
@@ -164,6 +167,9 @@
       <li class="nav-item">
         <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'Diagnostic_Center:view_medicine' %}">Medicines</a>
+    </li>
     
     {% else %}
     <ul class="navbar-nav ml-auto">
@@ -177,12 +183,15 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'App_Login:view_doctor' %}"> Doctors </a>
       </li>
-        <li class="nav-item">
+      <li class="nav-item">
           <a class="nav-link" href="{% url 'Diagnostic_Center:view_test' %}">Tests</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'Diagnostic_Center:view_package' %}">Packages</a>
      </li>
+     <li class="nav-item">
+      <a class="nav-link" href="{% url 'Diagnostic_Center:view_medicine' %}">Medicines</a>
+    </li>
     
       {% endif %}
           {% if request.user.is_staff %}

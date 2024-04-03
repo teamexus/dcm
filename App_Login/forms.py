@@ -128,13 +128,15 @@ class DoctorProfileChange(UserChangeForm):
     class Meta:
         model = Doctor
         #fields = "__all__" 
-        fields = ('doctor_full_name', 'phone', 'spe', 'designation', 'degree', 'current_working_place', 'mbbs_institution')
+        fields = ('doctor_full_name', 'phone', 'spe', 'designation', 'degree', 'current_working_place', 'mbbs_institution', 'post_graduation_institution')
         
 
 class TechnicianProfileChange(UserChangeForm):
     class Meta:
         model = Technician
         fields = "__all__" 
+        fields = ('technician_full_name', 'phone', 'designation')
+        
         
 class PatientProfileChange(UserChangeForm):
     class Meta:
