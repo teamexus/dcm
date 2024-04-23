@@ -8,28 +8,50 @@
 </div>
 {% else %}
 <div class="container">
-  <h2 class="text-center">Create Technician New Account Here</h2>
-  <form method="post" >
-    {% csrf_token %}
-    <label>User Name</label>
-    <input type="text" class="form-control" name="username" required />
-    <label> Technician Full Name</label>
-    <input type="text" class="form-control" name="technician_full_name" required />
-    <label>Email</label>
-    <input type="text" class="form-control" name="email" required />
-    <label>Phone Number</label>
-    <input type="text" class="form-control" name="phone" required />
-    <label>Designation</label>
-    <input type="text" class="form-control" name="designation" required />
-    <label>Password</label>
-    <input type="password" class="form-control" name="password1" required />
-    <label>Confirm Password</label>
-    <input type="password" class="form-control" name="password2" required />
-    <br />
-    <input type="submit" value="Submit" class="form-control btn btn-primary" />
-  </form>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <h2 class="text-center mb-4">Create A Technician</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">User Name</label>
+                    <input type="text" class="form-control" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="technician_full_name">Technician Full Name</label>
+                    <input type="text" class="form-control" name="technician_full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" class="form-control" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="designation">Designation</label>
+                    <input type="text" class="form-control" name="designation" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_department">Department</label>
+                    {{ form.department }}
+                </div>
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" class="form-control" name="password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" class="form-control" name="password2" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </div>
+            </form>
+            <p class="text-center">Already have an account? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
+        </div>
+    </div>
 </div>
-<br />
-<p>Already have an account ? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
 {% endif %} 
 {% endblock %}

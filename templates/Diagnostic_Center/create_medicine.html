@@ -2,30 +2,45 @@
 {% block title_block %} Create Medicine {% endblock %} 
 {% block body_block %}
 
-<div class="container">
-  <br>
-  <br>
-  <h2 class="text-center">Create Medicine</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-
-    <label>Medicine Name</label>
-    <input type="text" class="form-control" name="medicine_name" required />
-    <label>Medicine Department</label>
-    <select name="medicine_department" class="form-control">
-      {% for i in medicine_department %}
-      <option value="{{i.name}}">{{i.name}}</option>
-      {% endfor %}
-    </select>
-    <label>Medicine Price</label>
-    <input type="text" class="form-control" name="medicine_price" required />
-    <br />
-    <input type="submit" value="Submit" class="form-control btn btn-primary" />
-  </form>
+<div class="container mt-5">
+  <div class="card border">
+    <div class="card-header">
+      <h2 class="text-center mb-0">Create Medicine</h2>
+    </div>
+    <div class="card-body">
+      <div class="row justify-content-center"> <!-- Centering the form horizontally -->
+        <div class="col-md-6"> <!-- Making the form take up 6 columns out of 12, which is 50% of the screen on medium devices -->
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+              <label for="medicine_name">Medicine Name</label>
+              <input type="text" class="form-control" name="medicine_name" required />
+            </div>
+            <div class="form-group">
+              <label for="medicine_department">Medicine Department</label>
+              <select name="medicine_department" class="form-control">
+                {% for i in medicine_department %}
+                   <option value="{{i.name}}">{{i.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="medicine_price">Medicine Price</label>
+              <input type="text" class="form-control" name="medicine_price" required />
+            </div>
+            <br>
+            <div class="text-center">
+              <input type="submit" value="Submit" class="btn btn-primary btn-sm" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
- {% if error == "no" %}
+{% if error == "no" %}
 <script>
   alert('Record  Save Successfully');
   window.location = ('{% url 'Diagnostic_Center:view_medicine' %}');
@@ -38,3 +53,4 @@
 {% endif %}
 
 {% endblock %}
+

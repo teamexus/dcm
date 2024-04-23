@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
+from Core.models import Department
 
 # Create your models here.
 
@@ -81,6 +82,7 @@ class Technician(models.Model):
     technician_full_name = models.CharField(max_length=100, null=True, blank=True)
     phone = models.IntegerField(blank=True, null=True)
     designation = models.CharField(max_length=30, blank=True, null=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null = True, blank = True)
 
 
     def __str__(self):
@@ -90,9 +92,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name = 'user_profile', on_delete=models.CASCADE, null=True, blank=True)
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True)
 
-class AttendentProfile(models.Model):
-    user = models.OneToOneField(Attendent, related_name = 'user_profile', on_delete=models.CASCADE, null=True, blank=True)
-    profile_pic = models.ImageField(upload_to='profile_pics', blank=True, null=True)
 
 class DoctorProfile(models.Model):
     doctor = models.OneToOneField(Doctor, related_name = 'doctor_profile', on_delete=models.CASCADE, null=True, blank=True)

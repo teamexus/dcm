@@ -10,27 +10,24 @@
     {% csrf_token %}
     
     <label>Doctor Name</label>
-    <select name="pres_doctor" class="form-control" readonly>
-      {% for doctor in pres_doctor %}
-      <option value="{{ doctor.doctor_full_name }}">{{ doctor.doctor_full_name }}</option>
-      {% endfor %}
-    </select>
+    {% for doctor in pres_doctor %}
+    <input type="text" class="form-control" name="pres_doctor" value="{{ doctor.doctor_full_name }}" readonly/>
+    {% endfor %}
+    
     
     <label>Patient Name</label>
-    <select name="pres_patient" class="form-control" readonly>
-      {% for patient in pres_patient %}
-      <option value="{{ patient.name }}">{{ patient.name }}</option>
-      {% endfor %}
-    </select>
+    {% for patient in pres_patient %}
+    <input type="text" class="form-control" name="pres_patient" value="{{ patient.name }}" readonly/>
+    {% endfor %}
+    
     
 
     <label>User Name</label>
-    <select name="pres_user" class="form-control" readonly >
-      {% for i in pres_user %}
-      <option value="{{i.first_name}}">{{i.first_name}}</option>
-      {% endfor %}
-    </select>
-    
+    {% for i in pres_user %}
+    <input type="text" class="form-control" name="pres_user" value={{i.first_name}} readonly/>
+    {% endfor %}
+ 
+
     <label>Medicine</label>
     <select name="medicine" class="form-control" multiple>
       {% for medicine in medicines %}

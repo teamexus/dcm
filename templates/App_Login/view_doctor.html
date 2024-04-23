@@ -12,11 +12,16 @@
             <tr>
                 <th>Doctor Full Name</th>
                 <th>Specialization</th>
-                <th>Designation</th>
-                <th>Degrees</th>
-                {% if request.user.is_staff or user.is_dcmadmin %}
-                <th>Delete</th>
+                {% comment %} <th>Designation</th>
+                <th>Degrees</th> {% endcomment %}
+                <th>Profile</th>
                 
+                {% if user.is_dcmadmin %}
+                <th>Delete</th>
+                {% elif  user.is_doctor   %}
+                {% elif  user.is_technician  %}
+                {% elif user.is_authenticated %}
+                <th>Appointment</th>
                 {% endif %}
                 
             </tr>
@@ -26,13 +31,20 @@
             <tr>
                 <td>{{i.doctor_full_name}}</td>
                 <td>{{i.spe}}</td>
-                <td>{{i.designation}}</td>
-                <td>{{i.degree}}</td>
-
-                {% if request.user.is_staff or user.is_dcmadmin %}
-                <td><a href="{% url 'App_Login:delete_doctor' i.user_id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+                {% comment %} <td>{{i.designation}}</td>
+                <td>{{i.degree}}</td> {% endcomment %}
+                <td><a href="{% url 'App_Login:doctor_profile_2' i.user_id %}"  class="btn btn-danger">Profile</a></td>
                 
+
+                {% if user.is_dcmadmin %}
+                <td><a href="{% url 'App_Login:delete_doctor' i.user_id %}" onClick="return confirm('Are you sure?')"  class="btn btn-danger">Delete</a></td>
+                {% elif  user.is_doctor   %}
+                {% elif  user.is_technician  %}
+                {% elif user.is_authenticated %}
+                <td><a href="{% url 'Diagnostic_Center:create_appointment_doctor_2' i.user_id %}" class="btn btn-danger">Create</a></td>
+                {% comment %} <td><a href="{% url 'Diagnostic_Center:update_doctor_appointment' i.id  %}"  class="btn btn-danger">Update</a></td> {% endcomment %}
                 {% endif %}
+                
             </tr>
             {% endfor %}
         </tbody>

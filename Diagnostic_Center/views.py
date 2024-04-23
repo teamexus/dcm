@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.models import User 
 from .models import *
 from django.contrib.auth import authenticate, logout, login
-from App_Login.models import User, DcmPatient, Doctor, DcmAdmin
+from App_Login.models import User, DcmPatient, Doctor, DcmAdmin, Technician
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -55,7 +55,8 @@ def create_appointment_doctor(request):
         aps = request.POST.get('appointment_status')
         
         
-        doctor = Doctor.objects.filter(doctor_full_name=x).first()
+        doctor_user = User.objects.filter(id=x).first()
+        doctor = Doctor.objects.filter(user= doctor_user).first()
         #doctor2 = Doctor.objects.filter(doctor_id=x).first()
         patient = DcmPatient.objects.filter(name=y).first()
         max_serial = DoctorAppointment.objects.filter(doctor=doctor, date1=d1).aggregate(Max('serial'))['serial__max']
@@ -73,6 +74,47 @@ def create_appointment_doctor(request):
     return render(request, 'Diagnostic_Center/create_appointment_doctor.html', k)
 
 
+@login_required
+def create_appointment_doctor_2(request, doctor_id):
+    doctor = get_object_or_404(Doctor, pk=doctor_id)
+    error=""
+    user = request.user
+    #doctor2 = Doctor.objects.filter(id=did)
+    doctor1= Doctor.objects.all()
+    patient1 = DcmPatient.objects.filter(user=request.user)
+    
+    if request.method == 'POST':
+    
+        x = request.POST.get('doctor')
+        y = request.POST.get('patient')
+        p = request.POST.get('appointment')
+        m = request.POST.get('mobile')
+        d1 = request.POST.get('date1')
+        serial_number = request.POST.get('serial')
+        aps = request.POST.get('appointment_status')
+        
+        
+        doctor = Doctor.objects.filter(doctor_full_name=x).first()
+        #doctor2 = Doctor.objects.filter(doctor_id=x).first()
+        patient = DcmPatient.objects.filter(name=y).first()
+        max_serial = DoctorAppointment.objects.filter(doctor=doctor, date1=d1).aggregate(Max('serial'))['serial__max']
+        # Increment the serial number
+        if max_serial is None:
+            serial_number = 1  # No appointments for the day yet, so start with 1
+        else:
+            serial_number = max_serial + 1
+        try:
+            DoctorAppointment.objects.create(user=user, doctor=doctor,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status=aps)
+            error="no"
+        except:
+            error="yes"
+    k = {'user': user,'doctor': doctor1, 'patient':patient1, 'selected_doctor': doctor, 'error':error}
+    return render(request, 'Diagnostic_Center/create_appointment_doctor_2.html', k)
+
+
+
+
+
 class UpdateDoctorAppointment(LoginRequiredMixin, UpdateView):
     model = DoctorAppointment
     fields = ('serial', 'appointment_status')
@@ -86,10 +128,16 @@ def delete_appointment_doctor(request, pid):
     appointment.delete()
     return redirect('/diagnostic_center/view_appointment_doctor')
 
+
 @login_required
 def view_appointment_test(request):
     if request.user.is_technician:
-        app = TestAppointment.objects.all()
+        technician = Technician.objects.get(user=request.user)
+        technician_department = technician.department
+        # Filter appointments based on tests in the technician's department
+        app = TestAppointment.objects.filter(
+            test__test_name_department=technician_department
+        ).distinct()  # Ensure distinct results to avoid duplicates
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
     
@@ -101,6 +149,8 @@ def view_appointment_test(request):
         app = TestAppointment.objects.filter(user=request.user)
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+
+
 
 
 @login_required
@@ -116,6 +166,10 @@ def create_appointment_test(request):
         d1 = request.POST.get('date1')
         serial_number = request.POST.get('serial')
         aps = request.POST.get('appointment_status')
+        test_ids = request.POST.getlist('test')
+        tests = Test.objects.filter(id__in=test_ids)
+      
+
         
         patient = DcmPatient.objects.filter(name=y).first()
         
@@ -127,12 +181,59 @@ def create_appointment_test(request):
             serial_number = max_serial + 1
         
         try:
-            TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status= aps )
+            testappointment =TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status= aps )
+            testappointment.test.set(tests)
             error="no"
         except:
             error="yes"
-    k = {'user':user,  'patient':patient1, 'error':error}
+    tests = Test.objects.all()  # Assuming you want to display all tests
+
+    k = {'user':user,  'patient':patient1, 'tests': tests, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_test.html', k)
+
+
+@login_required
+def create_appointment_test_2(request, test_id):
+    test = Test.objects.get(pk=test_id)
+    error=""
+    user = request.user
+    patient1 = DcmPatient.objects.filter(user=request.user)
+    
+    if request.method == 'POST':
+        y = request.POST.get('patient')
+        p = request.POST.get('appointment')
+        m = request.POST.get('mobile')
+        d1 = request.POST.get('date1')
+        serial_number = request.POST.get('serial')
+        aps = request.POST.get('appointment_status')
+        test_ids = request.POST.getlist('test')
+        tests = Test.objects.filter(id__in=test_ids)
+      
+
+        
+        patient = DcmPatient.objects.filter(name=y).first()
+        
+        max_serial = TestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
+        # Increment the serial number
+        if max_serial is None:
+            serial_number = 1  # No appointments for the day yet, so start with 1
+        else:
+            serial_number = max_serial + 1
+        
+        try:
+            testappointment =TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status= aps )
+            testappointment.test.set(tests)
+            error="no"
+        except:
+            error="yes"
+    tests = Test.objects.all()  # Assuming you want to display all tests
+
+    k = {'user':user,  'patient':patient1, 'tests': tests, 'error':error}
+    return render(request, 'Diagnostic_Center/create_appointment_test.html', k)
+
+
+
+
 
 class UpdateTestAppointment(LoginRequiredMixin, UpdateView):
     model = TestAppointment
@@ -169,6 +270,7 @@ def create_appointment_package_test(request):
     error=""
     user = request.user
     patient1 = DcmPatient.objects.filter(user=request.user)
+    package1 = Package.objects.all()
     
     if request.method == 'POST':
         y = request.POST.get('patient')
@@ -177,8 +279,10 @@ def create_appointment_package_test(request):
         d1 = request.POST.get('date1')
         serial_number  = request.POST.get('serial')
         aps = request.POST.get('appointment_status')
+        pa = request.POST.get('package')
         
         patient = DcmPatient.objects.filter(name=y).first()
+        package = Package.objects.filter(package_name=pa).first()
         max_serial = PackageTestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
         # Increment the serial number
         if max_serial is None:
@@ -186,12 +290,48 @@ def create_appointment_package_test(request):
         else:
             serial_number = max_serial + 1
         try:
-            PackageTestAppointment.objects.create(user=user, patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number , appointment_status= aps)
+            PackageTestAppointment.objects.create(user=user, patient=patient, package=package, appointment=p, mobile=m, date1=d1, serial=serial_number , appointment_status= aps)
             error="no"
         except:
             error="yes"
-    k = {'user':user,  'patient':patient1, 'error':error}
+    k = {'user':user,  'patient':patient1, 'package':package1, 'error':error}
     return render(request, 'Diagnostic_Center/create_appointment_package_test.html', k)
+
+
+
+@login_required
+def create_appointment_package_test_2(request, package_id):
+    package = get_object_or_404(Package, pk=package_id)
+    error=""
+    user = request.user
+    patient1 = DcmPatient.objects.filter(user=request.user)
+    package1 = Package.objects.all()
+    
+    if request.method == 'POST':
+        y = request.POST.get('patient')
+        p = request.POST.get('appointment')
+        m = request.POST.get('mobile')
+        d1 = request.POST.get('date1')
+        serial_number  = request.POST.get('serial')
+        aps = request.POST.get('appointment_status')
+        pa = request.POST.get('package')
+        
+        patient = DcmPatient.objects.filter(name=y).first()
+        package = Package.objects.filter(package_name=pa).first()
+        max_serial = PackageTestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
+        # Increment the serial number
+        if max_serial is None:
+            serial_number = 1  # No appointments for the day yet, so start with 1
+        else:
+            serial_number = max_serial + 1
+        try:
+            PackageTestAppointment.objects.create(user=user, patient=patient, package=package, appointment=p, mobile=m, date1=d1, serial=serial_number , appointment_status= aps)
+            error="no"
+        except:
+            error="yes"
+    k = {'user':user,  'patient':patient1, 'package':package1, 'selected_package': package, 'error':error}
+    return render(request, 'Diagnostic_Center/create_appointment_package_test_2.html', k)
+
 
 
 class UpdatePackageTestAppointment(LoginRequiredMixin, UpdateView):

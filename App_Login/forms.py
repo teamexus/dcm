@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.db import transaction
 from App_Login.models import User, DcmAdmin, Doctor, Technician, UserProfile, DcmPatient
+from Core.models import Department
 
 
 class UserSignUpForm(UserCreationForm):
@@ -12,21 +13,6 @@ class UserSignUpForm(UserCreationForm):
         model = User
         fields = ('username',  'first_name', 'last_name', 'email', 'password1', 'password2')
 
-class AttendentSignUpForm(UserCreationForm):
-    email=forms.EmailField(required=True)
-  
-    class Meta(UserCreationForm.Meta):
-        model = User
-        fields = ('username',  'first_name', 'last_name', 'email', 'password1', 'password2')
-
-    @transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.email=self.cleaned_data.get('email')
-        user.is_dcmadmin = True
-        user.save()
-        patient = DcmAdmin.objects.create(user=user)
-        return user
 
 class DcmAdminSignUpForm(UserCreationForm):
     email=forms.EmailField(required=True)
@@ -94,6 +80,7 @@ class TechnicianSignUpForm(UserCreationForm):
     technician_full_name = forms.CharField(required=True)
     phone=forms.IntegerField(required=True)
     designation=forms.CharField(required=True)
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), required=True)
     
   
     class Meta(UserCreationForm.Meta):
@@ -111,6 +98,7 @@ class TechnicianSignUpForm(UserCreationForm):
         technician.technician_full_name = self.cleaned_data.get('technician_full_name')
         technician.phone=self.cleaned_data.get('phone')
         technician.designation=self.cleaned_data.get('designation')
+        technician.department = self.cleaned_data.get('department')
         technician.save()
         return technician
     
@@ -119,10 +107,7 @@ class UserProfileChange(UserChangeForm):
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
 
-class AttendentProfileChange(UserChangeForm):
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'password')
+
         
 class DoctorProfileChange(UserChangeForm):
     class Meta:
@@ -134,8 +119,8 @@ class DoctorProfileChange(UserChangeForm):
 class TechnicianProfileChange(UserChangeForm):
     class Meta:
         model = Technician
-        fields = "__all__" 
-        fields = ('technician_full_name', 'phone', 'designation')
+        #fields = "__all__" 
+        fields = ('technician_full_name', 'phone', 'designation', 'department')
         
         
 class PatientProfileChange(UserChangeForm):
@@ -148,6 +133,10 @@ class ProfilePic(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['profile_pic']
+        widgets = {
+            'profile_pic': forms.FileInput(attrs={'class': 'form-control-file'}),
+        }
+
 
 class PatientProfilePic(forms.ModelForm):
     class Meta:

@@ -6,10 +6,8 @@
 <br>
 <h2>Change Your Patient Profile Picture: </h2>
 <form method="post" enctype="multipart/form-data">
-<form method="post">
-    {{ form }}
+    {{ form.as_p }}
     {% csrf_token %}
-    <button type="submit" class="btn btn-success btn-sm">Add</button>
+    <button type="submit" class="btn btn-success btn-sm">Save</button>
 </form>
-
 {% endblock %}

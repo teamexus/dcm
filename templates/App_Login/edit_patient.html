@@ -3,12 +3,25 @@
 {% block title_block %} Edit Patient {% endblock %}
 {% block body_block %}
 {% if user.is_authenticated %}
-<form method="POST">
-{{form.as_p}}
-{% csrf_token %}
-<button type="submit" name="button">Update</button>
+<div class="container">
+    <form method="POST" class="mx-auto" style="max-width: 500px;">
+        <br>
+        <br>
+        <h2 class="text-center">Edit Patient</h2>
+        <div class="row">
+            <div class="col-md-12">
+                {{ form.as_p }}
+            </div>
+        </div>
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary btn-block">Update</button>
+            </div>
+        </div>
+    </form>
+</div>
 {% else %}
 <p>Your are not allowed to view this page. 404</p>
-</form>
 {% endif %}
 {% endblock %}

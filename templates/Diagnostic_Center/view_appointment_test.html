@@ -6,7 +6,7 @@
 <div class="container" style="margin-top:50px">
 <h2 class="text-center"> Appointment For Test </h2>
 {% if  user.is_doctor %}
-{% elif  user.is_dcmadmin %}
+{% elif  user.is_technician %}
 {% elif  user.is_dcmadmin %}
 {%else %}
 <td><a href="{% url 'Diagnostic_Center:create_appointment_test' %}" class="btn btn-danger">Create Appointment</a></td>
@@ -18,6 +18,7 @@
             
             <th>Patient Name</th>
             <th>Contact Number</th>
+            <th>Test Name</th>
             <th>Date</th>
             <th>Serial </th>
             <th>Status</th>
@@ -29,10 +30,12 @@
     </thead>
     <tbody>
         {% for i in app %}
+        {% for j in i.test.all %}
         <tr>
             
             <td>{{i.patient}}</td>
             <td>{{i.mobile}}</td>
+            <td>{{j.test_name}}</td>
             <td>{{i.date1}}</td>
             <td>{{i.serial}}</td>
             <td>{{i.appointment_status}}</td>
@@ -42,6 +45,7 @@
             
             {% endif %}
         </tr>
+        {% endfor %}
         {% endfor %}
     </tbody>
 </table>

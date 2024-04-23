@@ -3,45 +3,71 @@
 {% block title_block %} Create Doctor New Account {% endblock %} 
 {% block body_block %} 
 {% if registered %}
-<div class="alert allert-success">
+<div class="alert alert-success">
   Account Created Successfully! <a href="{% url 'App_Login:login' %}">Login Here</a>
 </div>
 {% else %}
 <div class="container">
-  <h2 class="text-center">Create A Doctor </h2>
-  <form method="post" >
-    {% csrf_token %}
-
-    <label>User Name</label>
-    <input type="text" class="form-control" name="username" required />
-    <label> Doctor Full Name</label>
-    <input type="text" class="form-control" name="doctor_full_name" required />
-    <label>Email</label>
-    <input type="text" class="form-control" name="email" required />
-    <label>Phone Number</label>
-    <input type="text" class="form-control" name="phone" required />
-    <label>Specialization</label>
-    <input type="text" class="form-control" name="spe" required />
-    <label>Designation</label>
-    <input type="text" class="form-control" name="designation" required />
-    <label>Degrees</label>
-    <input type="text" class="form-control" name="degree" required />
-    <label>Current Working Place</label>
-    <input type="text" class="form-control" name="current_working_place" required />
-    <label>Mbbs Institution</label>
-    <input type="text" class="form-control" name="mbbs_institution" required />
-    <label>Post Graduation Institution</label>
-    <input type="text" class="form-control" name="post_graduation_institution" required />
-    <label>Password</label>
-    <input type="password" class="form-control" name="password1" required />
-    <label>Confirm Password</label>
-    <input type="password" class="form-control" name="password2" required />
-    <br />
-    <input type="submit" value="Submit" class="form-control btn btn-primary" />
-  </form>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <h2 class="text-center">Create A Doctor</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">User Name</label>
+                    <input type="text" class="form-control" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctor_full_name">Doctor Full Name</label>
+                    <input type="text" class="form-control" name="doctor_full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" class="form-control" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="spe">Specialization</label>
+                    <input type="text" class="form-control" name="spe" required>
+                </div>
+                <div class="form-group">
+                    <label for="designation">Designation</label>
+                    <input type="text" class="form-control" name="designation" required>
+                </div>
+                <div class="form-group">
+                    <label for="degree">Degrees</label>
+                    <input type="text" class="form-control" name="degree" required>
+                </div>
+                <div class="form-group">
+                    <label for="current_working_place">Current Working Place</label>
+                    <input type="text" class="form-control" name="current_working_place" required>
+                </div>
+                <div class="form-group">
+                    <label for="mbbs_institution">Mbbs Institution</label>
+                    <input type="text" class="form-control" name="mbbs_institution" required>
+                </div>
+                <div class="form-group">
+                    <label for="post_graduation_institution">Post Graduation Institution</label>
+                    <input type="text" class="form-control" name="post_graduation_institution" required>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" class="form-control" name="password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" class="form-control" name="password2" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </div>
+            </form>
+            <p class="text-center">Already have an account? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
+        </div>
+    </div>
 </div>
-
-<br />
-<p>Already have an account ? <a href="{% url 'App_Login:login' %}">Login Here</a></p>
 {% endif %} 
 {% endblock %}

@@ -8,6 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('App_Login.urls')),
     path('diagnostic_center/', include('Diagnostic_Center.urls')),
+    path('core/', include('Core.urls')),
     path('', views.Index, name='index'),
 ]
 urlpatterns += staticfiles_urlpatterns()

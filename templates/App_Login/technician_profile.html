@@ -43,6 +43,7 @@
             <p>Technician Full Name: {{ i.technician_full_name }} </p>
             <p>Technician Phone Number: {{ i.phone }} </p>
             <p>Technician Designation : {{ i.designation }} </p>
+            <p>Technician Department : {{ i.department }} </p>
         </div>
     {% endfor %}
     <a href="{% url 'App_Login:technician_change' %}" class="btn btn-warning btn-sm">Change Profile Info</a>

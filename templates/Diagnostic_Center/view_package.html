@@ -18,6 +18,10 @@
                 {% if  user.is_dcmadmin   %}
                 <th>Update</th>
                 <th>Delete</th>
+                {% elif  user.is_doctor   %}
+                {% elif  user.is_technician  %}
+                {% elif  user.is_authenticated   %}
+                <th>Appointment</th>
                 {% endif %}
                 
             </tr>
@@ -33,6 +37,10 @@
                 {% if  user.is_dcmadmin   %}
                 <td><a href="{% url 'Diagnostic_Center:package_update' i.id  %}"  class="btn btn-danger">Update</a></td>
                 <td><a href="{% url 'Diagnostic_Center:delete_package' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+                {% elif  user.is_doctor   %}
+                {% elif  user.is_technician  %}
+                {% elif  user.is_authenticated   %}
+                <td><a href="{% url 'Diagnostic_Center:create_appointment_package_test_2' i.id %}" class="btn btn-danger">Create</a></td>
                 {% endif %}
             </tr>
             {% endfor %}

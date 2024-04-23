@@ -1,14 +1,9 @@
 from django.db import models
 from App_Login.models import  DcmPatient, Doctor, User
-import datetime
+from Core.models import Department
 
 # Create your models here.
 
-class Department(models.Model):
-    name = models.CharField(max_length=50)
-    
-    def __str__(self):
-        return self.name
 
 class Test(models.Model):
     test_name =  models.CharField(max_length=50)
@@ -64,13 +59,12 @@ class DoctorAppointment(models.Model):
     date1 = models.DateField()
     serial = models.IntegerField(blank=True, null=True)
     status = (
-        ('Pending', 'Pending'),
         ('Confirmed', 'Confirmed'),
         ('Cancelled', 'Cancelled'),
         ('Completed', 'Completed'),
     
     )
-    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True)
+    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True, default='Confirmed')
     
     def __str__(self):
         return self.doctor.doctor_full_name + "--" + self.patient.name
@@ -83,13 +77,13 @@ class TestAppointment(models.Model):
     date1 = models.DateField()
     serial = models.IntegerField(blank=True, null=True)
     status = (
-        ('Pending', 'Pending'),
         ('Confirmed', 'Confirmed'),
         ('Cancelled', 'Cancelled'),
         ('Completed', 'Completed'),
     
     )
-    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True)
+    appointment_status = models.CharField(max_length=20, choices= status, null=True, blank=True, default= ('Confirmed'))
+    test = models.ManyToManyField(Test, blank=True, null=True)
     
     
     def __str__(self):
@@ -103,13 +97,13 @@ class PackageTestAppointment(models.Model):
     date1 = models.DateField()
     serial = models.IntegerField(blank=True, null=True)
     status = (
-        ('Pending', 'Pending'),
         ('Confirmed', 'Confirmed'),
         ('Cancelled', 'Cancelled'),
         ('Completed', 'Completed'),
     
     )
-    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True)
+    appointment_status = models.CharField(max_length=20, choices= status, null=True, blank=True, default=('Confirmed'))
+    package = models.ForeignKey(Package, null=True, blank=True, on_delete=models.CASCADE)
     
     
     def __str__(self):

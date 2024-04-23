@@ -1,6 +1,7 @@
 from django.urls import path
 from App_Login import views
 from .views import sign_up, DcmAdminSignUpview, DoctorSignUpview, TechnicianSignUpview, CreatePatient
+
 app_name = 'App_Login'
 
 urlpatterns = [
@@ -13,11 +14,12 @@ urlpatterns = [
     path('delete_doctor(<int:pid>)', views.delete_doctor, name='delete_doctor'),
     path('techniciansignup/', TechnicianSignUpview.as_view(),  name='techniciansignup'),
     path('view_technician/', views.View_Technician, name='view_technician'),
-    path('delete_technician(<int:pid>)', views.Delete_Technician, name='delete_technician'),
+    path('delete_technician(<int:pid>/)', views.Delete_Technician, name='delete_technician'),
     path('login/', views.login_page, name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('profile/', views.profile, name='profile'),
     path('doctor_profile/', views.doctor_profile, name='doctor_profile'),
+    path('doctor_profile_2(<int:pid>)', views.doctor_profile_2, name='doctor_profile_2'),
     path('technician_profile/', views.technician_profile, name='technician_profile'),
     path('patient_profile(<int:pid>)', views.patient_profile, name='patient_profile'),
     path('change-profile/', views.user_change, name='user_change'),

@@ -3,6 +3,8 @@
 {% block body_block %}
 
 <div class="container">
+  <br>
+  <br>
   <h2 class="text-center"> Appointment A Doctor</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -10,7 +12,7 @@
     <label>Doctor Name</label>
     <select name="doctor" class="form-control">
       {% for i in doctor %}
-      <option value="{{i.doctor_full_name}}">{{i.doctor_full_name}}</option>
+      <option value="{{i.user_id}}">{{i.doctor_full_name}}</option>
       {% endfor %}
     </select>
     <label>Patient Name</label>
@@ -26,9 +28,8 @@
     <label>Serial Number </label>
     <input type="text" class="form-control" name="serial"  required disabled/>
     <label for="appointment_status">Appointment Status </label>
-    <select name="appointment_status" id="appointment_status" class="form-control" disabled>
-      <option value="Pending">Pending</option>
-      <option value="Confirmed">Confirmed</option>
+    <select name="appointment_status" id="appointment_status" class="form-control"  disabled>
+      <option value="Confirmed" selected>Confirmed</option>
       <option value="Cancelled">Cancelled</option>
       <option value="Completed">Completed</option>
     </select>

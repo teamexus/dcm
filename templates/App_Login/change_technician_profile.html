@@ -31,6 +31,18 @@
           <label>Designation</label>
           <input type="text" class="form-control" name="designation" value="{{ tec.designation }}" required />
         </div>
+
+        
+        <div class="col-md-6">
+          <label>Department</label>
+          <select class="form-control" name="department" required>
+            {% for department in departments %}
+              <option value="{{ department.id }}" {% if tec.department == department %} selected {% endif %}>{{ department.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        
         
       </div>
       <div class="row">

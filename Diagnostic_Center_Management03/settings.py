@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'App_Login',
     'Diagnostic_Center',
+    'Core',
     'crispy_forms',
     'django_cleanup.apps.CleanupConfig',
 ]

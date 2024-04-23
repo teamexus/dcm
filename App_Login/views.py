@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
 from App_Login import models
+from Core.models import Department
 
 # Create your views here.
 
@@ -27,6 +28,18 @@ def sign_up(request):
 @login_required
 def profile(request):
     return render(request, 'App_Login/profile.html', context={})
+
+@login_required
+def user_change(request):
+    current_user = request.user
+    form = UserProfileChange(instance=current_user)
+    if request.method == 'POST':
+        form = UserProfileChange(request.POST, instance=current_user)
+        if form.is_valid():
+            form.save()
+            form = UserProfileChange(instance=current_user)
+            return render(request, 'App_Login/profile.html', context={})
+    return render(request, 'App_Login/change_profile.html', context={'form':form})
 
 
 class DoctorSignUpview(CreateView):
@@ -50,6 +63,18 @@ def doctor_profile(request):
     d = {'doc': doc}
     return render(request, 'App_Login/doctor_profile.html', d)
 
+def doctor_profile_2(request, pid):
+    doc = Doctor.objects.get(user_id=pid)
+    d = {'doc': doc}
+    return render(request, 'App_Login/doctor_profile_2.html', d)
+
+
+@login_required
+def patient_profile(request, pid):
+    pat = DcmPatient.objects.filter(id=pid)
+    d = {'pat': pat}
+    return render(request, 'App_Login/patient_profile.html', d)
+
 def View_Doctor(request):
     doc = Doctor.objects.all()
     d = {'doc': doc}
@@ -64,8 +89,11 @@ def doctor_change(request):
         form = DoctorProfileChange(request.POST, instance=doc)
         if form.is_valid():
             form.save()
-            form = DoctorProfileChange(instance=doc)
+            #form = DoctorProfileChange(instance=doc)
+            #return render(request, 'App_Login/doctor_profile.html', context={'form':form})
+            return redirect('App_Login:doctor_profile')
     return render(request, 'App_Login/change_doctor_profile.html', context={'form':form})
+
 
 def delete_doctor(request, pid):
     if not request.user.is_staff:
@@ -104,12 +132,16 @@ def technician_change(request):
     current_user = request.user
     tec = Technician.objects.filter(user=request.user).first()
     form = TechnicianProfileChange(instance=tec)
+    departments = Department.objects.all()  # Query to fetch all departments
+    print(departments)
     if request.method == 'POST':
         form = TechnicianProfileChange(request.POST, instance=tec)
         if form.is_valid():
             form.save()
             form = TechnicianProfileChange(instance=tec)
-    return render(request, 'App_Login/change_technician_profile.html', context={'form':form, "tec":tec})
+    return render(request, 'App_Login/change_technician_profile.html', context={'form':form, "tec":tec, 'departments': departments})
+
+
 
 def Delete_Technician(request, pid):
     if not request.user.is_staff:
@@ -170,26 +202,6 @@ def logout_user(request):
     return HttpResponseRedirect(reverse('index'))
 
 
-    
-@login_required
-def user_change(request):
-    current_user = request.user
-    form = UserProfileChange(instance=current_user)
-    if request.method == 'POST':
-        form = UserProfileChange(request.POST, instance=current_user)
-        if form.is_valid():
-            form.save()
-            form = UserProfileChange(instance=current_user)
-    return render(request, 'App_Login/change_profile.html', context={'form':form})
-
-
-
-
-
-
-
-  
-
 @login_required
 def pass_change(request):
     current_user = request.user
@@ -216,15 +228,16 @@ def add_pro_pic(request):
 
 @login_required
 def change_pro_pic(request):
-    form = ProfilePic(instance=request.user)
     if request.method == 'POST':
-        form = ProfilePic(request.POST, request.FILES, instance=request.user)
-        if request.method == 'POST':
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(reverse('App_Login:profile'))
-                
-    return render(request, 'App_Login/change_pro_pic.html', context={'form':form})
+        form = ProfilePic(request.POST, request.FILES, instance=request.user.user_profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('App_Login:profile'))
+    else:
+        form = ProfilePic(instance=request.user.user_profile)
+            
+    return render(request, 'App_Login/change_pro_pic.html', context={'form': form})
+
 
 @login_required
 def add_patient_pic(request):
@@ -239,17 +252,23 @@ def add_patient_pic(request):
             return  HttpResponseRedirect(reverse('App_Login:patient_profile', kwargs={'pid':request.user.id}))
     return render(request, 'App_Login/add_patient_pic.html', context={'form':form})
 
+
 @login_required
 def change_patient_pic(request):
-    form = PatientProfilePic(instance=request.user)
+    dcm_patient_instance = DcmPatient.objects.filter(user=request.user).first()  
+    form = PatientProfilePic(instance=dcm_patient_instance)  
     if request.method == 'POST':
-        form = PatientProfilePic(request.POST, request.FILES, instance=request.user)
-        if request.method == 'POST':
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect(reverse('App_Login:patient_profile',  kwargs={'pid':request.user.id}))
+        form = PatientProfilePic(request.POST, request.FILES, instance=dcm_patient_instance)  
+        if form.is_valid():
+            form.save()
+            return redirect('App_Login:patient_profile', pid=request.user.id)  # Redirect to patient_profile view
                 
     return render(request, 'App_Login/change_patient_pic.html', context={'form':form})
+
+
+
+
+
 
 
 @login_required

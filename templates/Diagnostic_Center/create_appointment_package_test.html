@@ -3,6 +3,8 @@
 {% block body_block %}
 
 <div class="container">
+  <br>
+  <br>
   <h2 class="text-center">Appointment A Package Test</h2>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -14,6 +16,12 @@
       <option value="{{i.name}}">{{i.name}}</option>
       {% endfor %}
     </select>
+    <label>Package Name</label>
+    <select name="package" class="form-control">
+      {% for i in package %}
+      <option value="{{i.package_name}}">{{i.package_name}}</option>
+      {% endfor %}
+    </select>
     <label>Contact</label>
     <input type="text" class="form-control" name="mobile" required />
     <label>Date</label>
@@ -22,8 +30,7 @@
     <input type="text" class="form-control" name="serial"  required disabled/>
     <label for="appointment_status">Appointment Status </label>
     <select name="appointment_status" id="appointment_status" class="form-control" disabled>
-      <option value="Pending">Pending</option>
-      <option value="Confirmed">Confirmed</option>
+      <option value="Confirmed" selected>Confirmed</option>
       <option value="Cancelled">Cancelled</option>
       <option value="Completed">Completed</option>
     </select>

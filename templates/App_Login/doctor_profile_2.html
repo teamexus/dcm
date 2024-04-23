@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title_block %}Doctor Profile{% endblock %}
+{% block body_block %}
+<div class="container mt-4">  <!-- Adjusted margin-top -->
+    <div class="d-flex justify-content-center">
+        <div class="card shadow-sm" style="max-width: 500px; width: 100%; margin-top: 20px;">  <!-- Added margin-top for a gap -->
+            <div class="card-header bg-primary text-white text-center py-2">
+                <h5>Doctor Profile</h5>
+            </div>
+            <div class="card-body p-2">  <!-- Reduced padding in the card body -->
+                <div class="row">
+                    <!-- Use a single column layout for better responsiveness on smaller screens -->
+                    <div class="col-12" style="font-size: 14px;">
+                        <!-- Minimize the margin between fields -->
+                        <div class="mb-1">
+                            <p><strong>Full Name:</strong> {{ doc.doctor_full_name }}</p>
+                        </div>
+                        <div class="mb-1">
+                            <p><strong>Phone Number:</strong> {{ doc.phone }}</p>
+                        </div>
+                        <div class="mb-1">
+                            <p><strong>Specialization:</strong> {{ doc.spe }}</p>
+                        </div>
+                        <div class="mb-1">
+                            <p><strong>Designation:</strong> {{ doc.designation }}</p>
+                        </div>
+                        <div class="mb-1">
+                            <p><strong>Degrees:</strong> {{ doc.degree }}</p>
+                        </div>
+                        <div class="mb-1">
+                            <p><strong>Current Working Place:</strong> {{ doc.current_working_place }}</p>
+                        </div>
+                        <div class="mb-1">
+                            <p><strong>MBBS Institution:</strong> {{ doc.mbbs_institution }}</p>
+                        </div>
+                        <div class="mb-1">
+                            <p><strong>Post Graduation Institution:</strong> {{ doc.post_graduation_institution }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% comment %} <a href="{% url 'App_Login:doctor_change' %}" class="btn btn-warning btn-sm">Change Profile Info</a> {% endcomment %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+

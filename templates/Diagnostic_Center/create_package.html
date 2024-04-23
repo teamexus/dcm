@@ -1,25 +1,55 @@
 {% extends 'base.html' %}
 {% block title_block %} Profile {% endblock %} 
 {% block body_block %}
+<div class="container mt-5"> <!-- Increased top margin to create a larger gap -->
+  <div class="row justify-content-center">
+    <div class="col-md-6"> <!-- Set the column width to 6 to match the size of Create Test -->
+      <div class="card border">
+        <div class="card-header">
+          <h1 class="text-center mb-0">Create Package</h1>
+        </div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.help_text %}
+              <small class="form-text text-muted">{{ field.help_text }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+              <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+            <div class="text-center"> <!-- Centering the submit button -->
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<h1 class="text-center">Package</h1>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-
-    <button type="submit" class="btn btn-primary mt-2">Submit</button>
-</form>
- 
 {% if error == "no" %}
 <script>
-  alert('Record  Save Successfully');
+  alert('Record Saved Successfully');
   window.location = ('{% url 'Diagnostic_Center:view_appointment_package_test' %}');
 </script>
 {% endif %} 
 {% if error == "yes" %}
 <script>
-  alert("Something went wrong, Try again");
+  alert("Something went wrong, please try again");
 </script>
 {% endif %} 
 {% endblock %}
+
+
+
+
+
+
+
+
