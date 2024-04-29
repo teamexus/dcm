@@ -15,12 +15,13 @@
       <option value="{{i.name}}">{{i.name}}</option>
       {% endfor %}
     </select>
+
     <label>Test</label>
-     <select name="test" class="form-control" multiple>
-      {% for test in tests %}
-          <option value="{{ test.id }}" {% if test.id == test_id %} selected {% endif %}>{{ test.test_name }}</option>
-      {% endfor %}
-  </select>
+    {% for i in tests %}
+      {% if selected_test.pk == i.pk %} 
+        <input type="text" class="form-control" name="test" value="{{ i.test_name }}" readonly />
+      {% endif %}
+    {% endfor %}
 
   
   

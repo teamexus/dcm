@@ -100,3 +100,7 @@ class DoctorProfile(models.Model):
 class TechnicianProfile(models.Model):
     technician = models.OneToOneField(Technician, related_name = 'technician_profile', on_delete=models.CASCADE, null=True, blank=True)
     profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
+    
+class DcmAdminProfile(models.Model):
+    dcmadmin = models.OneToOneField(DcmAdmin, related_name = 'dcmadmin_profile', on_delete=models.CASCADE, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)

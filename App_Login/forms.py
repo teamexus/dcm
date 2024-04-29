@@ -121,6 +121,12 @@ class TechnicianProfileChange(UserChangeForm):
         model = Technician
         #fields = "__all__" 
         fields = ('technician_full_name', 'phone', 'designation', 'department')
+
+class DcmAdminProfileChange(UserChangeForm):
+    class Meta:
+        model = DcmAdmin
+        #fields = "__all__" 
+        fields = ('dcmadmin_full_name', 'dcmadmin_phone', 'dcmadmin_department')
         
         
 class PatientProfileChange(UserChangeForm):

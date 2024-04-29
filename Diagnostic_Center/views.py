@@ -10,6 +10,9 @@ from django.urls import reverse, reverse_lazy
 from .forms import PackageForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
+from django.db.models import Count
+
+
 
 
 
@@ -129,18 +132,33 @@ def delete_appointment_doctor(request, pid):
     return redirect('/diagnostic_center/view_appointment_doctor')
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.db.models import Q
+
+
 @login_required
 def view_appointment_test(request):
     if request.user.is_technician:
         technician = Technician.objects.get(user=request.user)
         technician_department = technician.department
+        print("Technician's Department:", technician_department)
+        
         # Filter appointments based on tests in the technician's department
-        app = TestAppointment.objects.filter(
-            test__test_name_department=technician_department
-        ).distinct()  # Ensure distinct results to avoid duplicates
+       # Filter appointments based on tests in the technician's department
+        app = TestAppointment.objects.filter(test__test_name_department=technician_department).distinct()
+
+      # Get all tests in the technician's department
+        tests_in_department = technician_department.test_set.all()
+
+    # Iterate over each test in the department and filter appointments accordingly
+        for test in tests_in_department:
+         app = app.filter(test=test)
+        print("Final filtered appointments:", app)
+        
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
-    
     elif request.user.is_dcmadmin:
         app = TestAppointment.objects.all()
         a = {'app': app}
@@ -149,6 +167,12 @@ def view_appointment_test(request):
         app = TestAppointment.objects.filter(user=request.user)
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+
+
+
+
+
+
 
 
 
@@ -228,8 +252,8 @@ def create_appointment_test_2(request, test_id):
             error="yes"
     tests = Test.objects.all()  # Assuming you want to display all tests
 
-    k = {'user':user,  'patient':patient1, 'tests': tests, 'error':error}
-    return render(request, 'Diagnostic_Center/create_appointment_test.html', k)
+    k = {'user':user,  'patient':patient1, 'tests': tests, 'selected_test': test, 'error':error}
+    return render(request, 'Diagnostic_Center/create_appointment_test_2.html', k)
 
 
 

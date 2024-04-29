@@ -7,7 +7,7 @@
 <h2 class="text-center">Appointment A Package Test</h2>
 {% if  user.is_doctor %}
 {% elif  user.is_dcmadmin %}
-{% elif  user.is_dcmadmin %}
+{% elif  user.is_technician %}
 {%else %}
 <td><a href="{% url 'Diagnostic_Center:create_appointment_package_test' %}" class="btn btn-danger">Create Appointment</a></td>
 {% endif %}

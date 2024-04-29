@@ -6,24 +6,25 @@
 {% if user.is_authenticated and user.is_doctor  %}
 <br>
 <br>
-<div class="alert alert-success">Logged in As Doctor! <a ></a></div>
+<div class="alert alert-success">Logged in As Doctor! <a > <p>Your User Id is  : {{user.id}} </p> </a></div>
 {% elif user.is_authenticated and user.is_technician  %}
+
 <br>
 <br>
 <div class="alert alert-success">
-  Logged in As Technician! <a></a>
+  Logged in As Technician! <a> <p>Your User Id is  : {{user.id}} </p></a>
 </div>
 {% elif user.is_authenticated and user.is_dcmadmin  %}
 <br>
 <br>
 <div class="alert alert-success">
-  Logged in As Admin! <a></a>
+  Logged in As Admin! <a> <p>Your User Id is  : {{user.id}} </p></a>
 </div>
 {% elif user.is_authenticated %}
 <br>
 <br>
 <div class="alert alert-success">
-  Logged in As User! <a ></a>
+  Logged in As User! <a > <p>Your User Id is  : {{user.id}} </p></a>
 </div>
 {% else %}
 <br>

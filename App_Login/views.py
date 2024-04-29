@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponseRedirect,  HttpResponse
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login, authenticate, logout 
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView
 from django.contrib.auth.decorators import login_required
-from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange, PatientProfilePic
+from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, DcmAdminProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange, PatientProfilePic
 from App_Login.models import User, DcmPatient, Doctor, Technician, DcmAdmin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
@@ -102,6 +102,7 @@ def delete_doctor(request, pid):
     doctor.delete()
     return redirect('/account/view_doctor')
 
+
 class TechnicianSignUpview(CreateView):
     model = User
     form_class = TechnicianSignUpForm
@@ -171,6 +172,27 @@ def View_DcmAdmin(request):
     adm = DcmAdmin.objects.all()
     a = {'adm': adm}
     return render(request, 'App_Login/view_dcmadmin.html', a)
+
+@login_required
+def dcmadmin_profile(request):
+    dcma = DcmAdmin.objects.filter(user=request.user)
+    t = {'dcma': dcma}
+    return render(request, 'App_Login/dcmadmin_profile.html', t)
+
+
+@login_required
+def dcmadmin_change(request):
+    current_user = request.user
+    dcma = DcmAdmin.objects.filter(user=request.user).first()
+    form = DcmAdminProfileChange(instance=dcma)
+    if request.method == 'POST':
+        form = DcmAdminProfileChange(request.POST, instance=dcma)
+        if form.is_valid():
+            form.save()
+            #form = DoctorProfileChange(instance=doc)
+            #return render(request, 'App_Login/doctor_profile.html', context={'form':form})
+            return redirect('App_Login:dcmadmin_profile')
+    return render(request, 'App_Login/change_dcmadmin_profile.html', context={'form':form})
 
 def Delete_DcmAdmin(request, pid):
     if not request.user.is_staff:
@@ -266,11 +288,6 @@ def change_patient_pic(request):
     return render(request, 'App_Login/change_patient_pic.html', context={'form':form})
 
 
-
-
-
-
-
 @login_required
 def View_Patient(request):
     pat = DcmPatient.objects.filter(user=request.user)
@@ -321,5 +338,13 @@ class UpdateDcmPatient(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self, **kwargs):
         return reverse_lazy('App_Login:view_patient')
+
+def sample_view(request):
+    current_user = request.user
+    print(current_user.id)
+
+
+
+
 
 

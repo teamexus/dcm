@@ -84,6 +84,7 @@ class TestAppointment(models.Model):
     )
     appointment_status = models.CharField(max_length=20, choices= status, null=True, blank=True, default= ('Confirmed'))
     test = models.ManyToManyField(Test, blank=True, null=True)
+   
     
     
     def __str__(self):
