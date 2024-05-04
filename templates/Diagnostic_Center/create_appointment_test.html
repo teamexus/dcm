@@ -16,24 +16,18 @@
       {% endfor %}
     </select>
     <label>Test</label>
-     <select name="test" class="form-control" multiple>
+    <input type="text" id="test_search" class="form-control" oninput="searchTests()" placeholder="Search for test...">
+    <select name="test" id="test_select" class="form-control" multiple>
       {% for test in tests %}
-          <option value="{{ test.id }}">{{ test.test_name }}</option>
+          <option value="{{ test.id }}">{{ test.test_name }}  {{ test.department }}  </option>
        {% endfor %}
-     </select>
+    </select>
 
     <label>Contact</label>
     <input type="text" class="form-control" name="mobile" required />
     <label>Date</label>
-    <input type="date" class="form-control" name="date1" required />
-    <label>Serial Number </label>
-    <input type="text" class="form-control" name="serial"  required disabled/>
-    <label for="appointment_status">Appointment Status </label>
-    <select name="appointment_status" id="appointment_status" class="form-control" disabled>
-      <option value="Confirmed" selected>Confirmed</option>
-      <option value="Cancelled">Cancelled</option>
-      <option value="Completed">Completed</option>
-    </select>
+    <input type="date" class="form-control" name="date1" value="{{ today }}" required />
+    
     <br />
     <input type="submit" value="Submit" class="form-control btn btn-primary" />
   </form>
@@ -50,4 +44,56 @@
   alert("Something went wrong, Try again");
 </script>
 {% endif %} 
+
+<script>
+  function searchTests() {
+    var input, filter, select, options, option, i;
+    input = document.getElementById('test_search');
+    filter = input.value.toUpperCase();
+    select = document.getElementById('test_select');
+    options = select.getElementsByTagName('option');
+    for (i = 0; i < options.length; i++) {
+      option = options[i];
+      if (option.textContent.toUpperCase().indexOf(filter) > -1) {
+        option.style.display = ""; // Ensure it's visible
+      } else {
+        option.style.display = "none"; // Hide options not matching the filter
+      }
+    }
+  }
+
+  function addSelectedTest() {
+    var select = document.getElementById('test_select');
+    var selectedTests = document.getElementById('selected_tests');
+    var selectedOptions = select.selectedOptions;
+
+    // Iterate through the selected options and add them to the selected tests list
+    for (var i = 0; i < selectedOptions.length; i++) {
+      var selectedOption = selectedOptions[i];
+      var selectedTestId = selectedOption.value;
+      var selectedTestName = selectedOption.textContent;
+
+      // Check if the test is already selected
+      var isSelected = Array.from(selectedTests.children).some(function(item) {
+        return item.dataset.testId === selectedTestId;
+      });
+
+      if (!isSelected) {
+        // Create a new list item to display the selected test
+        var listItem = document.createElement('li');
+        listItem.dataset.testId = selectedTestId;
+        listItem.textContent = selectedTestName;
+        selectedTests.appendChild(listItem);
+
+        // Mark the option as selected in the dropdown
+        selectedOption.selected = true;
+      }
+    }
+  }
+</script>
+
+<ul id="selected_tests"></ul> <!-- List to display selected tests -->
+
 {% endblock %}
+
+

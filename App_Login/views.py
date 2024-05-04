@@ -64,7 +64,7 @@ def doctor_profile(request):
     return render(request, 'App_Login/doctor_profile.html', d)
 
 def doctor_profile_2(request, pid):
-    doc = Doctor.objects.get(user_id=pid)
+    doc = User.objects.get(id=pid)
     d = {'doc': doc}
     return render(request, 'App_Login/doctor_profile_2.html', d)
 
@@ -96,8 +96,8 @@ def doctor_change(request):
 
 
 def delete_doctor(request, pid):
-    if not request.user.is_staff:
-        return redirect('index')
+    #if not request.user.is_staff:
+        #return redirect('index')
     doctor = Doctor.objects.get(user_id=pid)
     doctor.delete()
     return redirect('/account/view_doctor')
@@ -145,8 +145,8 @@ def technician_change(request):
 
 
 def Delete_Technician(request, pid):
-    if not request.user.is_staff:
-        return redirect('login')
+   # if not request.user.is_staff:
+       # return redirect('login')
     technician = Technician.objects.get(user_id=pid)
     technician.delete()
     return redirect('/account/view_technician')
@@ -276,14 +276,18 @@ def add_patient_pic(request):
 
 
 @login_required
-def change_patient_pic(request):
-    dcm_patient_instance = DcmPatient.objects.filter(user=request.user).first()  
+
+def change_patient_pic(request,  pid):
+    print("Hello dfdlfkjg")
+    #dcm_patient_instance = DcmPatient.objects.filter(user=request.user).first()
+    dcm_patient_instance = DcmPatient.objects.filter(id=pid).first()
+    print(request.user) 
     form = PatientProfilePic(instance=dcm_patient_instance)  
     if request.method == 'POST':
         form = PatientProfilePic(request.POST, request.FILES, instance=dcm_patient_instance)  
         if form.is_valid():
             form.save()
-            return redirect('App_Login:patient_profile', pid=request.user.id)  # Redirect to patient_profile view
+            return redirect('App_Login:patient_profile', pid=pid)  # Redirect to patient_profile view
                 
     return render(request, 'App_Login/change_patient_pic.html', context={'form':form})
 

@@ -13,7 +13,7 @@
       {% endif %}
       <div class="mt-3">
         {% if pat %}
-        <a href="{% url 'App_Login:change_patient_pic' %}" class="btn btn-info btn-sm">Change Patient Picture</a>
+        <a href="{% url 'App_Login:change_patient_pic' patient.id %}" class="btn btn-info btn-sm">Change Patient Picture</a>
         {% else %}
         <a href="{% url 'App_Login:add_patient_pic' %}" class="btn btn-info btn-sm">Add Patient Picture</a>
         {% endif %}

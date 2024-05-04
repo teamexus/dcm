@@ -25,15 +25,8 @@
     <label>Contact</label>
     <input type="text" class="form-control" name="mobile" required />
     <label>Date</label>
-    <input type="date" class="form-control" name="date1" required />
-    <label>Serial Number </label>
-    <input type="text" class="form-control" name="serial"  required disabled/>
-    <label for="appointment_status">Appointment Status </label>
-    <select name="appointment_status" id="appointment_status" class="form-control" disabled>
-      <option value="Confirmed" selected>Confirmed</option>
-      <option value="Cancelled">Cancelled</option>
-      <option value="Completed">Completed</option>
-    </select>
+    <input type="date" class="form-control" name="date1" value="{{ today }}" required />
+    
     <br />
     <input type="submit" value="Submit" class="form-control btn btn-primary" />
   </form>

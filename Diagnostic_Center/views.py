@@ -11,6 +11,7 @@ from .forms import PackageForm
 from django.shortcuts import get_object_or_404
 from django.db.models import Max
 from django.db.models import Count
+from datetime import date
 
 
 
@@ -47,6 +48,9 @@ def create_appointment_doctor(request):
     doctor1 = Doctor.objects.all()
     patient1 = DcmPatient.objects.filter(user=request.user)
     
+    # Get today's date
+    today_date = date.today().strftime("%Y-%m-%d")
+    
     if request.method == 'POST':
     
         x = request.POST.get('doctor')
@@ -55,7 +59,7 @@ def create_appointment_doctor(request):
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
         serial_number = request.POST.get('serial')
-        aps = request.POST.get('appointment_status')
+        aps = request.POST.get('appointment_status','Confirmed')
         
         
         doctor_user = User.objects.filter(id=x).first()
@@ -73,49 +77,60 @@ def create_appointment_doctor(request):
             error="no"
         except:
             error="yes"
-    k = {'user': user,'doctor': doctor1, 'patient':patient1, 'error':error}
+    k = {'user': user,'doctor': doctor1, 'patient':patient1, 'error':error, 'today': today_date}
     return render(request, 'Diagnostic_Center/create_appointment_doctor.html', k)
 
 
 @login_required
 def create_appointment_doctor_2(request, doctor_id):
     doctor = get_object_or_404(Doctor, pk=doctor_id)
-    error=""
+    error = ""
     user = request.user
-    #doctor2 = Doctor.objects.filter(id=did)
-    doctor1= Doctor.objects.all()
+    doctor1 = Doctor.objects.all()
     patient1 = DcmPatient.objects.filter(user=request.user)
     
-    if request.method == 'POST':
+    # Get today's date
+    today_date = date.today().strftime("%Y-%m-%d")
     
+    if request.method == 'POST':
         x = request.POST.get('doctor')
         y = request.POST.get('patient')
         p = request.POST.get('appointment')
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
         serial_number = request.POST.get('serial')
-        aps = request.POST.get('appointment_status')
+        aps = request.POST.get('appointment_status', 'Confirmed')
         
-        
+        # Remove the line redefining d1 to use today_date
+        # d1 = today_date = date.today().strftime("%Y-%m-%d")
+
         doctor = Doctor.objects.filter(doctor_full_name=x).first()
-        #doctor2 = Doctor.objects.filter(doctor_id=x).first()
         patient = DcmPatient.objects.filter(name=y).first()
         max_serial = DoctorAppointment.objects.filter(doctor=doctor, date1=d1).aggregate(Max('serial'))['serial__max']
+        
         # Increment the serial number
         if max_serial is None:
             serial_number = 1  # No appointments for the day yet, so start with 1
         else:
             serial_number = max_serial + 1
+        
         try:
-            DoctorAppointment.objects.create(user=user, doctor=doctor,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status=aps)
-            error="no"
+            DoctorAppointment.objects.create(
+                user=user,
+                doctor=doctor,
+                patient=patient,
+                appointment=p,
+                mobile=m,
+                date1=d1,
+                serial=serial_number,
+                appointment_status=aps
+            )
+            error = "no"
         except:
-            error="yes"
-    k = {'user': user,'doctor': doctor1, 'patient':patient1, 'selected_doctor': doctor, 'error':error}
+            error = "yes"
+    
+    k = {'user': user, 'doctor': doctor1, 'patient': patient1, 'selected_doctor': doctor, 'error': error, 'today': today_date}
     return render(request, 'Diagnostic_Center/create_appointment_doctor_2.html', k)
-
-
-
 
 
 class UpdateDoctorAppointment(LoginRequiredMixin, UpdateView):
@@ -132,12 +147,6 @@ def delete_appointment_doctor(request, pid):
     return redirect('/diagnostic_center/view_appointment_doctor')
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.db.models import Count
-from django.db.models import Q
-
-
 @login_required
 def view_appointment_test(request):
     if request.user.is_technician:
@@ -146,24 +155,26 @@ def view_appointment_test(request):
         print("Technician's Department:", technician_department)
         
         # Filter appointments based on tests in the technician's department
-       # Filter appointments based on tests in the technician's department
-        app = TestAppointment.objects.filter(test__test_name_department=technician_department).distinct()
+        app = TestAppointment.objects.filter(test_department=technician_department).distinct()
 
-      # Get all tests in the technician's department
-        tests_in_department = technician_department.test_set.all()
+        print("Appointments in Technician's Department:", app)
 
-    # Iterate over each test in the department and filter appointments accordingly
-        for test in tests_in_department:
-         app = app.filter(test=test)
-        print("Final filtered appointments:", app)
-        
+        # Optionally, you can further filter appointments based on technician's assigned tests
+        # This step is necessary only if a technician is assigned specific tests within their department
+        # tests_in_technician_department = technician_department.test_set.all()
+        # app = app.filter(test__in=tests_in_technician_department)
+
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+    
     elif request.user.is_dcmadmin:
+        # For admin users, show all appointments
         app = TestAppointment.objects.all()
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
+    
     else:
+        # For regular users, show their own appointments
         app = TestAppointment.objects.filter(user=request.user)
         a = {'app': app}
         return render(request, 'Diagnostic_Center/view_appointment_test.html', a)
@@ -171,17 +182,13 @@ def view_appointment_test(request):
 
 
 
-
-
-
-
-
-
 @login_required
 def create_appointment_test(request):
-    error=""
+    error = ""
     user = request.user
     patient1 = DcmPatient.objects.filter(user=request.user)
+    tests = Test.objects.all()  # Retrieve all tests
+    today_date = date.today().strftime("%Y-%m-%d")
     
     if request.method == 'POST':
         y = request.POST.get('patient')
@@ -189,31 +196,37 @@ def create_appointment_test(request):
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
         serial_number = request.POST.get('serial')
-        aps = request.POST.get('appointment_status')
-        test_ids = request.POST.getlist('test')
-        tests = Test.objects.filter(id__in=test_ids)
-      
+        aps = request.POST.get('appointment_status', 'Confirmed')
+        test_ids = request.POST.getlist('test')  # Get list of selected test IDs
 
-        
         patient = DcmPatient.objects.filter(name=y).first()
         
-        max_serial = TestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
-        # Increment the serial number
-        if max_serial is None:
-            serial_number = 1  # No appointments for the day yet, so start with 1
-        else:
-            serial_number = max_serial + 1
-        
         try:
-            testappointment =TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status= aps )
-            testappointment.test.set(tests)
-            error="no"
+            for test_id in test_ids:
+                test = Test.objects.get(pk=test_id)
+                # Fetch the department associated with the test
+                test_department = test.test_name_department
+                
+                max_serial = TestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
+                # Increment the serial number
+                if max_serial is None:
+                    serial_number = 1  # No appointments for the day yet, so start with 1
+                else:
+                    serial_number = max_serial + 1
+                
+                # Create a TestAppointment object for each selected test
+                TestAppointment.objects.create(user=user, patient=patient, appointment=p, mobile=m, date1=d1,
+                                                serial=serial_number, appointment_status=aps, test=test,
+                                                test_department=test_department)
+                
+            error = "no"
         except:
-            error="yes"
-    tests = Test.objects.all()  # Assuming you want to display all tests
+            error = "yes"
 
-    k = {'user':user,  'patient':patient1, 'tests': tests, 'error':error}
+    k = {'user': user, 'patient': patient1, 'tests': tests, 'error': error, 'today': today_date}
     return render(request, 'Diagnostic_Center/create_appointment_test.html', k)
+
+
 
 
 @login_required
@@ -221,7 +234,8 @@ def create_appointment_test_2(request, test_id):
     test = Test.objects.get(pk=test_id)
     error=""
     user = request.user
-    patient1 = DcmPatient.objects.filter(user=request.user)
+    patient1 = DcmPatient.objects.filter( user = request.user)
+    today_date = date.today().strftime("%Y-%m-%d")
     
     if request.method == 'POST':
         y = request.POST.get('patient')
@@ -229,12 +243,15 @@ def create_appointment_test_2(request, test_id):
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
         serial_number = request.POST.get('serial')
-        aps = request.POST.get('appointment_status')
-        test_ids = request.POST.getlist('test')
-        tests = Test.objects.filter(id__in=test_ids)
+        aps = request.POST.get('appointment_status', 'Confirmed')
+        #test_ids = request.POST.getlist('test')
+        #tests = Test.objects.filter(id__in=test_ids)
+        
+        test_names = request.POST.getlist('test')
+        tests = Test.objects.filter(test_name__in=test_names)
       
 
-        
+        test_department = test.test_name_department
         patient = DcmPatient.objects.filter(name=y).first()
         
         max_serial = TestAppointment.objects.filter(date1=d1).aggregate(Max('serial'))['serial__max']
@@ -245,14 +262,14 @@ def create_appointment_test_2(request, test_id):
             serial_number = max_serial + 1
         
         try:
-            testappointment =TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status= aps )
-            testappointment.test.set(tests)
+            TestAppointment.objects.create(user=user,  patient=patient, appointment=p, mobile=m, date1=d1, serial=serial_number, appointment_status= aps, test=test, test_department=test_department )
+            
             error="no"
         except:
             error="yes"
     tests = Test.objects.all()  # Assuming you want to display all tests
 
-    k = {'user':user,  'patient':patient1, 'tests': tests, 'selected_test': test, 'error':error}
+    k = {'user':user,  'patient':patient1, 'tests': tests, 'selected_test': test, 'error':error, 'today': today_date}
     return render(request, 'Diagnostic_Center/create_appointment_test_2.html', k)
 
 
@@ -295,6 +312,7 @@ def create_appointment_package_test(request):
     user = request.user
     patient1 = DcmPatient.objects.filter(user=request.user)
     package1 = Package.objects.all()
+    today_date = date.today().strftime("%Y-%m-%d")
     
     if request.method == 'POST':
         y = request.POST.get('patient')
@@ -302,7 +320,7 @@ def create_appointment_package_test(request):
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
         serial_number  = request.POST.get('serial')
-        aps = request.POST.get('appointment_status')
+        aps = request.POST.get('appointment_status', 'Confirmed')
         pa = request.POST.get('package')
         
         patient = DcmPatient.objects.filter(name=y).first()
@@ -318,7 +336,7 @@ def create_appointment_package_test(request):
             error="no"
         except:
             error="yes"
-    k = {'user':user,  'patient':patient1, 'package':package1, 'error':error}
+    k = {'user':user,  'patient':patient1, 'package':package1, 'error':error, 'today': today_date}
     return render(request, 'Diagnostic_Center/create_appointment_package_test.html', k)
 
 
@@ -330,6 +348,7 @@ def create_appointment_package_test_2(request, package_id):
     user = request.user
     patient1 = DcmPatient.objects.filter(user=request.user)
     package1 = Package.objects.all()
+    today_date = date.today().strftime("%Y-%m-%d")
     
     if request.method == 'POST':
         y = request.POST.get('patient')
@@ -337,7 +356,7 @@ def create_appointment_package_test_2(request, package_id):
         m = request.POST.get('mobile')
         d1 = request.POST.get('date1')
         serial_number  = request.POST.get('serial')
-        aps = request.POST.get('appointment_status')
+        aps = request.POST.get('appointment_status', 'Confirmed')
         pa = request.POST.get('package')
         
         patient = DcmPatient.objects.filter(name=y).first()
@@ -353,7 +372,7 @@ def create_appointment_package_test_2(request, package_id):
             error="no"
         except:
             error="yes"
-    k = {'user':user,  'patient':patient1, 'package':package1, 'selected_package': package, 'error':error}
+    k = {'user':user,  'patient':patient1, 'package':package1, 'selected_package': package, 'error':error, 'today': today_date}
     return render(request, 'Diagnostic_Center/create_appointment_package_test_2.html', k)
 
 
@@ -401,6 +420,7 @@ def create_prescription(request, aid):
     pres_doctor1 = Doctor.objects.filter(user=request.user)
     patient = appointment1.values('patient').first()  
     pres_patient1 = DcmPatient.objects.filter(id= patient['patient'])
+    today_date = date.today().strftime("%Y-%m-%d")
 
     
     if request.method == 'POST':
@@ -447,7 +467,8 @@ def create_prescription(request, aid):
         'pres_patient':pres_patient1,
         'tests': tests,
         'medicines': medicines,
-        'error': error
+        'error': error,
+        'today': today_date
     }
     
     return render(request, 'Diagnostic_Center/create_prescription.html', k)

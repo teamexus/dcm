@@ -83,7 +83,8 @@ class TestAppointment(models.Model):
     
     )
     appointment_status = models.CharField(max_length=20, choices= status, null=True, blank=True, default= ('Confirmed'))
-    test = models.ManyToManyField(Test, blank=True, null=True)
+    test = models.ForeignKey(Test, blank=True, null=True, on_delete=models.CASCADE)
+    test_department = models.ForeignKey(Department , on_delete=models.CASCADE, null=True, blank=True)
    
     
     

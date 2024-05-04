@@ -31,13 +31,13 @@
     </thead>
     <tbody>
         {% for i in app %}
-        {% for j in i.test.all %}
+        {% comment %} {% for j in i.test.all %} {% endcomment %}
         <tr>
             
             <td>{{i.patient}}</td>
             <td>{{i.mobile}}</td>
-            <td>{{j.test_name}}</td>
-            <td>{{j.test_name_department}}</td>
+            <td>{{i.test}}</td>
+            <td>{{i.test_department.name}}</td>  <!-- Here is the modification -->
             <td>{{i.date1}}</td>
             <td>{{i.serial}}</td>
             <td>{{i.appointment_status}}</td>
@@ -47,7 +47,7 @@
             
             {% endif %}
         </tr>
-        {% endfor %}
+        {% comment %} {% endfor %} {% endcomment %}
         {% endfor %}
     </tbody>
 </table>
