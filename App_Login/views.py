@@ -9,8 +9,9 @@ from App_Login.models import User, DcmPatient, Doctor, Technician, DcmAdmin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
-from App_Login import models
+from Diagnostic_Center.models import Test, DoctorAppointment, TestAppointment, PackageTestAppointment
 from Core.models import Department
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -64,9 +65,12 @@ def doctor_profile(request):
     return render(request, 'App_Login/doctor_profile.html', d)
 
 def doctor_profile_2(request, pid):
-    doc = User.objects.get(id=pid)
-    d = {'doc': doc}
-    return render(request, 'App_Login/doctor_profile_2.html', d)
+    user = get_object_or_404(User, pk=pid)
+    doctor = get_object_or_404(Doctor, user=user)
+    print(user.profile_pic)
+    print(user.id)
+    return render(request, 'App_Login/doctor_profile_2.html', {'doc': doctor, 'user': user})
+
 
 
 @login_required
@@ -346,6 +350,8 @@ class UpdateDcmPatient(LoginRequiredMixin, UpdateView):
 def sample_view(request):
     current_user = request.user
     print(current_user.id)
+
+
 
 
 

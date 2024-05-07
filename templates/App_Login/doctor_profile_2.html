@@ -2,28 +2,22 @@
 {% block title_block %}Doctor Profile{% endblock %}
 {% block body_block %}
 <div class="container mt-4">  <!-- Adjusted margin-top -->
+    <br>
     <h2>Your Profile</h2>
-    {% if user.user_profile %}
-    <img src='/media/{{ user.user_profile.profile_pic }}' class="rounded-circle" width="150px">
-    <br><br>
-    <a href="{% url 'App_Login:change_pro_pic' %}" class="btn btn-info btn-sm">Change Profile Picture</a>
-    {% else %}
-    <img src='/media/profile_pics/avatar-male.jpg' class="rounded-circle" width="150px"/>
-    <br><br>
-    <a href="{% url 'App_Login:add_pro_pic' %}" class="btn btn-info btn-sm">Add Profile Picture</a>
-    {% endif %}
-    <br><br>
-
-    <div class="d-flex justify-content-center">
-        <div class="card shadow-sm" style="max-width: 500px; width: 100%; margin-top: 20px;">  <!-- Added margin-top for a gap -->
-            <div class="card-header bg-primary text-white text-center py-2">
-                <h5>Doctor Profile</h5>
-            </div>
-            <div class="card-body p-2">  <!-- Reduced padding in the card body -->
-                <div class="row">
-                    <!-- Use a single column layout for better responsiveness on smaller screens -->
-                    <div class="col-12" style="font-size: 14px;">
-                        <!-- Minimize the margin between fields -->
+    <div class="row">
+        <div class="col-md-4"> <!-- Left column for profile picture -->
+            {% if user.profile_pic %}
+            <img src='/media/{{ user.user_profile.profile_pic }}' class="rounded-circle" width="150px">
+            {% endif %}
+        </div>
+        <div class="col-md-8"> <!-- Right column for profile details -->
+            <div class="card shadow-sm">  <!-- Adjusted margin-top for a gap -->
+                <div class="card-header bg-primary text-white text-center py-2">
+                    <h5>Doctor Profile</h5>
+                </div>
+                <div class="card-body">  <!-- Reduced padding in the card body -->
+                    <div style="font-size: 14px;">
+                        <!-- Profile details -->
                         <div class="mb-1">
                             <p><strong>Full Name:</strong> {{ doc.doctor_full_name }}</p>
                         </div>
@@ -52,10 +46,11 @@
                 </div>
             </div>
         </div>
-        {% comment %} <a href="{% url 'App_Login:doctor_change' %}" class="btn btn-warning btn-sm">Change Profile Info</a> {% endcomment %}
     </div>
 </div>
 {% endblock %}
+
+
 
 
 

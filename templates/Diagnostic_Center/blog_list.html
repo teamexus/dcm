@@ -32,6 +32,78 @@
 <br>
 {% endif %}
 
-<img src='/media/DiagnosticCenter.jpg' alt="Diagnostic Center" style="width:100%;height:400px;">
+<style>
+  /* Custom CSS styles */
+  .card {
+    border: 2px solid #333; /* Darker border color */
+    height: 150px; /* Set fixed height for consistency */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center content horizontally */
+  }
+  .card-body {
+    padding: 20px; /* Add padding for better appearance */
+  }
+</style>
+
+<div class="row">
+  <div class="col-md-4 mb-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title" style="color: blue;">{{ total_doctors }}</h5>
+        <a href="{% url 'App_Login:view_doctor' %}" class="btn btn-danger">Doctors</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title" style="color: blue;">{{ total_tests }}</h5>
+        <a href="{% url 'Diagnostic_Center:view_test' %}" class="btn btn-danger">Tests</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title" style="color: blue;">{{ total_packages }}</h5>
+        <a href="{% url 'Diagnostic_Center:view_package' %}" class="btn btn-danger">Packages</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title" style="color: blue;">{{ total_doctor_appointments }}</h5>
+        <a href="{% url 'App_Login:login' %}" class="btn btn-danger">Doctor Appointments</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title" style="color: blue;">{{ total_test_appointments }}</h5>
+        <a href="{% url 'App_Login:login' %}" class="btn btn-danger">Test Appointments</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-4">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title" style="color: blue;">{{ total_package_test_appointments }}</h5>
+        <a href="{% url 'App_Login:login' %}" class="btn btn-danger">Package Test Appointments</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
+
+
+
+
+
