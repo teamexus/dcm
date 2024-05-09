@@ -70,6 +70,7 @@ class Doctor(models.Model):
     current_working_place=models.CharField(max_length=200, null=True, blank=True)
     mbbs_institution = models.CharField(max_length=200, null=True, blank=True)
     post_graduation_institution = models.CharField(max_length=200, null=True, blank=True)
+    profile_pic = models.ImageField(upload_to='profile_pics', null=True, blank=True)
     
 
 

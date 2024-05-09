@@ -3,12 +3,14 @@
 {% block body_block %}
 <div class="container mt-4">  <!-- Adjusted margin-top -->
     <br>
-    <h2>Your Profile</h2>
+    <br>
     <div class="row">
         <div class="col-md-4"> <!-- Left column for profile picture -->
-            {% if user.profile_pic %}
-            <img src='/media/{{ user.user_profile.profile_pic }}' class="rounded-circle" width="150px">
-            {% endif %}
+            <br>
+            <br>
+            {% comment %} {% if user.is_doctor %} {% endcomment %}
+            <img src='/media/{{ doc.profile_pic }}' class="rounded-circle" width="150px">
+            {% comment %} {% endif %} {% endcomment %}
         </div>
         <div class="col-md-8"> <!-- Right column for profile details -->
             <div class="card shadow-sm">  <!-- Adjusted margin-top for a gap -->

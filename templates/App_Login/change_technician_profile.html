@@ -35,11 +35,7 @@
         
         <div class="col-md-6">
           <label>Department</label>
-          <select class="form-control" name="department" required>
-            {% for department in departments %}
-              <option value="{{ department.id }}" {% if tec.department == department %} selected {% endif %}>{{ department.name }}</option>
-            {% endfor %}
-          </select>
+          <input type="text" class="form-control" name="department" value="{{ tec.department.name }}" required readonly>
         </div>
         
         

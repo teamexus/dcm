@@ -3,7 +3,7 @@
 {% block body_block %}
 <div class="container" style="margin-top:50px">
     <h2 class="text-center"> Medicines </h2>
-    {% if  user.is_dcmadmin   %}
+    {% if  user.is_dcmadmin or  user.is_doctor %}
    <td><a href="{% url 'Diagnostic_Center:create_medicine' %}" class="btn btn-danger">Create Medicine</a></td>
     {% endif %}
     <br><br>

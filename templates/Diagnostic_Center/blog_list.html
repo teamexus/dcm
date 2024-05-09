@@ -3,7 +3,7 @@
 {% block title_block %} Home {% endblock %} 
 {% block body_block %}
 
-{% if user.is_authenticated and user.is_doctor  %}
+{% comment %} {% if user.is_authenticated and user.is_doctor  %}
 <br>
 <br>
 <div class="alert alert-success">Logged in As Doctor! <a > <p>Your User Id is  : {{user.id}} </p> </a></div>
@@ -27,10 +27,11 @@
   Logged in As User! <a > <p>Your User Id is  : {{user.id}} </p></a>
 </div>
 {% else %}
+
+{% endif %} {% endcomment %}
 <br>
 <br>
 <br>
-{% endif %}
 
 <style>
   /* Custom CSS styles */

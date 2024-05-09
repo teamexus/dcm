@@ -136,6 +136,33 @@ class Prescription(models.Model):
     def __str__(self):
         return str(self.date1)
     
+    
+    
+class TestReport(models.Model):
+    appointment_id = models.ForeignKey(TestAppointment, on_delete=models.CASCADE, null=True, blank=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    patient_id = models.ForeignKey(DcmPatient, on_delete=models.CASCADE, blank=True, null=True)
+    test_id = models.ForeignKey(Test, on_delete=models.CASCADE, null=True, blank=True)
+    result =  models.CharField(max_length=800 , null=True, blank=True)
+    date = models.DateField()
+    status_choice = (
+        ('On Progress', 'On Progress'),
+        ('Publish', 'Publish'),
+    )
+    report_status = models.CharField(max_length=30, blank=True, null=True, choices=status_choice, default='On Progress')
+class PackageTestReport(models.Model):
+    appointment_id = models.ForeignKey(PackageTestAppointment, on_delete=models.CASCADE, null=True, blank=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    patient_id = models.ForeignKey(DcmPatient, on_delete=models.CASCADE, blank=True, null=True)
+    Package_id = models.ForeignKey(Package, on_delete=models.CASCADE, null=True, blank=True)
+    result =  models.CharField(max_length=800 , null=True, blank=True)
+    date = models.DateField()
+    status_choice = (
+        ('On Progress', 'On Progress'),
+        ('Publish', 'Publish'),
+    )
+    report_status = models.CharField(max_length=30, blank=True, null=True, choices=status_choice, default='On Progress')
+    
 
 
 

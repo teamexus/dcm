@@ -570,11 +570,11 @@ class UpdatePackage(LoginRequiredMixin, UpdateView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('Diagnostic_Center:view_package')
     
-@login_required
+#@login_required
 def package_detail(request, pid):
     
     pac = Package.objects.filter(id=pid)
-    d = {'pac': pac,}
+    d = {'pac': pac}
     return render(request, 'Diagnostic_Center/package_detail.html', d)
     
 
@@ -628,6 +628,52 @@ def delete_medicine(request, pid):
     medicine = Medicine.objects.get(id=pid)
     medicine.delete()
     return redirect('/diagnostic_center/view_medicine')
+
+
+
+@login_required
+def create_test_report(request):
+    error = ""
+    user = request.user
+    patient1 = DcmPatient.objects.filter(user=request.user)
+    tests = Test.objects.all()  # Retrieve all tests
+    today_date = date.today().strftime("%Y-%m-%d")
+    
+    if request.method == 'POST':
+        a = request.POST.get('appointment_id')
+        p = request.POST.get('patient_id')
+        r = request.POST.get('result')
+        d = request.POST.get('date')
+        rs = request.POST.get('report_status', 'On Progress')
+        test_ids = request.POST.getlist('test')  # Get list of selected test IDs
+
+        patient = DcmPatient.objects.filter(name=p).first()
+        
+        try:
+            for test_id in test_ids:
+                test = Test.objects.get(pk=test_id)
+                # Fetch the department associated with the test
+                test_department = test.test_name_department
+                
+                max_serial = TestAppointment.objects.filter(date=d).aggregate(Max('serial'))['serial__max']
+              
+                
+                # Create a TestAppointment object for each selected test
+                TestReport.objects.create(user=user, patient=patient,  date=d, test=test, appointment_id=a, result=r, report_status=rs)
+                
+            error = "no"
+        except:
+            error = "yes"
+
+    k = {'user': user, 'patient': patient1, 'tests': tests, 'error': error, 'today': today_date}
+    return render(request, 'Diagnostic_Center/create_test_report.html', k)
+
+def view_test_report(request):
+    tr = TestReport.objects.all()
+    r = {'tr': tr}
+    return render(request, 'Diagnostic_Center/view_test_report.html', r)
+
+
        
        
   

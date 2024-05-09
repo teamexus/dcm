@@ -55,7 +55,7 @@
 
 {% if error == "no" %}
 <script>
-  alert('Record saved successfully');
+  {% comment %} alert('Record saved successfully'); {% endcomment %}
   window.location.href = "{% url 'Diagnostic_Center:view_prescription' %}";
 </script>
 {% endif %} 

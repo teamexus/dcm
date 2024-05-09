@@ -4,25 +4,48 @@
 <style>
     .center {
         text-align: center;
+        margin: 20px auto; /* Adjust margin from navbar */
+        width: 80%; /* Adjust the width as needed */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+    .headline-box {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f0f0f0;
+    }
+    .package-details {
+        margin-bottom: 20px;
     }
 </style>
 
 <div class="center">
-    <br>
-    <br>
-    <h2>Package Details</h2>
-    <br>
-    <br>
+    <div class="headline-box">
+        <h2>Package Details</h2>
+    </div>
+    
     {% for i in pac %}
-    <p>Package Name: {{ i.package_name }}</p>
-    <p>Total Price: {{ i.total_price }} </p>
-    <p>Package Price: {{ i.package_price }} </p>
-    
-        {% for test in i.package_test.all %}
-        <li>Package Test: {{ test.test_name }}</li>
-        {% endfor %}
-    
+    <div class="package-details">
+        <p>Package Name: {{ i.package_name }}</p>
+        <p>Total Price: {{ i.total_price }} </p>
+        <p>Package Price: {{ i.package_price }} </p>
+        
+        <ul>
+            {% for test in i.package_test.all %}
+            Package Test: {{ test.test_name }}
+            <br>
+            {% endfor %}
+        </ul>
+    </div>
     {% endfor %}
 </div>
 
 {% endblock %}
+
+
+

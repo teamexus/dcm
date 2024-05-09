@@ -42,7 +42,7 @@
 
 {% if error == "no" %}
 <script>
-  alert('Record  Save Successfully');
+  {% comment %} alert('Record  Save Successfully'); {% endcomment %}
   window.location = ('{% url 'Diagnostic_Center:view_medicine' %}');
 </script>
 {% endif %} 

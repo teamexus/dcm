@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView
 from django.contrib.auth.decorators import login_required
-from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, DcmAdminProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange, PatientProfilePic
+from App_Login.forms import UserSignUpForm,  DcmAdminSignUpForm, DoctorSignUpForm, TechnicianSignUpForm, UserProfileChange, DcmAdminProfileChange, ProfilePic, DoctorProfileChange, TechnicianProfileChange, PatientProfilePic, DoctorProfilePic
 from App_Login.models import User, DcmPatient, Doctor, Technician, DcmAdmin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, UpdateView
@@ -64,12 +64,15 @@ def doctor_profile(request):
     d = {'doc': doc}
     return render(request, 'App_Login/doctor_profile.html', d)
 
+
 def doctor_profile_2(request, pid):
-    user = get_object_or_404(User, pk=pid)
-    doctor = get_object_or_404(Doctor, user=user)
-    print(user.profile_pic)
-    print(user.id)
-    return render(request, 'App_Login/doctor_profile_2.html', {'doc': doctor, 'user': user})
+    #user = get_object_or_404(User, pk=pid)
+    #doctor = get_object_or_404(Doctor, user=user)
+    doctor = get_object_or_404(Doctor, pk=pid)
+    #print(user.profile_pic)
+    #print(user.id)
+    #return render(request, 'App_Login/doctor_profile_2.html', {'doc': doctor, 'user': user})
+    return render(request, 'App_Login/doctor_profile_2.html', {'doc': doctor})
 
 
 
@@ -253,6 +256,18 @@ def add_pro_pic(request):
     return render(request, 'App_Login/add_pro_pic.html', context={'form':form})
 
 @login_required
+def add_doctor_pro_pic(request):
+    form = DoctorProfilePic()
+    if request.method == 'POST':
+        form = DoctorProfilePic(request.POST, request.FILES)
+        if form.is_valid():
+            user_obj = form.save(commit=False)
+            user_obj.is_doctor = request.user
+            user_obj.save()
+            return  HttpResponseRedirect(reverse('App_Login:doctor_profile'))
+    return render(request, 'App_Login/add_doctor_pro_pic.html', context={'form':form})
+
+@login_required
 def change_pro_pic(request):
     if request.method == 'POST':
         form = ProfilePic(request.POST, request.FILES, instance=request.user.user_profile)
@@ -263,6 +278,18 @@ def change_pro_pic(request):
         form = ProfilePic(instance=request.user.user_profile)
             
     return render(request, 'App_Login/change_pro_pic.html', context={'form': form})
+
+@login_required
+def change_doctor_pro_pic(request):
+    if request.method == 'POST':
+        form = DoctorProfilePic(request.POST, request.FILES, instance=request.user.doctor_profile)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('App_Login:doctor_profile'))
+    else:
+        form = DoctorProfilePic(instance=request.user.doctor_profile)
+            
+    return render(request, 'App_Login/change_doctor_pro_pic.html', context={'form': form})
 
 
 @login_required

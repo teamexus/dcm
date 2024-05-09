@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.db import transaction
-from App_Login.models import User, DcmAdmin, Doctor, Technician, UserProfile, DcmPatient
+from App_Login.models import User, DcmAdmin, Doctor, Technician, UserProfile, DcmPatient, DoctorProfile
 from Core.models import Department
 
 
@@ -138,6 +138,14 @@ class PatientProfileChange(UserChangeForm):
 class ProfilePic(forms.ModelForm):
     class Meta:
         model = UserProfile
+        fields = ['profile_pic']
+        widgets = {
+            'profile_pic': forms.FileInput(attrs={'class': 'form-control-file'}),
+        }
+        
+class DoctorProfilePic(forms.ModelForm):
+    class Meta:
+        model = DoctorProfile
         fields = ['profile_pic']
         widgets = {
             'profile_pic': forms.FileInput(attrs={'class': 'form-control-file'}),

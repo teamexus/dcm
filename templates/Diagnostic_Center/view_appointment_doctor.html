@@ -24,10 +24,13 @@
             <th>Serial </th>
             <th>Status</th>
             {% if user.is_doctor %}
+            <th>Update</th>
+            <th>Prescription</th>
             <th>Prescription</th>
             {% elif user.is_dcmadmin %}
             <th>Delete</th>
             <th>Update</th>
+            {% elif user.is_tecjnician %}
             {% endif %}
         </tr>
     </thead>
@@ -42,10 +45,14 @@
             <td>{{i.serial}}</td>
             <td>{{i.appointment_status}}</td>
             {% if user.is_doctor %}
+            <td><a href="{% url 'Diagnostic_Center:update_doctor_appointment' i.id  %}"  class="btn btn-danger">Update</a></td>
             <td><a href="{% url 'Diagnostic_Center:create_prescription' i.id %}"  class="btn btn-danger">Create</a></td>
+            <td><a href="'Diagnostic_Center:prescription_detail' i.id  %}"  class="btn btn-danger">Published</a></td>
             {% elif user.is_dcmadmin %}
             <td><a href="{% url 'Diagnostic_Center:delete_appointment_doctor' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
             <td><a href="{% url 'Diagnostic_Center:update_doctor_appointment' i.id  %}"  class="btn btn-danger">Update</a></td>
+            {% elif user.is_technician %}
+            <td><a href="'Diagnostic_Center:prescription_detail' i.id  %}"  class="btn btn-danger">Published</a></td>
             {% endif %}
         </tr>
         {% endfor %}

@@ -35,7 +35,7 @@
 
 {% if error == "no" %}
 <script>
-  alert('Record Saved Successfully');
+  {% comment %} alert('Record Saved Successfully'); {% endcomment %}
   window.location = ('{% url 'Diagnostic_Center:view_appointment_package_test' %}');
 </script>
 {% endif %} 
