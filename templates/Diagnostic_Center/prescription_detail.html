@@ -2,7 +2,7 @@
 {% block title_block %} Prescription Details {% endblock %} 
 {% block body_block %}
 <style>
-    .container {
+    .center {
         text-align: center;
         margin: 20px auto; /* Adjust margin from navbar */
         width: 80%; /* Adjust the width as needed */
@@ -19,32 +19,41 @@
         border-radius: 4px;
         background-color: #f0f0f0;
     }
+    .prescription-details {
+        margin-bottom: 20px;
+    }
 </style>
 
-<div class="container">
+<div class="center">
     <div class="headline-box">
         <h2>Prescription Details</h2>
     </div>
     
     {% for i in pres %}
+    <div class="prescription-details">
         <p>User Name: {{ i.pres_user }} </p>
         <p>Patient Name: {{ i.pres_patient }} </p>
         <p>Doctor Name: {{ i.pres_doctor }} </p>
-        {% for j in i.medicine.all %}
-            Medicine :{{ j.medicine_name }}
+        
+        <ul>
+            {% for medicine in i.medicine.all %}
+            Medicine: {{ medicine.medicine_name }}
             <br>
-        {% endfor %}
-        <br>
-        {% for j in i.test.all %}
-            Test :{{ j.test_name }}
-            <br>
-        {% endfor %}
-        <br>
-        <br>
+            {% endfor %}
+        </ul>
+        
+        <ul>
+            {% for test in i.test.all %}
+            Test: {{ test.test_name }}
+            {% endfor %}
+        </ul>
+        
         <p>Suggestions: {{ i.text1 }} </p>
         <p>Date: {{ i.date1 }} </p>
+    </div>
     {% endfor %}
 </div>
 
 {% endblock %}
+
 

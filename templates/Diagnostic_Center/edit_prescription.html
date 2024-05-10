@@ -1,14 +1,26 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
 {% block title_block %} Edit Prescription {% endblock %}
 {% block body_block %}
 {% if user.is_authenticated %}
-<form method="POST">
-{{form.as_p}}
-{% csrf_token %}
-<button type="submit" name="button">Update</button>
+<div class="container mt-5">
+    <h2 class="text-center">Edit Prescription</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% else %}
-<p>Your are not allowed to view this page. 404</p>
-</form>
+<p class="text-center mt-5">You are not allowed to view this page. 404</p>
 {% endif %}
 {% endblock %}

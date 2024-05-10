@@ -1,24 +1,20 @@
-<!-- update_doctor_appointment.html -->
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 {% block title_block %} Update Test {% endblock %}
+
 {% block body_block %}
-{% if user.is_authenticated %}
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col">
-            <form method="POST">
-                {% csrf_token %}
-                <br>
-                <br>
-                <h2 class="text-center">Update Test </h2>
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary btn-block">Update</button>
-            </form>
-        </div>
-    </div>
+    <br>
+    <br>
+    <h2 class="text-center">Update Test</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_test_name">Test Name:</label>
+        <input type="text" class="form-control" name="test_name" id="id_test_name" value="{{ object.test_name }}" required>
+        <br>
+        <label for="id_test_price">Test Price:</label>
+        <input type="number" class="form-control" name="test_price" id="id_test_price" value="{{ object.test_price }}" required>
+        <br>
+        <button type="submit" class="btn btn-primary">Update Test</button>
+    </form>
 </div>
-{% else %}
-<p>You are not allowed to view this page. 404</p>
-{% endif %}
 {% endblock %}

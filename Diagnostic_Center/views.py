@@ -631,42 +631,43 @@ def delete_medicine(request, pid):
 
 
 
+from django.shortcuts import redirect
+
 @login_required
-def create_test_report(request):
+def create_test_report(request, aid):
     error = ""
-    user = request.user
-    patient1 = DcmPatient.objects.filter(user=request.user)
-    tests = Test.objects.all()  # Retrieve all tests
+    appointment = TestAppointment.objects.get(id=aid)
+    user = appointment.user
+    patient = appointment.patient
+    
+    # Filter tests based on the appointment's test
+    tests = Test.objects.filter(id=appointment.test_id)
+
     today_date = date.today().strftime("%Y-%m-%d")
     
     if request.method == 'POST':
         a = request.POST.get('appointment_id')
-        p = request.POST.get('patient_id')
         r = request.POST.get('result')
         d = request.POST.get('date')
         rs = request.POST.get('report_status', 'On Progress')
-        test_ids = request.POST.getlist('test')  # Get list of selected test IDs
+        test_ids = request.POST.getlist('test_id')  # Get list of selected test IDs
 
-        patient = DcmPatient.objects.filter(name=p).first()
-        
         try:
             for test_id in test_ids:
                 test = Test.objects.get(pk=test_id)
-                # Fetch the department associated with the test
-                test_department = test.test_name_department
-                
-                max_serial = TestAppointment.objects.filter(date=d).aggregate(Max('serial'))['serial__max']
-              
-                
-                # Create a TestAppointment object for each selected test
-                TestReport.objects.create(user=user, patient=patient,  date=d, test=test, appointment_id=a, result=r, report_status=rs)
-                
-            error = "no"
-        except:
+                TestReport.objects.create(user=user, patient=patient, date=d, test=test, appointment_id=a, result=r, report_status=rs)
+            return redirect('Diagnostic_Center:view_test_report')  # Redirect upon successful creation
+        except Exception as e:
+            print(e)  # Print the exception for debugging purposes
             error = "yes"
 
-    k = {'user': user, 'patient': patient1, 'tests': tests, 'error': error, 'today': today_date}
+    k = {'appointment': appointment,  'patient': patient, 'tests': tests, 'error': error, 'today': today_date}
     return render(request, 'Diagnostic_Center/create_test_report.html', k)
+
+
+
+
+
 
 def view_test_report(request):
     tr = TestReport.objects.all()

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title_block %} Create Test Report {% endblock %} 
+{% block body_block %}
+
+<div class="container">
+  <br>
+  <br>
+  <h2 class="text-center">Create Test Report</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {% comment %} <label>User Name</label>
+    <input type="text" class="form-control" name="user_id" value="{{ user.username }}" readonly/> {% endcomment %}
+
+    <label>Patient Name</label>
+    <input type="text" class="form-control" name="patient_id" value="{{ patient.name }}" readonly/>
+
+    <label>Test</label>
+     <select name="test_id" class="form-control" multiple>
+    {% for test in tests %}
+    <option value="{{ test.id }}">{{ test.test_name }}</option>
+    {% endfor %}
+   </select>
+
+    
+    <label for="result">Results</label>
+    <textarea id="result" class="form-control" name="result" required></textarea>
+    
+    <label>Date</label>
+    <input type="date" class="form-control" name="date1" value="{{ today }}" required />
+    
+    <br />
+    <input type="submit" value="Submit" class="form-control btn btn-primary" />
+  </form>
+</div>
+
+{% comment %} {% if error == "no" %}
+<script>
+  alert('Record saved successfully');
+  window.location.href = "{% url 'Diagnostic_Center:view_test_report.html' %}";
+</script>
+{% endif %} 
+
+{% if error == "yes" %}
+<script>
+  alert("Something went wrong. Please try again.");
+</script>
+{% endif %}  {% endcomment %}
+
+{% endblock %}
