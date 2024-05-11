@@ -368,7 +368,7 @@ def Delete_Patient(request, pid):
 
 class UpdateDcmPatient(LoginRequiredMixin, UpdateView):
     model = DcmPatient
-    fields = ('user', 'name', 'gender', 'patient_blood_group', 'mobile', 'age', 'address')
+    fields = ( 'name', 'gender', 'patient_blood_group', 'mobile', 'age', 'address')
     template_name = 'App_Login/edit_patient.html'
     
     def get_success_url(self, **kwargs):

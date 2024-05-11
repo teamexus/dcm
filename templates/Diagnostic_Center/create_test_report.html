@@ -9,8 +9,8 @@
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
-    {% comment %} <label>User Name</label>
-    <input type="text" class="form-control" name="user_id" value="{{ user.username }}" readonly/> {% endcomment %}
+     <label>User Name</label>
+    <input type="text" class="form-control" name="user_id" value="{{ user.username }}" readonly/> 
 
     <label>Patient Name</label>
     <input type="text" class="form-control" name="patient_id" value="{{ patient.name }}" readonly/>
@@ -27,14 +27,14 @@
     <textarea id="result" class="form-control" name="result" required></textarea>
     
     <label>Date</label>
-    <input type="date" class="form-control" name="date1" value="{{ today }}" required />
+    <input type="date" class="form-control" name="date" value="{{ today }}" required />
     
     <br />
     <input type="submit" value="Submit" class="form-control btn btn-primary" />
   </form>
 </div>
 
-{% comment %} {% if error == "no" %}
+{% if error == "no" %}
 <script>
   alert('Record saved successfully');
   window.location.href = "{% url 'Diagnostic_Center:view_test_report.html' %}";
@@ -45,6 +45,6 @@
 <script>
   alert("Something went wrong. Please try again.");
 </script>
-{% endif %}  {% endcomment %}
+{% endif %}
 
 {% endblock %}

@@ -1,27 +1,33 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 {% block title_block %} Edit Patient {% endblock %}
 {% block body_block %}
 {% if user.is_authenticated %}
 <div class="container">
+    <br>
+    <br>
+    <h2 class="text-center">Edit Patient</h2>
     <form method="POST" class="mx-auto" style="max-width: 500px;">
-        <br>
-        <br>
-        <h2 class="text-center">Edit Patient</h2>
-        <div class="row">
-            <div class="col-md-12">
-                {{ form.as_p }}
-            </div>
-        </div>
         {% csrf_token %}
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <button type="submit" class="btn btn-primary btn-block">Update</button>
-            </div>
-        </div>
+        <label for="name">Full Name:</label>
+        <input type="text" class="form-control" name="name" id="name" value="{{ form.name.value }}" required>
+        <br>
+        <label for="id_age">Age:</label>
+        <input type="number" class="form-control" name="age" id="id_age" value="{{ form.age.value }}" required>
+        <br>
+        <label for="id_gender">Gender:</label>
+        <select name="gender" class="form-control" id="id_gender" required>
+            <option value="Male" {% if form.gender.value == 'Male' %} selected {% endif %}>Male</option>
+            <option value="Female" {% if form.gender.value == 'Female' %} selected {% endif %}>Female</option>
+        </select>
+        <br>
+        <label for="id_address">Address:</label>
+        <textarea class="form-control" name="address" id="id_address" required>{{ form.address.value }}</textarea>
+        <br>
+        <button type="submit" class="btn btn-primary btn-block">Update</button>
     </form>
 </div>
 {% else %}
 <p>Your are not allowed to view this page. 404</p>
 {% endif %}
 {% endblock %}
+

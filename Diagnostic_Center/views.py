@@ -650,12 +650,14 @@ def create_test_report(request, aid):
         r = request.POST.get('result')
         d = request.POST.get('date')
         rs = request.POST.get('report_status', 'On Progress')
-        test_ids = request.POST.getlist('test_id')  # Get list of selected test IDs
+        test_ids = request.POST.get('test_id')  # Get list of selected test IDs
+        print(d)
+        print(test_ids)
 
         try:
-            for test_id in test_ids:
-                test = Test.objects.get(pk=test_id)
-                TestReport.objects.create(user=user, patient=patient, date=d, test=test, appointment_id=a, result=r, report_status=rs)
+            #for test_id in test_ids:
+            test = Test.objects.get(pk=test_ids)
+            TestReport.objects.create(user_id=user, patient_id=patient, date=d, test_id=test, appointment_id=a, result=r, report_status=rs)
             return redirect('Diagnostic_Center:view_test_report')  # Redirect upon successful creation
         except Exception as e:
             print(e)  # Print the exception for debugging purposes

@@ -1,48 +1,86 @@
 {% extends 'base.html' %}
 {% block title_block %}Doctor Profile{% endblock %}
 {% block body_block %}
-<div class="container mt-4">  <!-- Adjusted margin-top -->
-    <br>
-    <br>
+<div class="container mt-5"> <!-- Increased margin-top for space from Navbar -->
     <div class="row">
-        <div class="col-md-4"> <!-- Left column for profile picture -->
+        <div class="col-md-4">
             <br>
             <br>
-            {% comment %} {% if user.is_doctor %} {% endcomment %}
+            <!-- Left column for profile picture -->
             <img src='/media/{{ doc.profile_pic }}' class="rounded-circle" width="150px">
-            {% comment %} {% endif %} {% endcomment %}
         </div>
-        <div class="col-md-8"> <!-- Right column for profile details -->
-            <div class="card shadow-sm">  <!-- Adjusted margin-top for a gap -->
+        <div class="col-md-8">
+            <!-- Right column for profile details -->
+            <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white text-center py-2">
                     <h5>Doctor Profile</h5>
                 </div>
-                <div class="card-body">  <!-- Reduced padding in the card body -->
+                <div class="card-body">
                     <div style="font-size: 14px;">
                         <!-- Profile details -->
-                        <div class="mb-1">
-                            <p><strong>Full Name:</strong> {{ doc.doctor_full_name }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>Full Name:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.doctor_full_name }}
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <p><strong>Phone Number:</strong> {{ doc.phone }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>Phone Number:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.phone }}
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <p><strong>Specialization:</strong> {{ doc.spe }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>Specialization:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.spe }}
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <p><strong>Designation:</strong> {{ doc.designation }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>Designation:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.designation }}
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <p><strong>Degrees:</strong> {{ doc.degree }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>Degrees:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.degree }}
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <p><strong>Current Working Place:</strong> {{ doc.current_working_place }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>Current Working Place:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.current_working_place }}
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <p><strong>MBBS Institution:</strong> {{ doc.mbbs_institution }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>MBBS Institution:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.mbbs_institution }}
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <p><strong>Post Graduation Institution:</strong> {{ doc.post_graduation_institution }}</p>
+                        <div class="row mb-1">
+                            <div class="col-md-6">
+                                <strong>Post Graduation Institution:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                {{ doc.post_graduation_institution }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,6 +89,8 @@
     </div>
 </div>
 {% endblock %}
+
+
 
 
 

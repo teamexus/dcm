@@ -1,5 +1,5 @@
 from django.contrib import admin
-from Diagnostic_Center.models import Test, Package, PackageTest, DoctorAppointment, TestAppointment, PackageTestAppointment, Report, Bill, Prescription, Medicine
+from Diagnostic_Center.models import Test, Package, PackageTest, DoctorAppointment, TestAppointment, PackageTestAppointment, Report, Bill, Prescription, Medicine,TestReport
 
 # Register your models here.
 
@@ -14,3 +14,4 @@ admin.site.register(PackageTestAppointment)
 admin.site.register(Report)
 admin.site.register(Bill)
 admin.site.register(Prescription)
+admin.site.register(TestReport)
