@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title_block %} View Report Test {% endblock %} 
+{% block title_block %} View Package Report Test {% endblock %} 
 {% block body_block %}
 
 
 <div class="container" style="margin-top:50px">
-<h2 class="text-center">View Report Test</h2>
+<h2 class="text-center">View Package Report Test</h2>
 <br><br>
 <table class="table table-hover" id="example">
     <thead>
@@ -12,7 +12,7 @@
             {% comment %} <th>User Name</th> {% endcomment %}
             <th>Patient Name</th>
             <th>Date</th>
-            <th>Test Name</th>
+            {% comment %} <th>Test Name</th> {% endcomment %}
             <th>Result</th>
             {% comment %} <th>Report Status</th> {% endcomment %}
             {% comment %} {% if user.is_technician %}
@@ -30,7 +30,7 @@
             {% comment %} <th>{{i.user_id}}</th> {% endcomment %}
             <th>{{i.patient_id}}</th>
             <td>{{i.date}}</td>
-            <th>{{i.test_id}}</th>
+            {% comment %} <th>{{i.test_id}}</th> {% endcomment %}
             <td>{{i.result}}</td>
             {% comment %} <td>{{i.report_status}}</td> {% endcomment %}
             {% comment %} {% if user.is_doctor %}

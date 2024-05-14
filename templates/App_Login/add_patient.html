@@ -4,7 +4,9 @@
 {% block body_block %}
 
 <div class="container">
-  <h2 class="text-center"> Your Patient </h2>
+  <br>
+  <br>
+  <h2 class="text-center"> Add A Patient </h2>
   <form method="post" >
     {% csrf_token %}
     
@@ -41,7 +43,7 @@
 
 {% if error == "no" %}
 <script>
-  alert('Record  Save Successfully');
+  {% comment %} alert('Record  Save Successfully'); {% endcomment %}
   window.location = ('{% url 'App_Login:view_patient' %}');
 </script>
 {% endif %}

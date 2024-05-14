@@ -14,29 +14,27 @@
     <input type="text" class="form-control" name="pres_doctor" value="{{ doctor.doctor_full_name }}" readonly/>
     {% endfor %}
     
-    
     <label>Patient Name</label>
     {% for patient in pres_patient %}
     <input type="text" class="form-control" name="pres_patient" value="{{ patient.name }}" readonly/>
     {% endfor %}
     
-    
-
     <label>User Name</label>
     {% for i in pres_user %}
-    <input type="text" class="form-control" name="pres_user" value={{i.first_name}} readonly/>
+    <input type="text" class="form-control" name="pres_user" value="{{ i.first_name }}" readonly/>
     {% endfor %}
  
-
     <label>Medicine</label>
-    <select name="medicine" class="form-control" multiple>
+    <input type="text" id="medicine_search" class="form-control" oninput="searchMedicines()" placeholder="Search for medicine...">
+    <select name="medicine" id="medicine_select" class="form-control" multiple>
       {% for medicine in medicines %}
       <option value="{{ medicine.id }}">{{ medicine.medicine_name }}</option>
       {% endfor %}
     </select>
     
     <label>Test</label>
-    <select name="test" class="form-control" multiple>
+    <input type="text" id="test_search" class="form-control" oninput="searchTests()" placeholder="Search for test...">
+    <select name="test" id="test_select" class="form-control" multiple>
       {% for test in tests %}
       <option value="{{ test.id }}">{{ test.test_name }}</option>
       {% endfor %}
@@ -65,4 +63,42 @@
 </script>
 {% endif %} 
 
+<script>
+  // JavaScript code for searching tests
+  function searchTests() {
+    var input, filter, select, options, option, i;
+    input = document.getElementById('test_search');
+    filter = input.value.toUpperCase();
+    select = document.getElementById('test_select');
+    options = select.getElementsByTagName('option');
+    for (i = 0; i < options.length; i++) {
+      option = options[i];
+      if (option.textContent.toUpperCase().indexOf(filter) > -1) {
+        option.style.display = ""; // Ensure it's visible
+      } else {
+        option.style.display = "none"; // Hide options not matching the filter
+      }
+    }
+  }
+
+  // JavaScript code for searching medicines
+  function searchMedicines() {
+    var input, filter, select, options, option, i;
+    input = document.getElementById('medicine_search');
+    filter = input.value.toUpperCase();
+    select = document.getElementById('medicine_select');
+    options = select.getElementsByTagName('option');
+    for (i = 0; i < options.length; i++) {
+      option = options[i];
+      if (option.textContent.toUpperCase().indexOf(filter) > -1) {
+        option.style.display = ""; // Ensure it's visible
+      } else {
+        option.style.display = "none"; // Hide options not matching the filter
+      }
+    }
+  }
+</script>
+
 {% endblock %}
+
+

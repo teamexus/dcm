@@ -43,14 +43,15 @@
           <li class="nav-item active">
             <a class="nav-link" href="{% url 'index' %}"> Home</a></li>
             {% if user.is_authenticated and user.is_doctor  %}
-            <div class="dropdown" style="position: absolute; right: 70px;">
+            <div class="dropdown" style="position: absolute; right: 110px;">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                   @{{ user.username }}
               </a>
               <div class="dropdown-menu">
                   <a class="dropdown-item" href="{% url 'App_Login:doctor_profile' %}">Your Profile</a>
                   <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_prescription' %}">Prescription</a>
-                  <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Reports </a>
+                  <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Test Reports </a>
+                  <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_package_test_report' %}">Package Test Reports </a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
               </div>
@@ -75,13 +76,14 @@
             <a class="nav-link" href="{% url 'Diagnostic_Center:view_medicine' %}">Medicines</a>
           </li>
             {% elif user.is_authenticated and user.is_technician  %}
-            <div class="nav-item dropdown" style="position: absolute; right: 70px;">
+            <div class="nav-item dropdown" style="position: absolute; right: 110px;">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 @{{user.username}}
               </a>
               <div class="dropdown-menu">
                <a class="dropdown-item" href="{% url 'App_Login:technician_profile' %}">Your Profile</a>
-               <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Reports </a>
+               <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Test Reports </a>
+               <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_package_test_report' %}">Package Test Reports </a>
                 <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
                 <hr>
               </div>
@@ -107,13 +109,14 @@
             
             
             {% elif user.is_authenticated and user.is_dcmadmin %}
-            <div class="nav-item dropdown" style="position: absolute; right: 70px;">
+            <div class="nav-item dropdown" style="position: absolute; right: 110px;">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 @{{user.username}}
               </a>
               <div class="dropdown-menu">
                <a class="dropdown-item" href="{% url 'App_Login:dcmadmin_profile' %}">Your Profile</a>
-               <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Reports </a>
+               <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Test Reports </a>
+               <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_package_test_report' %}">Package Test Reports </a>
                 <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
                 <hr>
               </div>
@@ -144,7 +147,7 @@
 
      
         {% elif user.is_authenticated %}
-        <div class="nav-item dropdown" style="position: absolute; right: 100px;">
+        <div class="nav-item dropdown" style="position: absolute; right: 120px;">
           <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             @{{user.username}}
           </a>
@@ -152,7 +155,8 @@
            <a class="dropdown-item" href="{% url 'App_Login:profile' %}">Your Profile</a>
             <a class="dropdown-item"  href="{% url 'App_Login:view_patient' %}"> Patient</a>
             <a class="dropdown-item"  href="{% url 'Diagnostic_Center:view_prescription' %}"> Prescription</a>
-            <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Reports </a>
+            <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_test_report' %}">Test Reports </a>
+            <a class="dropdown-item" href="{% url 'Diagnostic_Center:view_package_test_report' %}">Package Test Reports </a>
             <a class="dropdown-item" href="{% url 'App_Login:logout' %}">Logout</a>
             <hr>
           </div>

@@ -424,7 +424,7 @@ def create_prescription(request, aid):
 
     
     if request.method == 'POST':
-        x = request.POST.get('appointment')
+        #x = request.POST.get('appointment')
         u= request.POST.get('pres_user')
         d= request.POST.get('pres_doctor')
         p= request.POST.get('pres_patient')
@@ -435,7 +435,7 @@ def create_prescription(request, aid):
         medicine_ids = request.POST.getlist('medicine')
         medicines = Medicine.objects.filter(id__in=medicine_ids)
         
-        appointment = DoctorAppointment.objects.filter(id=x).first()
+        #appointment = DoctorAppointment.objects.filter(id=x).first()
         pres_user = User.objects.filter(first_name=u).first()
         pres_doctor = Doctor.objects.filter(doctor_full_name=d).first()
         pres_patient = DcmPatient.objects.filter(name=p).first()
@@ -443,7 +443,7 @@ def create_prescription(request, aid):
         
         try:
             prescription = Prescription.objects.create(
-                appointment=appointment,
+                appointment_id=aid,
                 pres_user=pres_user,
                 pres_doctor=pres_doctor,
                 pres_patient=pres_patient,
@@ -493,6 +493,12 @@ class UpdatePrescription(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self, **kwargs):
         return reverse_lazy('Diagnostic_Center:view_prescription')
+    
+def update_prescription(request, pid):
+    pres = Prescription.objects.get(id=pid)
+    return render(request, "edit_prescription.html", {"pres": pres})
+    
+ 
     
 
 def view_test(request):
@@ -619,6 +625,7 @@ class UpdateMedicine(LoginRequiredMixin, UpdateView):
     model = Medicine
     fields = ('medicine_name','medicine_department','medicine_price' )
     template_name = 'Diagnostic_Center/update_medicine.html'
+    print("Hello")
     
     def get_success_url(self, **kwargs):
         return reverse_lazy('Diagnostic_Center:view_medicine')
@@ -677,7 +684,54 @@ def view_test_report(request):
     return render(request, 'Diagnostic_Center/view_test_report.html', r)
 
 
-       
+@login_required
+def create_package_test_report(request, aid):
+    error = ""
+    appointment = PackageTestAppointment.objects.get(id=aid)
+    user = appointment.user
+    patient = appointment.patient
+    
+    # Get the ID of the package associated with the appointment
+    package_id = appointment.package_id
+    
+    # Filter packages based on the appointment's package ID
+    packages = Package.objects.filter(id=package_id)
+
+    today_date = date.today().strftime("%Y-%m-%d")
+    
+    if request.method == 'POST':
+        a = request.POST.get('appointment_id')
+        r = request.POST.get('result')
+        d = request.POST.get('date')
+        rs = request.POST.get('report_status', 'On Progress')
+        package_ids = request.POST.getlist('package_id')  # Get list of selected test IDs
+
+        try:
+            for package_id in package_ids:
+                package = Package.objects.get(pk=package_id)
+                PackageTestReport.objects.create(user_id=user, patient_id=patient, date=d, Package_id=package, appointment_id=a, result=r, report_status=rs)
+            return redirect('Diagnostic_Center:view_package_test_report')  # Redirect upon successful creation
+        except Exception as e:
+            print(e)  # Print the exception for debugging purposes
+            error = "yes"
+
+    k = {'appointment': appointment,  'patient': patient, 'packages': packages, 'error': error, 'today': today_date}
+    return render(request, 'Diagnostic_Center/create_package_test_report.html', k)
+
+
+
+
+
+def view_package_test_report(request):
+    tr = PackageTestReport.objects.all()
+    r = {'tr': tr}
+    return render(request, 'Diagnostic_Center/view_package_test_report.html', r)
+
+def doctor_appointment_details(request, aid):
+    dad = DoctorAppointment.objects.filter(id=aid).first()
+    r = {'dad':dad}
+    return render(request, 'Diagnostic_Center/doctor_appointment_details.html', r)
+
        
   
 

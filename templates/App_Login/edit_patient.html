@@ -20,6 +20,21 @@
             <option value="Female" {% if form.gender.value == 'Female' %} selected {% endif %}>Female</option>
         </select>
         <br>
+        <label for="id_patient_blood_group">Gender:</label>
+        <select name="patient_blood_group" class="form-control" id="id_patient_blood_group" required>
+            <option value="A+" {% if form.patient_blood_group.value == 'A+' %} selected {% endif %}>A+</option>
+            <option value="A-" {% if form.patient_blood_group.value == 'A-' %} selected {% endif %}>A-</option>
+            <option value="B+" {% if form.patient_blood_group.value == 'B+' %} selected {% endif %}>B+</option>
+            <option value="B-" {% if form.patient_blood_group.value == 'B-' %} selected {% endif %}>B-</option>
+            <option value="O+" {% if form.patient_blood_group.value == 'O+' %} selected {% endif %}>O+</option>
+            <option value="O-" {% if form.patient_blood_group.value == 'O-' %} selected {% endif %}>O-</option>
+            <option value="AB+" {% if form.patient_blood_group.value == 'AB+' %} selected {% endif %}>AB+</option>
+            <option value="AB-" {% if form.patient_blood_group.value == 'AB-' %} selected {% endif %}>AB-</option>
+        </select>
+        <br>
+        <label for="id_mobile">Contract:</label>
+        <input type="number" class="form-control" name="mobile" id="id_mobile" value="{{ form.mobile.value }}" />
+        <br>
         <label for="id_address">Address:</label>
         <textarea class="form-control" name="address" id="id_address" required>{{ form.address.value }}</textarea>
         <br>

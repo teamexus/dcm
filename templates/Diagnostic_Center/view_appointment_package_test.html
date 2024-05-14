@@ -27,6 +27,7 @@
             <th>Delete</th>
             {% elif user.is_technician %}
             <th>Update</th>
+            <th>Report</th>
             {% endif %}
         </tr>
     </thead>
@@ -45,6 +46,7 @@
             <td><a href="{% url 'Diagnostic_Center:delete_appointment_package_test' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
             {% elif user.is_technician %}
             <td><a href="{% url 'Diagnostic_Center:update_package_test_appointment' i.id  %}"  class="btn btn-danger">Update</a></td>
+            <td><a href="{% url 'Diagnostic_Center:create_package_test_report' i.id %}"  class="btn btn-danger">Create</a></td>
             {% endif %}
         </tr>
         {% endfor %}

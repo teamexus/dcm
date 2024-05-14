@@ -1,0 +1,45 @@
+{% extends 'base.html' %} 
+{% block title_block %} Package Details {% endblock %} 
+{% block body_block %}
+<style>
+    .center {
+        text-align: center;
+        margin: 20px auto; /* Adjust margin from navbar */
+        width: 80%; /* Adjust the width as needed */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+    .headline-box {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f0f0f0;
+    }
+    .package-details {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="center">
+    <div class="headline-box">
+        <h2>Doctor Appointment Details</h2>
+    </div>
+    
+
+    <div class="package-details">
+        <p>Appointment Id: {{  dad.id }}</p>
+        <p>User Name: {{  dad.user }}</p>
+        <p>Patient Name: {{dad.patient}} </p>
+        <p>Doctor Name: {{ dad.doctor }} </p>
+        <p>Date: {{ dad.date1 }} </p>
+        
+        
+    </div>
+    
+</div>
+
+{% endblock %}

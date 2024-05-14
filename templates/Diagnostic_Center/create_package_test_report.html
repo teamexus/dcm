@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title_block %} Create Package Test Report {% endblock %} 
+{% block body_block %}
+
+<div class="container">
+  <br>
+  <br>
+  <h2 class="text-center">Create Package Test Report</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+     <label>User Name</label>
+    <input type="text" class="form-control" name="user_id" value="{{ user.username }}" readonly/> 
+
+    <label>Patient Name</label>
+    <input type="text" class="form-control" name="patient_id" value="{{ patient.name }}" readonly/>
+
+    <label>Package</label>
+     <select name="package_id" class="form-control" multiple>
+    {% for i in packages %}
+    <option value="{{ i.id }}">{{ i.package_name }}</option>
+    {% endfor %}
+   </select>
+
+    
+    <label for="result">Results</label>
+    <textarea id="result" class="form-control" name="result" required></textarea>
+    
+    <label>Date</label>
+    <input type="date" class="form-control" name="date" value="{{ today }}" required />
+    
+    <br />
+    <input type="submit" value="Submit" class="form-control btn btn-primary" />
+  </form>
+</div>
+
+{% if error == "no" %}
+<script>
+  alert('Record saved successfully');
+  window.location.href = "{% url 'Diagnostic_Center:view_test_report.html' %}";
+</script>
+{% endif %} 
+
+{% if error == "yes" %}
+<script>
+  alert("Something went wrong. Please try again.");
+</script>
+{% endif %}
+
+{% endblock %}
