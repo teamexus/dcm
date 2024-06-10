@@ -538,6 +538,11 @@ class UpdateTest(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self, **kwargs):
         return reverse_lazy('Diagnostic_Center:view_test')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['departments'] = Department.objects.all()
+        return context
 
 
 
@@ -630,6 +635,11 @@ class UpdateMedicine(LoginRequiredMixin, UpdateView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('Diagnostic_Center:view_medicine')
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['departments'] = Department.objects.all()
+        return context
+    
     
 def delete_medicine(request, pid):
     medicine = Medicine.objects.get(id=pid)
@@ -657,14 +667,16 @@ def create_test_report(request, aid):
         r = request.POST.get('result')
         d = request.POST.get('date')
         rs = request.POST.get('report_status', 'On Progress')
-        test_ids = request.POST.get('test_id')  # Get list of selected test IDs
+        test_ids = request.POST.get('test_id')
+        re = request.FILES.get('report')
+        # Get list of selected test IDs
         print(d)
         print(test_ids)
 
         try:
             #for test_id in test_ids:
             test = Test.objects.get(pk=test_ids)
-            TestReport.objects.create(user_id=user, patient_id=patient, date=d, test_id=test, appointment_id=a, result=r, report_status=rs)
+            TestReport.objects.create(user_id=user, patient_id=patient, date=d, test_id=test, appointment_id=a, result=r, report_status=rs, report=re)
             return redirect('Diagnostic_Center:view_test_report')  # Redirect upon successful creation
         except Exception as e:
             print(e)  # Print the exception for debugging purposes
@@ -674,7 +686,13 @@ def create_test_report(request, aid):
     return render(request, 'Diagnostic_Center/create_test_report.html', k)
 
 
-
+class UpdateTestReport(LoginRequiredMixin, UpdateView):
+    model = TestReport
+    fields = ('result','date','report_status','report' )
+    template_name = 'Diagnostic_Center/update_test_report.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_test_report')
 
 
 
@@ -682,6 +700,11 @@ def view_test_report(request):
     tr = TestReport.objects.all()
     r = {'tr': tr}
     return render(request, 'Diagnostic_Center/view_test_report.html', r)
+
+def delete_test_report(request, pid):
+    test_report = TestReport.objects.get(id=pid)
+    test_report.delete()
+    return redirect('/diagnostic_center/view_test_report')
 
 
 @login_required
@@ -705,11 +728,12 @@ def create_package_test_report(request, aid):
         d = request.POST.get('date')
         rs = request.POST.get('report_status', 'On Progress')
         package_ids = request.POST.getlist('package_id')  # Get list of selected test IDs
+        re = request.FILES.get('report')
 
         try:
             for package_id in package_ids:
                 package = Package.objects.get(pk=package_id)
-                PackageTestReport.objects.create(user_id=user, patient_id=patient, date=d, Package_id=package, appointment_id=a, result=r, report_status=rs)
+                PackageTestReport.objects.create(user_id=user, patient_id=patient, date=d, Package_id=package, appointment_id=a, result=r, report_status=rs, report=re)
             return redirect('Diagnostic_Center:view_package_test_report')  # Redirect upon successful creation
         except Exception as e:
             print(e)  # Print the exception for debugging purposes
@@ -727,10 +751,27 @@ def view_package_test_report(request):
     r = {'tr': tr}
     return render(request, 'Diagnostic_Center/view_package_test_report.html', r)
 
+
+class UpdatePackageTestReport(LoginRequiredMixin, UpdateView):
+    model = Medicine
+    fields = ('result','date','report_status','report' )
+    template_name = 'Diagnostic_Center/update_package_test_report.html'
+    
+    def get_success_url(self, **kwargs):
+        return reverse_lazy('Diagnostic_Center:view_package_test_report')
+
 def doctor_appointment_details(request, aid):
     dad = DoctorAppointment.objects.filter(id=aid).first()
     r = {'dad':dad}
     return render(request, 'Diagnostic_Center/doctor_appointment_details.html', r)
+
+def delete_package_test_report(request, pid):
+    package_test_report = PackageTestReport.objects.get(id=pid)
+    package_test_report.delete()
+    return redirect('/diagnostic_center/view_package_test_report')
+
+
+
 
        
   

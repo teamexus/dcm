@@ -64,7 +64,7 @@ class DoctorAppointment(models.Model):
         ('Completed', 'Completed'),
     
     )
-    appointment_status = models.CharField(max_length=20,choices= status, null=True, blank=True, default='Confirmed')
+    appointment_status = models.CharField(max_length=20,choices=status, null=True, blank=True, default='Confirmed')
     
     def __str__(self):
         return self.doctor.doctor_full_name + "--" + self.patient.name
@@ -150,6 +150,7 @@ class TestReport(models.Model):
         ('Publish', 'Publish'),
     )
     report_status = models.CharField(max_length=30, blank=True, null=True, choices=status_choice, default='On Progress')
+    report = models.FileField(upload_to='reports/', null=True, blank=True)
 class PackageTestReport(models.Model):
     appointment_id = models.ForeignKey(PackageTestAppointment, on_delete=models.CASCADE, null=True, blank=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
@@ -162,6 +163,7 @@ class PackageTestReport(models.Model):
         ('Publish', 'Publish'),
     )
     report_status = models.CharField(max_length=30, blank=True, null=True, choices=status_choice, default='On Progress')
+    report = models.FileField(upload_to='reports/', null=True, blank=True)
     
 
 

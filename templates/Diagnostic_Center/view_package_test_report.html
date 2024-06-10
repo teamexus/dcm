@@ -14,6 +14,7 @@
             <th>Date</th>
             {% comment %} <th>Test Name</th> {% endcomment %}
             <th>Result</th>
+            <th>Report</th>
             {% comment %} <th>Report Status</th> {% endcomment %}
             {% comment %} {% if user.is_technician %}
             <th>Delete</th>
@@ -32,6 +33,13 @@
             <td>{{i.date}}</td>
             {% comment %} <th>{{i.test_id}}</th> {% endcomment %}
             <td>{{i.result}}</td>
+            <td>
+                {% if i.report %}
+                <a href="{{ i.report.url }}" target="_blank">View Package Report</a>
+                {% else %}
+                No Report Uploaded
+                {% endif %}
+            </td>
             {% comment %} <td>{{i.report_status}}</td> {% endcomment %}
             {% comment %} {% if user.is_doctor %}
              <td><a href="{% url 'Diagnostic_Center:delete_prescription' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>

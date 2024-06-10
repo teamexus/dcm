@@ -14,14 +14,12 @@
             <th>Date</th>
             <th>Test Name</th>
             <th>Result</th>
+            <th>Report</th>
             {% comment %} <th>Report Status</th> {% endcomment %}
-            {% comment %} {% if user.is_technician %}
+            {% if user.is_technician %}
             <th>Delete</th>
             <th>Edit</th>
-            <th>Details</th>
-            {% else %}
-            <th>Details</th>
-            {% endif %}  {% endcomment %}
+            {% endif %} 
         </tr>
     </thead>
     <tbody>
@@ -32,15 +30,23 @@
             <td>{{i.date}}</td>
             <th>{{i.test_id}}</th>
             <td>{{i.result}}</td>
+            <td>
+                {% if i.report %}
+                <a href="{{ i.report.url }}" target="_blank">View Report</a>
+                {% else %}
+                No Report Uploaded
+                {% endif %}
+            </td>
             {% comment %} <td>{{i.report_status}}</td> {% endcomment %}
-            {% comment %} {% if user.is_doctor %}
-             <td><a href="{% url 'Diagnostic_Center:delete_prescription' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
-            <td><a href="{% url 'Diagnostic_Center:edit_prescription' i.id  %}"  class="btn btn-danger">Edit</a></td>
-            <td><a href="{% url 'Diagnostic_Center:prescription_detail' i.id  %}"  class="btn btn-danger">Details</a></td>
+             {% if user.is_technician %}
+             <td><a href="{% url 'Diagnostic_Center:delete_test_report' i.id %}" onClick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a></td>
+            <td><a href="{% url 'Diagnostic_Center:update_test_report' i.id  %}"  class="btn btn-danger">Edit</a></td>
+            {% comment %} <td><a href="{% url 'Diagnostic_Center:prescription_detail' i.id  %}"  class="btn btn-danger">Details</a></td> {% endcomment %}
             {% else %}
             {% comment %} <td><a href="{% url 'Diagnostic_Center:prescription_detail' i.id  %}"  class="btn btn-danger">Details</a></td> {% endcomment %}
            
         </tr>
+        {% endif %}
         {% endfor %}
     </tbody>
 </table>

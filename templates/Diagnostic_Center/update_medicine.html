@@ -12,7 +12,13 @@
         <input type="text" class="form-control" name="medicine_name" id="id_medicine_name" value="{{ object.medicine_name }}" required>
         <br>
         <label for="id_medicine_department">Department:</label>
-        <input type="text" class="form-control" name="medicine_department" id="id_medicine_name" value="{{ object.medicine_department }}" required>
+        <select class="form-control" name="medicine_department" id="id_medicine_department" required>
+            {% for department in departments %}
+                <option value="{{ department.pk }}" {% if department == object.medicine_department %}selected{% endif %}>
+                    {{ department.name }}
+                </option>
+            {% endfor %}
+        </select>
         <br>
         <label for="id_medicine_price">Medicine Price:</label>
         <input type="number" class="form-control" name="medicine_price" id="id_medicine_price" value="{{ object.medicine_price }}" required>

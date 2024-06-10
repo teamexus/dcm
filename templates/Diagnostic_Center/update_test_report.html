@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title_block %} Update Test Report {% endblock %}
+
+{% block body_block %}
+<div class="container">
+    <br>
+    <br>
+    <h2 class="text-center">Update Test Report</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_result">Result:</label>
+        <input type="text" class="form-control" name="result" id="id_result" value="{{ object.result }}" required>
+        <br>
+        
+        <button type="submit" class="btn btn-primary">Update Test</button>
+    </form>
+</div>
+{% endblock %}

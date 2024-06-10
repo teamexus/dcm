@@ -12,7 +12,13 @@
         <input type="text" class="form-control" name="test_name" id="id_test_name" value="{{ object.test_name }}" required>
         <br>
         <label for="id_test_name_department">Department:</label>
-        <input type="text" class="form-control" name="test_name_department" id="id_test_name_department" value="{{ object.test_name_department }}" required>
+        <select class="form-control" name="test_name_department" id="id_test_name_department" required>
+            {% for department in departments %}
+                <option value="{{ department.pk }}" {% if department == object.test_name_department %}selected{% endif %}>
+                    {{ department.name }}
+                </option>
+            {% endfor %}
+        </select>
         <br>
         <label for="id_test_price">Test Price:</label>
         <input type="number" class="form-control" name="test_price" id="id_test_price" value="{{ object.test_price }}" required>
@@ -21,3 +27,5 @@
     </form>
 </div>
 {% endblock %}
+
+
